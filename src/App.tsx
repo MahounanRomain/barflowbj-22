@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { ReactNode, useState, useEffect, Suspense } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@/components/ui/theme-provider";
@@ -55,9 +55,8 @@ function AppContent() {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // Initialize daily reset and real-time sync
-  // Temporarily commenting out hooks to debug
-  // const { resetState } = useDailyReset();
-  // const { syncState } = useRealtimeSync();
+  const { resetState } = useDailyReset();
+  const { syncState } = useRealtimeSync();
 
   // Handle initial loading animation and route preloading
   useEffect(() => {
@@ -97,11 +96,7 @@ function AppContent() {
   }, [showLoadingAnimation]);
 
   if (showLoadingAnimation) {
-    return (
-      <div className="min-h-screen bg-background font-sans antialiased">
-        <LoadingAnimation />
-      </div>
-    );
+    return <LoadingAnimation />;
   }
 
   return (
@@ -117,11 +112,7 @@ function AppContent() {
           </a>
           
           <AppLayout>
-            <Suspense fallback={
-              <div className="min-h-screen flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-              </div>
-            }>
+            <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh]"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>}>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/sales" element={<Sales />} />

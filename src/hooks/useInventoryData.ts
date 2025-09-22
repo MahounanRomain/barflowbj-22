@@ -1,5 +1,4 @@
-import * as React from 'react';
-const { useState, useEffect, useCallback } = React;
+import React, { useState, useEffect, useCallback } from 'react';
 import { storage, InventoryItem, Category, InventoryHistoryEntry } from '@/lib/storage';
 
 export const useInventoryData = () => {

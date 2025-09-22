@@ -1,6 +1,5 @@
 
-import * as React from 'react';
-const { useState, useEffect, useCallback } = React;
+import React, { useState, useEffect, useCallback } from 'react';
 
 interface CacheItem<T> {
   data: T;

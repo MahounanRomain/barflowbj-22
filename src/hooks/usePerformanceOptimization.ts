@@ -1,6 +1,5 @@
 
-import * as React from 'react';
-const { useState, useCallback, useRef, useEffect } = React;
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 
 export const usePerformanceOptimization = () => {
   const [isOptimized, setIsOptimized] = useState(false);
