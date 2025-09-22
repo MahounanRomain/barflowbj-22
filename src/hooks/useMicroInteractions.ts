@@ -1,5 +1,6 @@
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import * as React from 'react';
+const { useState, useCallback, useRef, useEffect } = React;
 
 export const useMicroInteractions = () => {
   const [isInteracting, setIsInteracting] = useState(false);
