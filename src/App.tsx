@@ -1,4 +1,4 @@
-import React, { ReactNode, useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@/components/ui/theme-provider";
@@ -55,8 +55,9 @@ function AppContent() {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // Initialize daily reset and real-time sync
-  const { resetState } = useDailyReset();
-  const { syncState } = useRealtimeSync();
+  // Temporarily commenting out hooks to debug
+  // const { resetState } = useDailyReset();
+  // const { syncState } = useRealtimeSync();
 
   // Handle initial loading animation and route preloading
   useEffect(() => {
