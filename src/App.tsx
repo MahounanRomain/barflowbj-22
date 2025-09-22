@@ -23,7 +23,6 @@ const Settings = React.lazy(() => import("@/pages/Settings"));
 const NotFound = React.lazy(() => import("@/pages/NotFound"));
 
 // Lazy load navigation components
-const BottomNavigation = React.lazy(() => import("@/components/BottomNavigation"));
 const DesktopNavigation = React.lazy(() => import("@/components/DesktopNavigation"));
 const OfflineIndicator = React.lazy(() => import("@/components/OfflineIndicator"));
 const PWAInstallPrompt = React.lazy(() => import("@/components/PWAInstallPrompt"));
