@@ -43,7 +43,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
           {!isMobile && !isNotFoundPage && location.pathname !== '/'}
           
           {/* Page Content */}
-          <main className={`flex-1 ${isMobile && !isNotFoundPage ? "pb-20" : ""} ${!isMobile ? 'min-h-[calc(100vh-4rem)]' : ''}`} id="main-content" tabIndex={-1}>
+          <main className={`flex-1 ${isMobile && !isNotFoundPage ? "pb-28" : ""} ${!isMobile ? 'min-h-[calc(100vh-4rem)]' : ''}`} id="main-content" tabIndex={-1}>
             <ErrorBoundary>
               {children}
             </ErrorBoundary>
