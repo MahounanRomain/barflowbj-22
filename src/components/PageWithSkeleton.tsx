@@ -54,14 +54,14 @@ export const PageWithSkeleton: React.FC<PageWithSkeletonProps> = ({
 
   if (isLoading) {
     return (
-      <div className="animate-fade-in" key={`skeleton-${location.pathname}`}>
+      <div className="min-h-screen" style={{ transition: 'none' }} key={`skeleton-${location.pathname}`}>
         {getSkeletonForRoute()}
       </div>
     );
   }
 
   return (
-    <div className="animate-fade-in" key={`content-${location.pathname}`}>
+    <div className="min-h-screen" style={{ transition: 'none' }} key={`content-${location.pathname}`}>
       {children}
     </div>
   );

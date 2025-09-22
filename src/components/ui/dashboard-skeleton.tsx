@@ -1,60 +1,105 @@
 import React from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import Header from '@/components/Header';
 
 export const DashboardSkeleton = () => {
+  const isMobile = useIsMobile();
+  
   return (
-    <div className="mobile-container bg-gradient-to-br from-background via-background to-accent/5">
-      <div className="content-layout px-4 py-6">
-        {/* Welcome section skeleton */}
-        <div className="mb-6">
-          <Skeleton className="h-8 w-48 mb-2" />
-          <Skeleton className="h-4 w-64" />
-        </div>
+    <div className={`${isMobile ? 'mobile-container' : 'desktop-container'} bg-gradient-to-br from-background via-background to-accent/5 min-h-screen`} style={{ contain: 'layout' }}>
+      {isMobile && <Header rightContent={<Skeleton className="h-8 w-24" />} />}
+      
+      <ScrollArea className={`flex-1 ${isMobile ? 'h-[calc(100vh-140px)]' : 'h-[calc(100vh-6rem)]'}`}>
+        <main className={`${isMobile ? 'px-4 py-6' : 'px-8 py-8 max-w-7xl mx-auto'} min-h-[calc(100vh-8rem)]`}>
+          {/* Welcome section skeleton - preserve exact dimensions */}
+          <div className="mb-6 space-y-2" style={{ minHeight: '64px' }}>
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-4 w-96" />
+          </div>
 
-        {/* Stats cards skeleton - Mobile optimized layout */}
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-card rounded-xl p-4 border shadow-sm">
-              <div className="flex items-start justify-between mb-3">
-                <div className="space-y-2 flex-1">
-                  <Skeleton className="h-3 w-16" />
-                  <Skeleton className="h-6 w-20" />
+          {/* Stats grid skeleton - preserve exact grid layout */}
+          <div className={`${isMobile ? 'grid grid-cols-2 gap-3 mb-6' : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8'}`} style={{ minHeight: isMobile ? '120px' : '140px' }}>
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="bg-card rounded-xl p-4 border shadow-sm min-h-[100px]">
+                <div className="flex items-center justify-between h-full">
+                  <div className="space-y-2">
+                    <Skeleton className="h-3 w-16" />
+                    <Skeleton className="h-6 w-12" />
+                  </div>
+                  <Skeleton className="w-8 h-8 rounded" />
                 </div>
-                <Skeleton className="w-10 h-10 rounded-xl flex-shrink-0" />
+              </div>
+            ))}
+          </div>
+
+          {/* Main content sections skeleton - preserve exact layout */}
+          <div className={`${isMobile ? 'space-y-6' : 'grid grid-cols-1 lg:grid-cols-3 gap-6'}`} style={{ minHeight: '600px' }}>
+            {/* Cash flow section */}
+            <div className={`${!isMobile ? 'lg:col-span-2' : ''} bg-card rounded-xl p-6 border shadow-sm`} style={{ minHeight: '300px' }}>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Skeleton className="h-6 w-40" />
+                  <Skeleton className="h-8 w-24" />
+                </div>
+                <Skeleton className="h-40 w-full" />
               </div>
             </div>
-          ))}
-        </div>
 
-        {/* Other sections skeleton */}
-        <div className="space-y-6">
-          <div className="bg-card rounded-xl p-4 border shadow-sm">
-            <Skeleton className="h-5 w-32 mb-4" />
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-16" />
-                <Skeleton className="h-6 w-24" />
+            {/* Sales analytics */}
+            <div className="bg-card rounded-xl p-6 border shadow-sm" style={{ minHeight: '280px' }}>
+              <div className="space-y-4">
+                <Skeleton className="h-6 w-32" />
+                <Skeleton className="h-32 w-full" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-16" />
-                <Skeleton className="h-6 w-24" />
+            </div>
+
+            {/* Suggestions section */}
+            <div className={`${!isMobile ? 'lg:col-span-2' : ''} bg-card rounded-xl p-6 border shadow-sm`} style={{ minHeight: '260px' }}>
+              <div className="space-y-4">
+                <Skeleton className="h-6 w-48" />
+                <div className="space-y-3">
+                  {[...Array(3)].map((_, i) => (
+                    <div key={i} className="flex items-center space-x-3">
+                      <Skeleton className="w-8 h-8 rounded" />
+                      <div className="flex-1 space-y-1">
+                        <Skeleton className="h-4 w-full" />
+                        <Skeleton className="h-3 w-2/3" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Recent activity */}
+            <div className="bg-card rounded-xl p-6 border shadow-sm" style={{ minHeight: '240px' }}>
+              <div className="space-y-4">
+                <Skeleton className="h-6 w-36" />
+                <div className="space-y-3">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="flex items-center space-x-3">
+                      <Skeleton className="w-6 h-6 rounded-full" />
+                      <div className="flex-1 space-y-1">
+                        <Skeleton className="h-3 w-full" />
+                        <Skeleton className="h-3 w-1/2" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-card rounded-xl p-4 border shadow-sm">
-            <Skeleton className="h-5 w-40 mb-4" />
-            <div className="space-y-3">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="flex justify-between items-center">
-                  <Skeleton className="h-4 w-32" />
-                  <Skeleton className="h-4 w-16" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+          {/* Mobile spacing */}
+          {isMobile && <div className="h-8"></div>}
+        </main>
+      </ScrollArea>
     </div>
   );
 };

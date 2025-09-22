@@ -16,7 +16,7 @@ import { useLocalData } from "@/hooks/useLocalData";
 import { useDailyReset } from "@/hooks/useDailyReset";
 const DashboardContent = () => {
   const isMobile = useIsMobile();
-  return <div className={`${isMobile ? 'mobile-container' : 'desktop-container'} bg-gradient-to-br from-background via-background to-accent/5 animate-fade-in overflow-hidden`}>
+  return <div className={`${isMobile ? 'mobile-container' : 'desktop-container'} bg-gradient-to-br from-background via-background to-accent/5 min-h-screen overflow-hidden`} style={{ contain: 'layout' }}>
       {isMobile && <Header rightContent={<DarkModeToggle />} />}
 
       {/* Desktop Dashboard Header */}

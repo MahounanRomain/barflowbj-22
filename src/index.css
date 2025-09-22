@@ -284,6 +284,18 @@ html {
   100% { transform: translateX(200%) skewX(-12deg); }
 }
 
+/* Prevent layout shifts during content transitions */
+.content-stable {
+  min-height: 100vh;
+  transform: translateZ(0);
+  will-change: auto;
+  contain: layout;
+}
+
+.layout-stable {
+  contain: layout style;
+}
+
 @keyframes gradient-shift {
   0%, 100% {
     background-position: 0% 50%;
