@@ -32,21 +32,27 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
-  return <A11yProvider>
-      <div className="flex min-h-screen w-full bg-background">
+  return (
+    <A11yProvider>
+      <div className="flex min-h-screen w-full">
         {/* Desktop Navigation Sidebar */}
         {!isMobile && !isNotFoundPage && <EnhancedDesktopNavigation />}
-        
+
         {/* Main Content Area */}
-        <div className={`flex-1 flex flex-col min-h-screen ${!isMobile && !isNotFoundPage ? 'ml-0' : 'w-full'}`}>
-          {/* Desktop Header - Only for non-dashboard pages */}
-          {!isMobile && !isNotFoundPage && location.pathname !== '/'}
-          
+        <div
+          className={`flex-1 flex flex-col min-h-screen ${
+            !isMobile && !isNotFoundPage ? 'ml-0' : 'w-full'
+          }`}
+        >
           {/* Page Content */}
-          <main className={`flex-1 ${isMobile && !isNotFoundPage ? "pb-20" : ""} ${!isMobile ? 'min-h-[calc(100vh-4rem)]' : ''}`} id="main-content" tabIndex={-1}>
-            <ErrorBoundary>
-              {children}
-            </ErrorBoundary>
+          <main
+            className={`flex-1 bg-background ${
+              isMobile && !isNotFoundPage ? 'pb-20' : ''
+            } ${!isMobile ? 'min-h-[calc(100vh-4rem)]' : ''}`}
+            id="main-content"
+            tabIndex={-1}
+          >
+            <ErrorBoundary>{children}</ErrorBoundary>
           </main>
           
           {/* Mobile Bottom Navigation */}
@@ -58,6 +64,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
         <KeyboardShortcuts />
         <PerformanceMonitor />
       </div>
-    </A11yProvider>;
+    </A11yProvider>
+  );
 };
 export default AppLayout;
