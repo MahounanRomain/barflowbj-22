@@ -33,7 +33,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
   return <A11yProvider>
-      <div className="flex min-h-screen w-full bg-background">
+      <div className="flex min-h-screen w-full">
         {/* Desktop Navigation Sidebar */}
         {!isMobile && !isNotFoundPage && <EnhancedDesktopNavigation />}
         
@@ -43,7 +43,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
           {!isMobile && !isNotFoundPage && location.pathname !== '/'}
           
           {/* Page Content */}
-          <main className={`flex-1 ${isMobile && !isNotFoundPage ? "pb-28" : ""} ${!isMobile ? 'min-h-[calc(100vh-4rem)]' : ''}`} id="main-content" tabIndex={-1}>
+          <main className={`flex-1 bg-background ${isMobile && !isNotFoundPage ? "pb-28" : ""} ${!isMobile ? 'min-h-[calc(100vh-4rem)]' : ''}`} id="main-content" tabIndex={-1}>
             <ErrorBoundary>
               {children}
             </ErrorBoundary>
