@@ -1,0 +1,59 @@
+# Optimized cache headers for better SEO performance
+
+# Cache hashed assets for 1 year (they have content hashes so safe to cache)
+/assets/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache JS and CSS files for 1 year
+*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache images for 1 month
+*.png
+  Cache-Control: public, max-age=2592000
+
+*.jpg
+  Cache-Control: public, max-age=2592000
+
+*.jpeg
+  Cache-Control: public, max-age=2592000
+
+*.svg
+  Cache-Control: public, max-age=2592000
+
+*.webp
+  Cache-Control: public, max-age=2592000
+
+*.ico
+  Cache-Control: public, max-age=2592000
+
+# Cache fonts for 1 year
+*.woff
+  Cache-Control: public, max-age=31536000, immutable
+
+*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache manifest and service worker files for shorter periods
+*.json
+  Cache-Control: public, max-age=86400
+
+/sw.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Don't cache HTML files to ensure updates are reflected
+*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Don't cache the root to ensure updates are reflected
+/
+  Cache-Control: public, max-age=0, must-revalidate
