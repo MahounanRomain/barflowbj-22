@@ -1,5 +1,5 @@
 
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { storage, Table } from '@/lib/storage';
 import { generateRandomId } from '@/lib/utils';
 

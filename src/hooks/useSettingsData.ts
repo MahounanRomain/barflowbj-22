@@ -1,5 +1,5 @@
 
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { storage, BarSettings } from '@/lib/storage';
 
 export const useSettingsData = () => {

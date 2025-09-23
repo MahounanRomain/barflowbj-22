@@ -1,5 +1,5 @@
 
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useLocalData } from '@/hooks/useLocalData';
 
 interface ProductProfitability {

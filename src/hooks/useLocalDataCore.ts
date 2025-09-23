@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { storage, BarSettings, Table } from '@/lib/storage';
 import { generateRandomId } from '@/lib/utils';
 

@@ -10,24 +10,14 @@ interface CacheConfig {
 }
 
 export const useOptimizedCache = () => {
+  const queryClient = useQueryClient();
   const [cacheStats, setCacheStats] = useState({
     hits: 0,
     misses: 0,
     size: 0
   });
-  
-  let queryClient;
-  
-  try {
-    queryClient = useQueryClient();
-  } catch (error) {
-    console.warn('QueryClient not available in useOptimizedCache:', error);
-    queryClient = null;
-  }
 
   const optimizeCache = useCallback((config: CacheConfig) => {
-    if (!queryClient) return;
-    
     const cache = queryClient.getQueryCache();
     const queries = cache.getAll();
     
@@ -52,8 +42,6 @@ export const useOptimizedCache = () => {
   }, [queryClient]);
 
   const prefetchData = useCallback((keys: string[]) => {
-    if (!queryClient) return;
-    
     keys.forEach(key => {
       queryClient.prefetchQuery({
         queryKey: [key],
@@ -63,8 +51,6 @@ export const useOptimizedCache = () => {
   }, [queryClient]);
 
   const invalidateSmartly = useCallback((pattern: string) => {
-    if (!queryClient) return;
-    
     queryClient.invalidateQueries({
       predicate: (query) => {
         return query.queryKey.some(key => 

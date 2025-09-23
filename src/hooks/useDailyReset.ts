@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { storage } from '@/lib/storage';
 import { useToast } from '@/hooks/use-toast';
 
