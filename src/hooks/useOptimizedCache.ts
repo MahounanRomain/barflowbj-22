@@ -1,5 +1,6 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import * as React from 'react';
+const { useState, useEffect, useCallback } = React;
 import { useQueryClient } from '@tanstack/react-query';
 
 interface CacheConfig {

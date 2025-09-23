@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
+const { useState, useEffect } = React;
 import { useLocalData } from '@/hooks/useLocalData';
 
 export interface SmartAlert {

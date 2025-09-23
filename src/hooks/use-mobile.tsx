@@ -1,5 +1,6 @@
 
-import { useState, useEffect } from "react"
+import * as React from "react"
+const { useState, useEffect } = React;
 
 const MOBILE_BREAKPOINT = 768
 

@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import * as React from 'react';
+const { useEffect, useState } = React;
 import { storage } from '@/lib/storage';
 import { useToast } from '@/hooks/use-toast';
 
