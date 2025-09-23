@@ -1,5 +1,5 @@
 
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { storage, CashBalance, CashTransaction } from '@/lib/storage';
 
 export const useCashData = () => {

@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback, useEffect } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { useLocalData } from '@/hooks/useLocalData';
 import { useRealTimeData } from '@/hooks/useRealTimeData';
 import { getTodayDateString } from '@/lib/dateUtils';
