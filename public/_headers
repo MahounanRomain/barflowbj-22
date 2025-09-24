@@ -1,37 +1,58 @@
 # Optimized cache headers for better SEO performance
 
-# Cache hashed assets for 1 year (they have content hashes so safe to cache)
+# Cache all asset files with content hashes for 1 year
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+  Vary: Accept-Encoding
+
+# Specific rules for JS and CSS assets  
 /assets/*.js
   Cache-Control: public, max-age=31536000, immutable
+  Vary: Accept-Encoding
 
 /assets/*.css
   Cache-Control: public, max-age=31536000, immutable
+  Vary: Accept-Encoding
 
-/assets/*
-  Cache-Control: public, max-age=31536000, immutable
-
-# Cache JS and CSS files for 1 year
+# Cache all JavaScript files including dynamic imports
 *.js
   Cache-Control: public, max-age=31536000, immutable
+  Vary: Accept-Encoding
 
+# Cache all CSS files
 *.css
   Cache-Control: public, max-age=31536000, immutable
+  Vary: Accept-Encoding
+
+# Special handling for TypeScript source maps and dev files
+*.tsx
+  Cache-Control: public, max-age=31536000, immutable
+  Vary: Accept-Encoding
+
+*.ts
+  Cache-Control: public, max-age=31536000, immutable
+  Vary: Accept-Encoding
 
 # Cache images for 1 month
 *.png
   Cache-Control: public, max-age=2592000
+  Vary: Accept-Encoding
 
 *.jpg
   Cache-Control: public, max-age=2592000
+  Vary: Accept-Encoding
 
 *.jpeg
   Cache-Control: public, max-age=2592000
+  Vary: Accept-Encoding
 
 *.svg
   Cache-Control: public, max-age=2592000
+  Vary: Accept-Encoding
 
 *.webp
   Cache-Control: public, max-age=2592000
+  Vary: Accept-Encoding
 
 *.ico
   Cache-Control: public, max-age=2592000
@@ -39,14 +60,18 @@
 # Cache fonts for 1 year
 *.woff
   Cache-Control: public, max-age=31536000, immutable
+  Vary: Accept-Encoding
 
 *.woff2
   Cache-Control: public, max-age=31536000, immutable
+  Vary: Accept-Encoding
 
-# Cache manifest and service worker files for shorter periods
+# Cache manifest and JSON files for 1 day
 *.json
   Cache-Control: public, max-age=86400
+  Vary: Accept-Encoding
 
+# Service worker should not be cached to ensure updates
 /sw.js
   Cache-Control: public, max-age=0, must-revalidate
 
