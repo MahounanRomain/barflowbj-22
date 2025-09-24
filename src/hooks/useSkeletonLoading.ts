@@ -25,11 +25,8 @@ export const useSkeletonLoading = (isDataLoaded?: boolean) => {
   useEffect(() => {
     if (isDataLoaded !== undefined) {
       if (isDataLoaded) {
-        // Small delay to avoid flash
-        const timer = setTimeout(() => {
-          setIsSkeletonLoading(false);
-        }, 300);
-        return () => clearTimeout(timer);
+        // Immediate transition for better LCP
+        setIsSkeletonLoading(false);
       } else {
         setIsSkeletonLoading(true);
       }

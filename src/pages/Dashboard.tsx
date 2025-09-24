@@ -34,9 +34,7 @@ const DashboardContent = () => {
           {/* Content with enhanced animations */}
           <div className="relative z-10">
             {/* Section de bienvenue */}
-            <div className="animate-fade-in-up hover-lift" style={{
-              '--stagger': 0
-            } as React.CSSProperties}>
+            <div className="hover-lift" style={{ contentVisibility: 'auto' }}>
               <DashboardWelcome />
             </div>
 
