@@ -8,6 +8,17 @@ export default {
 		"./components/**/*.{ts,tsx}",
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
+		"./index.html"
+	],
+	safelist: [
+		// Keep critical classes that might be used dynamically
+		{
+			pattern: /^(bg|text|border)-(primary|secondary|accent|success|warning|info|destructive)/,
+		},
+		'keyboard-navigation',
+		'high-contrast',
+		'reduce-motion',
+		'sr-only'
 	],
 	prefix: "",
 	theme: {
