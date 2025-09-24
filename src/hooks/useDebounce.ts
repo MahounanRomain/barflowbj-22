@@ -1,5 +1,4 @@
-import * as React from 'react';
-const { useState, useEffect } = React;
+import React, { useState, useEffect } from 'react';
 
 /**
  * Hook pour debouncer une valeur

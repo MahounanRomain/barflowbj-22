@@ -1,6 +1,5 @@
 
-import * as React from 'react';
-const { useState, useEffect } = React;
+import React, { useState, useEffect } from 'react';
 import { useLocalData } from './useLocalData';
 
 export type Permission = 
