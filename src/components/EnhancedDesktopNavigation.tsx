@@ -107,11 +107,11 @@ const EnhancedDesktopNavigation = () => {
             {!shouldShowExpanded && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg hover-glow transition-smooth animate-gentle-bounce">
+                  <div className="w-14 h-14 rounded-xl flex items-center justify-center shadow-lg hover-glow transition-smooth animate-gentle-bounce">
                     <img 
                       src={barflowtrackLogo} 
                       alt="BarFlowTrack Logo" 
-                      className="w-10 h-10 object-contain"
+                      className="w-12 h-12 object-contain"
                     />
                   </div>
                 </TooltipTrigger>
