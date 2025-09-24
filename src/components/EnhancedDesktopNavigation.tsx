@@ -90,7 +90,7 @@ const EnhancedDesktopNavigation = () => {
                 <img 
                   src={barflowtrackLogo} 
                   alt="BarFlowTrack Logo" 
-                  className="w-8 h-8 object-contain"
+                  className="w-12 h-12 object-contain"
                 />
               </div>
               <div className={cn(
