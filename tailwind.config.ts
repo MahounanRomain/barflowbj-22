@@ -4,29 +4,10 @@ import type { Config } from "tailwindcss";
 export default {
 	darkMode: ["class"],
 	content: [
-		"./index.html",
+		"./pages/**/*.{ts,tsx}",
+		"./components/**/*.{ts,tsx}",
+		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
-		"./src/components/**/*.{ts,tsx}",
-		"./src/pages/**/*.{ts,tsx}",
-		"./src/hooks/**/*.{ts,tsx}"
-	],
-	safelist: [
-		// Keep critical classes that might be used dynamically
-		{
-			pattern: /^(bg|text|border)-(primary|secondary|accent|success|warning|info|destructive|muted)/,
-			variants: ['hover', 'focus', 'active', 'dark'],
-		},
-		{
-			pattern: /^(from|to|via)-(primary|secondary|accent)/,
-		},
-		'keyboard-navigation',
-		'high-contrast',
-		'reduce-motion',
-		'sr-only',
-		'animate-fade-in',
-		'animate-fade-in-up',
-		'hover-lift',
-		'card-hover'
 	],
 	prefix: "",
 	theme: {

@@ -66,11 +66,8 @@ export const EstablishmentSettings: React.FC<EstablishmentSettingsProps> = ({
               }}
               onInput={(e) => {
                 const target = e.target as HTMLTextAreaElement;
-                // Use requestAnimationFrame to avoid forced reflow
-                requestAnimationFrame(() => {
-                  target.style.height = 'auto';
-                  target.style.height = target.scrollHeight + 'px';
-                });
+                target.style.height = 'auto';
+                target.style.height = target.scrollHeight + 'px';
               }}
             />
           </div>

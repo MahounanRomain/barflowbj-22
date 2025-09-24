@@ -115,17 +115,12 @@ const PerformanceMonitor: React.FC = () => {
     const timer = setTimeout(() => {
       setIsLongPress(true);
       if (bubbleRef.current) {
-        // Use requestAnimationFrame to avoid forced reflow
-        requestAnimationFrame(() => {
-          if (bubbleRef.current) {
-            const rect = bubbleRef.current.getBoundingClientRect();
-            setDragOffset({
-              x: e.clientX - rect.left,
-              y: e.clientY - rect.top
-            });
-            setIsDragging(true);
-          }
+        const rect = bubbleRef.current.getBoundingClientRect();
+        setDragOffset({
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
         });
+        setIsDragging(true);
       }
     }, 500); // 500ms long press
     
