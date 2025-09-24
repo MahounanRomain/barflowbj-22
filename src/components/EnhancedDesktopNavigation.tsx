@@ -100,7 +100,7 @@ const EnhancedDesktopNavigation = () => {
                 <h1 className="text-lg font-bold text-foreground bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
                   BarFlowTrack
                 </h1>
-                <p className="text-xs text-muted-foreground font-medium">by Romain S. BOGNISSOU</p>
+                <p className="text-muted-foreground font-normal text-base">by Romain S. BOGNISSOU</p>
               </div>
             </div>
 
@@ -163,7 +163,7 @@ const EnhancedDesktopNavigation = () => {
               </div>
               <div className="text-center">
                 <p className="text-xs text-muted-foreground">
-                  Version <span className="text-primary font-semibold">1.0.0</span>
+                  Version <span className="text-primary font-semibold">2.0.0</span>
                 </p>
               </div>
             </> : <div className="flex flex-col items-center space-y-2">

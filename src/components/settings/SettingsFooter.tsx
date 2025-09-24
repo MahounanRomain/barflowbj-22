@@ -66,11 +66,11 @@ export const SettingsFooter: React.FC<SettingsFooterProps> = ({
           <div className="space-y-2 text-xs text-blue-700 dark:text-blue-300">
             <div className="flex justify-between">
               <span>Build:</span>
-              <span className="font-mono">2025-08-19</span>
+              <span className="font-mono">2025-05-19</span>
             </div>
             <div className="flex justify-between">
               <span>Dernière modification:</span>
-              <span className="font-mono">19 août 2025 à 02:26</span>
+              <span className="font-mono">24 Septembre 2025 à 21:30</span>
             </div>
             <div className="flex justify-between">
               <span>Type:</span>
@@ -108,13 +108,6 @@ export const SettingsFooter: React.FC<SettingsFooterProps> = ({
       </div>
 
       {/* Fixed save button */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t p-4">
-        <div className="max-w-4xl mx-auto">
-          
-          {hasUnsavedChanges && !isSaving && <p className="text-xs text-muted-foreground text-center mt-2">
-              Sauvegarde automatique dans 2 secondes...
-            </p>}
-        </div>
-      </div>
+      
     </>;
 };
