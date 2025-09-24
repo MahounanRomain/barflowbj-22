@@ -110,18 +110,7 @@ export const SettingsFooter: React.FC<SettingsFooterProps> = ({
       {/* Fixed save button */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t p-4">
         <div className="max-w-4xl mx-auto">
-          <Button onClick={onSave} disabled={isSaving} variant={hasUnsavedChanges ? "default" : "secondary"} className="-bottom-0.5 h-12 shadow-bar-light bg-gradient-to-r from-primary to-accent-foreground hover:decoration-accent transition-all duration-200 text-sm font-medium">
-            {isSaving ? <>
-                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                Sauvegarde en cours...
-              </> : hasUnsavedChanges ? <>
-                <Clock className="w-5 h-5 mr-2" />
-                Sauvegarder les modifications
-              </> : <>
-                <CheckCircle className="w-5 h-5 mr-2" />
-                Sauvegarder les paramètres
-              </>}
-          </Button>
+          
           {hasUnsavedChanges && !isSaving && <p className="text-xs text-muted-foreground text-center mt-2">
               Sauvegarde automatique dans 2 secondes...
             </p>}
