@@ -1,17 +1,17 @@
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { storage, StaffMember } from '@/lib/storage';
 
 export const useStaffData = () => {
-  const getStaff = React.useCallback((): StaffMember[] => {
+  const getStaff = useCallback((): StaffMember[] => {
     return storage.load<StaffMember[]>('staff') || [];
   }, []);
 
-  const saveStaff = React.useCallback((staff: StaffMember[]) => {
+  const saveStaff = useCallback((staff: StaffMember[]) => {
     storage.save('staff', staff);
   }, []);
 
-  const addStaffMember = React.useCallback((member: Omit<StaffMember, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const addStaffMember = useCallback((member: Omit<StaffMember, 'id' | 'createdAt' | 'updatedAt'>) => {
     const staff = getStaff();
     const newMember: StaffMember = {
       ...member,
@@ -25,7 +25,7 @@ export const useStaffData = () => {
     return newMember;
   }, [getStaff, saveStaff]);
 
-  const updateStaffMember = React.useCallback((id: string, updates: Partial<StaffMember>) => {
+  const updateStaffMember = useCallback((id: string, updates: Partial<StaffMember>) => {
     const staff = getStaff();
     const index = staff.findIndex(member => member.id === id);
     if (index !== -1) {
@@ -41,7 +41,7 @@ export const useStaffData = () => {
     return null;
   }, [getStaff, saveStaff]);
 
-  const deleteStaffMember = React.useCallback((id: string) => {
+  const deleteStaffMember = useCallback((id: string) => {
     const staff = getStaff();
     const filteredStaff = staff.filter(member => member.id !== id);
     saveStaff(filteredStaff);

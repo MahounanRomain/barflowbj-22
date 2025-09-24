@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme as useUITheme } from '@/components/ui/theme-provider';
 import { useLocalData } from './useLocalData';
 
@@ -7,14 +7,14 @@ export const useTheme = () => {
   const { theme, setTheme } = useUITheme();
   const { getSettings, updateSettings } = useLocalData();
   
-  const [isDark, setIsDark] = React.useState(() => {
+  const [isDark, setIsDark] = useState(() => {
     if (theme === "system") {
       return window.matchMedia("(prefers-color-scheme: dark)").matches;
     }
     return theme === "dark";
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const newIsDark = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
     setIsDark(newIsDark);
   }, [theme]);
