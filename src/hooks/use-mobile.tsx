@@ -13,37 +13,31 @@ export function useIsMobile() {
   })
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    
-    const debouncedCheck = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
-      }, 16); // ~60fps debounce
-    };
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+    }
 
-    // Media query listener pour une réactivité optimale (sans accès direct aux dimensions)
-    const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+    // Media query listener pour une réactivité optimale
+    const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
     
     // Fonction de callback pour les changements
     const handleChange = (e: MediaQueryListEvent) => {
-      setIsMobile(e.matches);
-    };
+      setIsMobile(e.matches)
+    }
 
-    // Vérification initiale uniquement via media query
-    setIsMobile(mediaQuery.matches);
+    // Vérification initiale
+    checkIsMobile()
     
     // Écoute des changements de media query (plus performant que resize)
-    mediaQuery.addEventListener('change', handleChange);
+    mediaQuery.addEventListener('change', handleChange)
     
-    // Fallback avec resize listener débounced
-    window.addEventListener('resize', debouncedCheck);
+    // Fallback avec resize listener
+    window.addEventListener('resize', checkIsMobile)
 
     return () => {
-      clearTimeout(timeoutId);
-      mediaQuery.removeEventListener('change', handleChange);
-      window.removeEventListener('resize', debouncedCheck);
-    };
+      mediaQuery.removeEventListener('change', handleChange)
+      window.removeEventListener('resize', checkIsMobile)
+    }
   }, [])
 
   return isMobile

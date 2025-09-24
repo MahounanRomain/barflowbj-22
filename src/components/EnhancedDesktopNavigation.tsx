@@ -100,7 +100,7 @@ const EnhancedDesktopNavigation = () => {
                 <h1 className="text-lg font-bold text-foreground bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
                   BarFlowTrack
                 </h1>
-                <p className="text-muted-foreground font-normal text-xs">by Romain Bognissou</p>
+                <p className="text-muted-foreground font-normal text-base">by Romain S. BOGNISSOU</p>
               </div>
             </div>
 

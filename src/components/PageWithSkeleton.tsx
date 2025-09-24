@@ -54,30 +54,14 @@ export const PageWithSkeleton: React.FC<PageWithSkeletonProps> = ({
 
   if (isLoading) {
     return (
-      <div 
-        className="animate-fade-in min-h-screen" 
-        key={`skeleton-${location.pathname}`}
-        style={{ 
-          containIntrinsicSize: '100vw 100vh',
-          contain: 'layout style size',
-          willChange: 'contents'
-        }}
-      >
+      <div className="animate-fade-in" key={`skeleton-${location.pathname}`}>
         {getSkeletonForRoute()}
       </div>
     );
   }
 
   return (
-    <div 
-      className="animate-fade-in min-h-screen" 
-      key={`content-${location.pathname}`}
-      style={{ 
-        containIntrinsicSize: '100vw 100vh',
-        contain: 'layout style',
-        willChange: 'auto'
-      }}
-    >
+    <div className="animate-fade-in" key={`content-${location.pathname}`}>
       {children}
     </div>
   );

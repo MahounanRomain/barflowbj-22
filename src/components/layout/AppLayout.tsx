@@ -38,12 +38,12 @@ const AppLayout: React.FC<AppLayoutProps> = ({
         {!isMobile && !isNotFoundPage && <EnhancedDesktopNavigation />}
         
         {/* Main Content Area */}
-        <div className={`flex-1 flex flex-col min-h-screen ${!isMobile && !isNotFoundPage ? 'ml-0' : 'w-full'} contain-layout will-change-transform`} style={{ transform: 'translateZ(0)' }}>
+        <div className={`flex-1 flex flex-col min-h-screen ${!isMobile && !isNotFoundPage ? 'ml-0' : 'w-full'}`}>
           {/* Desktop Header - Only for non-dashboard pages */}
           {!isMobile && !isNotFoundPage && location.pathname !== '/'}
           
           {/* Page Content */}
-          <main className={`flex-1 ${isMobile && !isNotFoundPage ? "pb-24" : ""} ${!isMobile ? 'min-h-[calc(100vh)]' : 'min-h-[calc(100vh-5rem)]'} contain-layout`} id="main-content" tabIndex={-1} style={{ transform: 'translateZ(0)' }}>
+          <main className={`flex-1 ${isMobile && !isNotFoundPage ? "pb-24" : ""} ${!isMobile ? 'min-h-[calc(100vh)]' : 'min-h-[calc(100vh-5rem)]'}`} id="main-content" tabIndex={-1}>
             <ErrorBoundary>
               {children}
             </ErrorBoundary>

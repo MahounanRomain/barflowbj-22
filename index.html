@@ -39,15 +39,10 @@
     <!-- Preconnect for performance - establish early connections -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://cdn.gpteng.co" />
     
-    <!-- Critical resource preloading for faster LCP and reduced chain depth -->
-    <link rel="modulepreload" href="/src/main.tsx" />
-    <link rel="modulepreload" href="/src/App.tsx" />
-    <link rel="prefetch" href="/src/pages/Sales.tsx" />
-    <link rel="prefetch" href="/src/pages/Inventory.tsx" />
-    <link rel="prefetch" href="/src/pages/Staff.tsx" />
-    <link rel="prefetch" href="/src/components/EnhancedDesktopNavigation.tsx" />
+    <!-- Critical resource preloading for faster LCP -->
+    <link rel="preload" href="/src/main.tsx" as="script" />
+    <link rel="preload" href="/src/App.tsx" as="script" />
     
     <!-- Optimized non-blocking font loading -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">

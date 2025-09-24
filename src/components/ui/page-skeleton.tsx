@@ -19,20 +19,14 @@ export const PageSkeleton: React.FC<PageSkeletonProps> = ({
   itemCount = 6
 }) => {
   return (
-    <div 
-      className="mobile-container bg-gradient-to-br from-background via-background to-muted/20 min-h-screen"
-      style={{ 
-        containIntrinsicSize: '100vw 100vh',
-        contain: 'layout style size'
-      }}
-    >
+    <div className="mobile-container bg-gradient-to-br from-background via-background to-muted/20 min-h-screen">
       {showHeader && (
         <Header rightContent={<Skeleton className="h-8 w-24" />} />
       )}
 
-      <main className="px-4 py-6 space-y-6 pb-24" style={{ contain: 'layout style' }}>
+      <main className="px-4 py-6 space-y-6 pb-24">
         {/* Page title */}
-        <div className="space-y-2" style={{ minHeight: '48px' }}>
+        <div className="space-y-2">
           <Skeleton className="h-8 w-48" />
           <Skeleton className="h-4 w-64" />
         </div>

@@ -76,27 +76,19 @@ const PerformanceMonitor: React.FC = () => {
 
   // Gestion du drag and drop
   useEffect(() => {
-    let rafId: number;
-    
     const handleMouseMove = (e: MouseEvent) => {
       if (!isDragging) return;
       
-      // Use RAF to batch DOM reads/writes and prevent forced reflows
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        const newX = e.clientX - dragOffset.x;
-        const newY = e.clientY - dragOffset.y;
-        
-        // Cache window dimensions to avoid repeated reads
-        const windowWidth = window.innerWidth;
-        const windowHeight = window.innerHeight;
-        const maxX = windowWidth - (isExpanded ? 280 : 60);
-        const maxY = windowHeight - (isExpanded ? 120 : 60);
-        
-        setPosition({
-          x: Math.max(0, Math.min(maxX, newX)),
-          y: Math.max(0, Math.min(maxY, newY))
-        });
+      const newX = e.clientX - dragOffset.x;
+      const newY = e.clientY - dragOffset.y;
+      
+      // Limiter aux bords de l'écran
+      const maxX = window.innerWidth - (isExpanded ? 280 : 60);
+      const maxY = window.innerHeight - (isExpanded ? 120 : 60);
+      
+      setPosition({
+        x: Math.max(0, Math.min(maxX, newX)),
+        y: Math.max(0, Math.min(maxY, newY))
       });
     };
 
