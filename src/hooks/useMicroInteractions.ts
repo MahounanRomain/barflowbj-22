@@ -33,24 +33,27 @@ export const useMicroInteractions = () => {
 
   const createRippleEffect = useCallback((event: React.MouseEvent<HTMLElement>) => {
     const element = event.currentTarget;
-    const rect = element.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height);
-    const x = event.clientX - rect.left - size / 2;
-    const y = event.clientY - rect.top - size / 2;
+    // Use requestAnimationFrame to avoid forced reflow
+    requestAnimationFrame(() => {
+      const rect = element.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const x = event.clientX - rect.left - size / 2;
+      const y = event.clientY - rect.top - size / 2;
 
-    const ripple = document.createElement('span');
-    ripple.style.width = ripple.style.height = size + 'px';
-    ripple.style.left = x + 'px';
-    ripple.style.top = y + 'px';
-    ripple.className = 'absolute rounded-full bg-current opacity-30 animate-ping pointer-events-none';
+      const ripple = document.createElement('span');
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+      ripple.className = 'absolute rounded-full bg-current opacity-30 animate-ping pointer-events-none';
 
-    element.style.position = 'relative';
-    element.style.overflow = 'hidden';
-    element.appendChild(ripple);
+      element.style.position = 'relative';
+      element.style.overflow = 'hidden';
+      element.appendChild(ripple);
 
-    setTimeout(() => {
-      ripple.remove();
-    }, 600);
+      setTimeout(() => {
+        ripple.remove();
+      }, 600);
+    });
   }, []);
 
   useEffect(() => {
