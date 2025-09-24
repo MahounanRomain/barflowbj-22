@@ -47,4 +47,17 @@ export default defineConfig(({ mode }) => ({
     // Optimize chunk sizes
     chunkSizeWarningLimit: 1000,
   },
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react/jsx-runtime',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-popover',
+      'date-fns',
+      'clsx',
+      'tailwind-merge'
+    ],
+    exclude: ['@tanstack/react-query']
+  },
 }));
