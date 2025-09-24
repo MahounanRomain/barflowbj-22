@@ -44,41 +44,7 @@ export default defineConfig(({ mode }) => ({
     target: 'esnext',
     // Enable tree shaking
     minify: mode === 'production' ? 'esbuild' : false,
-  },
-  css: {
-    postcss: {
-      plugins: mode === 'production' ? [
-        require('tailwindcss'),
-        require('autoprefixer'),
-        require('@fullhuman/postcss-purgecss')({
-          content: [
-            './index.html',
-            './src/**/*.{js,ts,jsx,tsx}',
-          ],
-          defaultExtractor: (content: string) => content.match(/[\w-/:]+(?<!:)/g) || [],
-          safelist: [
-            // Preserve critical classes
-            /^(bg|text|border)-(primary|secondary|accent|success|warning|info|destructive)/,
-            'keyboard-navigation',
-            'high-contrast', 
-            'reduce-motion',
-            'sr-only',
-            // Preserve animation classes
-            /^animate-/,
-            // Preserve Radix UI classes
-            /^radix-/,
-            // Preserve state classes
-            /^(hover|focus|active|disabled):/,
-            // Preserve responsive classes
-            /^(sm|md|lg|xl|2xl):/,
-            // Preserve dark mode classes
-            /^dark:/,
-          ]
-        })
-      ] : [
-        require('tailwindcss'),
-        require('autoprefixer')
-      ]
-    }
+    // Optimize chunk sizes
+    chunkSizeWarningLimit: 1000,
   },
 }));
