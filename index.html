@@ -44,6 +44,10 @@
     <link rel="preload" href="/src/main.tsx" as="script" />
     <link rel="preload" href="/src/App.tsx" as="script" />
     
+    <!-- Non-blocking CSS loading -->
+    <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
+    
     <!-- Optimized non-blocking font loading -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"></noscript>
@@ -75,6 +79,20 @@
           color: hsl(210 40% 98%);
         }
       }
+      
+      /* Critical dashboard styles for immediate rendering */
+      .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+      .font-bold { font-weight: 700; }
+      .text-center { text-align: center; }
+      .bg-gradient-to-r { background-image: linear-gradient(to right, var(--tw-gradient-stops)); }
+      .from-primary { --tw-gradient-from: hsl(262 83% 58%); --tw-gradient-to: transparent; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+      .to-accent { --tw-gradient-to: hsl(262 90% 65%); }
+      .bg-clip-text { background-clip: text; }
+      .text-transparent { color: transparent; }
+      .text-muted-foreground { color: hsl(215.4 16.3% 46.9%); }
+      .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+      .py-\[15px\] { padding-top: 15px; padding-bottom: 15px; }
+      .space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem; }
       
       /* Optimized loading state for better Speed Index */
       #root:empty::before {
