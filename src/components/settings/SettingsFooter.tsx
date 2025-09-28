@@ -1,23 +1,19 @@
-
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { CheckCircle, Clock, Loader2, Calendar } from "lucide-react";
-
 interface SettingsFooterProps {
   onSave: () => void;
   hasUnsavedChanges?: boolean;
   isSaving?: boolean;
 }
-
-export const SettingsFooter: React.FC<SettingsFooterProps> = ({ 
-  onSave, 
+export const SettingsFooter: React.FC<SettingsFooterProps> = ({
+  onSave,
   hasUnsavedChanges,
   isSaving = false
 }) => {
-  return (
-    <>
+  return <>
       <div className="mt-8 p-6 bg-gradient-to-r from-primary/5 to-accent/5 rounded-xl border shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -114,36 +110,11 @@ export const SettingsFooter: React.FC<SettingsFooterProps> = ({
       {/* Fixed save button */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t p-4">
         <div className="max-w-4xl mx-auto">
-          <Button 
-            onClick={onSave} 
-            disabled={isSaving}
-            className="w-full h-12 text-lg font-medium shadow-lg bg-gradient-to-r from-primary to-accent hover:shadow-xl transition-all duration-200"
-            variant={hasUnsavedChanges ? "default" : "secondary"}
-          >
-            {isSaving ? (
-              <>
-                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                Sauvegarde en cours...
-              </>
-            ) : hasUnsavedChanges ? (
-              <>
-                <Clock className="w-5 h-5 mr-2" />
-                Sauvegarder les modifications
-              </>
-            ) : (
-              <>
-                <CheckCircle className="w-5 h-5 mr-2" />
-                Sauvegarder les paramètres
-              </>
-            )}
-          </Button>
-          {hasUnsavedChanges && !isSaving && (
-            <p className="text-xs text-muted-foreground text-center mt-2">
+          
+          {hasUnsavedChanges && !isSaving && <p className="text-xs text-muted-foreground text-center mt-2">
               Sauvegarde automatique dans 2 secondes...
-            </p>
-          )}
+            </p>}
         </div>
       </div>
-    </>
-  );
+    </>;
 };
