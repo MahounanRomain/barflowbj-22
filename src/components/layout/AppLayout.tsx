@@ -9,6 +9,7 @@ import { A11yProvider } from '@/components/accessibility/A11yProvider';
 import KeyboardShortcuts from '@/components/accessibility/KeyboardShortcuts';
 import PerformanceMonitor from '@/components/performance/PerformanceMonitor';
 import PerformanceOptimizer from '@/components/performance/PerformanceOptimizer';
+import DataMigration from '@/components/DataMigration';
 import GlobalSearch from '@/components/features/GlobalSearch';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 interface AppLayoutProps {
@@ -59,6 +60,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
         <KeyboardShortcuts />
         <PerformanceMonitor />
         <PerformanceOptimizer />
+        <DataMigration onMigrationComplete={() => console.log('✅ Migration terminée')} />
       </div>
     </A11yProvider>;
 };
