@@ -66,11 +66,11 @@ export const SettingsFooter: React.FC<SettingsFooterProps> = ({
           <div className="space-y-2 text-xs text-blue-700 dark:text-blue-300">
             <div className="flex justify-between">
               <span>Build:</span>
-              <span className="font-mono">2025-08-19</span>
+              <span className="font-mono">2025-05-19</span>
             </div>
             <div className="flex justify-between">
               <span>Dernière modification:</span>
-              <span className="font-mono">19 août 2025 à 02:26</span>
+              <span className="font-mono">01 Octorbre 2025 à 10h</span>
             </div>
             <div className="flex justify-between">
               <span>Type:</span>

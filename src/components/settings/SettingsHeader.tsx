@@ -1,23 +1,19 @@
-
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Settings as SettingsIcon } from "lucide-react";
-
 interface SettingsHeaderProps {
   inventoryCount: number;
   salesCount: number;
   staffCount: number;
   hasUnsavedChanges?: boolean;
 }
-
 export const SettingsHeader: React.FC<SettingsHeaderProps> = ({
   inventoryCount,
   salesCount,
   staffCount,
   hasUnsavedChanges
 }) => {
-  return (
-    <div className="mb-8">
+  return <div className="mb-8">
       <div className="flex items-center gap-3 mb-4">
         <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 shadow-lg">
           <SettingsIcon className="w-6 h-6 text-primary" />
@@ -28,9 +24,7 @@ export const SettingsHeader: React.FC<SettingsHeaderProps> = ({
           </h1>
           <p className="text-muted-foreground">
             Configurez votre application BarFlowTrack
-            {hasUnsavedChanges && (
-              <span className="ml-2 text-orange-600 font-medium">• Modifications non sauvegardées</span>
-            )}
+            {hasUnsavedChanges && <span className="ml-2 text-orange-600 font-medium">• Modifications non sauvegardées</span>}
           </p>
         </div>
       </div>
@@ -45,10 +39,9 @@ export const SettingsHeader: React.FC<SettingsHeaderProps> = ({
           <div className="text-xs text-muted-foreground">Ventes</div>
         </div>
         <div className="text-center">
-          <div className="text-2xl font-bold text-secondary">{staffCount}</div>
+          <div className="text-2xl font-bold text-secondary bg-inherit">{staffCount}</div>
           <div className="text-xs text-muted-foreground">Personnel</div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
