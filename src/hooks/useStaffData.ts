@@ -1,5 +1,5 @@
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { storage, StaffMember } from '@/lib/storage';
 
 export const useStaffData = () => {
@@ -9,6 +9,7 @@ export const useStaffData = () => {
 
   const saveStaff = useCallback((staff: StaffMember[]) => {
     storage.save('staff', staff);
+    window.dispatchEvent(new CustomEvent('staffChanged'));
   }, []);
 
   const addStaffMember = useCallback((member: Omit<StaffMember, 'id' | 'createdAt' | 'updatedAt'>) => {

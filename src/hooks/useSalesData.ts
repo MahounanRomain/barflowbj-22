@@ -1,5 +1,5 @@
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { storage, SaleRecord, CashTransaction, CashBalance } from '@/lib/storage';
 
 export const useSalesData = () => {
@@ -9,6 +9,7 @@ export const useSalesData = () => {
 
   const saveSales = useCallback((sales: SaleRecord[]) => {
     storage.save('sales', sales);
+    window.dispatchEvent(new CustomEvent('salesChanged'));
   }, []);
 
   const addSale = useCallback((sale: Omit<SaleRecord, 'id' | 'createdAt'>) => {

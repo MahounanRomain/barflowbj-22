@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { storage, InventoryItem, Category, InventoryHistoryEntry } from '@/lib/storage';
 
 export const useInventoryData = () => {
@@ -34,6 +34,8 @@ export const useInventoryData = () => {
 
   const saveInventory = useCallback((inventory: InventoryItem[]) => {
     storage.save('inventory', inventory);
+    // Déclencher un événement pour la synchronisation temps réel
+    window.dispatchEvent(new CustomEvent('inventoryChanged'));
   }, []);
 
   const addInventoryItem = useCallback((item: Omit<InventoryItem, 'id' | 'createdAt' | 'updatedAt'>) => {
