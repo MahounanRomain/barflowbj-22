@@ -11,7 +11,8 @@ import PerformanceMonitor from '@/components/performance/PerformanceMonitor';
 import PerformanceOptimizer from '@/components/performance/PerformanceOptimizer';
 import DataMigration from '@/components/DataMigration';
 import GlobalSearch from '@/components/features/GlobalSearch';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { GlobalErrorBoundary } from '@/components/error/GlobalErrorBoundary';
+import { logger } from '@/lib/errorLogger';
 interface AppLayoutProps {
   children: ReactNode;
 }
@@ -34,34 +35,80 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
-  return <A11yProvider>
-      <div className="flex min-h-screen w-full bg-background">
-        {/* Desktop Navigation Sidebar */}
-        {!isMobile && !isNotFoundPage && <EnhancedDesktopNavigation />}
-        
-        {/* Main Content Area */}
-        <div className={`flex-1 flex flex-col min-h-screen ${!isMobile && !isNotFoundPage ? 'ml-0' : 'w-full'}`}>
-          {/* Desktop Header - Only for non-dashboard pages */}
-          {!isMobile && !isNotFoundPage && location.pathname !== '/'}
+
+  // Log app initialization
+  useEffect(() => {
+    logger.info('App layout initialized', {
+      isMobile,
+      currentPath: location.pathname,
+      userAgent: navigator.userAgent,
+    });
+  }, [isMobile, location.pathname]);
+
+  // Global error handler for uncaught errors
+  useEffect(() => {
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      logger.critical('Unhandled promise rejection', {
+        reason: event.reason,
+        promise: event.promise,
+      }, new Error(event.reason));
+    };
+
+    const handleError = (event: ErrorEvent) => {
+      logger.critical('Global error', {
+        filename: event.filename,
+        lineno: event.lineno,
+        colno: event.colno,
+      }, new Error(event.message));
+    };
+
+    window.addEventListener('unhandledrejection', handleUnhandledRejection);
+    window.addEventListener('error', handleError);
+
+    return () => {
+      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+      window.removeEventListener('error', handleError);
+    };
+  }, []);
+
+  return (
+    <GlobalErrorBoundary
+      onError={(error, errorInfo) => {
+        logger.critical('React Error Boundary triggered', {
+          componentStack: errorInfo.componentStack,
+        }, error);
+      }}
+    >
+      <A11yProvider>
+        <div className="flex min-h-screen w-full bg-background">
+          {/* Desktop Navigation Sidebar */}
+          {!isMobile && !isNotFoundPage && <EnhancedDesktopNavigation />}
           
-          {/* Page Content */}
-          <main className={`flex-1 ${isMobile && !isNotFoundPage ? "pb-24" : ""} ${!isMobile ? 'min-h-[calc(100vh)]' : 'min-h-[calc(100vh-5rem)]'}`} id="main-content" tabIndex={-1}>
-            <ErrorBoundary>
-              {children}
-            </ErrorBoundary>
-          </main>
+          {/* Main Content Area */}
+          <div className={`flex-1 flex flex-col min-h-screen ${!isMobile && !isNotFoundPage ? 'ml-0' : 'w-full'}`}>
+            {/* Desktop Header - Only for non-dashboard pages */}
+            {!isMobile && !isNotFoundPage && location.pathname !== '/'}
+            
+            {/* Page Content */}
+            <main className={`flex-1 ${isMobile && !isNotFoundPage ? "pb-24" : ""} ${!isMobile ? 'min-h-[calc(100vh)]' : 'min-h-[calc(100vh-5rem)]'}`} id="main-content" tabIndex={-1}>
+              <GlobalErrorBoundary>
+                {children}
+              </GlobalErrorBoundary>
+            </main>
+            
+            {/* Mobile Bottom Navigation */}
+            {isMobile && !isNotFoundPage && <GlassmorphicBottomNav />}
+          </div>
           
-          {/* Mobile Bottom Navigation */}
-          {isMobile && !isNotFoundPage && <GlassmorphicBottomNav />}
+          {/* Accessibility & Performance Tools */}
+          <GlobalSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+          <KeyboardShortcuts />
+          <PerformanceMonitor />
+          <PerformanceOptimizer />
+          <DataMigration onMigrationComplete={() => logger.info('Data migration completed')} />
         </div>
-        
-        {/* Accessibility & Performance Tools */}
-        <GlobalSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-        <KeyboardShortcuts />
-        <PerformanceMonitor />
-        <PerformanceOptimizer />
-        <DataMigration onMigrationComplete={() => console.log('✅ Migration terminée')} />
-      </div>
-    </A11yProvider>;
+      </A11yProvider>
+    </GlobalErrorBoundary>
+  );
 };
 export default AppLayout;
