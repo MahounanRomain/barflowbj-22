@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { initializeOptimizations } from './utils/optimizations';
+import { QueryProvider } from './providers/QueryProvider';
 
 // Initialiser les optimisations de performance
 try {
@@ -33,7 +34,9 @@ const root = createRoot(rootElement);
 try {
   root.render(
     <React.StrictMode>
-      <App />
+      <QueryProvider>
+        <App />
+      </QueryProvider>
     </React.StrictMode>
   );
   console.log('✅ React app rendered successfully');
