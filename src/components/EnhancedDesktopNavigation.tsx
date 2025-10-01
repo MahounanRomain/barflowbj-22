@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Home, ShoppingCart, Package, Users, Settings, BarChart3, Pin, PinOff, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import { Home, ShoppingCart, Package, Users, Settings, BarChart3, Pin, PinOff, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -20,7 +20,6 @@ const EnhancedDesktopNavigation = () => {
     { icon: Package, label: "Stock", path: "/inventory", ariaLabel: "Aller à la page de gestion du stock", id: "inventory" },
     { icon: Users, label: "Personnel", path: "/staff", ariaLabel: "Aller à la page de gestion du personnel", id: "staff" },
     { icon: BarChart3, label: "Rapports", path: "/reports", ariaLabel: "Aller à la page des rapports", id: "reports" },
-    { icon: Sparkles, label: "IA Dashboard", path: "/intelligent-dashboard", ariaLabel: "Aller au dashboard intelligent avec IA", id: "intelligent-dashboard" },
     { icon: Settings, label: "Paramètres", path: "/settings", ariaLabel: "Aller à la page des paramètres", id: "settings" }
   ];
 

@@ -37,9 +37,9 @@ const GlassmorphicBottomNav = () => {
         "fixed bottom-safe-bottom left-[48%] transform -translate-x-1/2 z-[60] mb-4",
         "bg-background/95 backdrop-blur-xl border border-border/30",
         "rounded-2xl shadow-lg",
-        "px-2 py-1.5 mx-4",
+        "px-3 py-2.5 mx-4",
         "animate-slide-up transition-all duration-300",
-        "w-fit max-w-[320px]"
+        "w-fit max-w-[380px]"
       )}
       role="navigation"
       aria-label="Navigation principale"
@@ -59,7 +59,7 @@ const GlassmorphicBottomNav = () => {
               to={item.path}
               className={cn(
                 "relative flex flex-col items-center justify-center",
-                "px-1.5 py-1 rounded-lg transition-all duration-300",
+                "px-2 py-1.5 rounded-lg transition-all duration-300",
                 "min-w-0 flex-1",
                 isActive
                   ? "bg-primary/10 text-primary"
@@ -77,14 +77,14 @@ const GlassmorphicBottomNav = () => {
             >
               <item.icon 
                 className={cn(
-                  "h-3.5 w-3.5 transition-all duration-300",
+                  "h-5 w-5 transition-all duration-300",
                   isActive && "text-primary"
                 )}
                 aria-hidden="true"
               />
               
               <span className={cn(
-                "text-[0.55rem] mt-0.5 font-medium transition-all duration-300 leading-none",
+                "text-[0.65rem] mt-1 font-medium transition-all duration-300 leading-tight",
                 isActive ? "text-primary font-semibold" : ""
               )}>
                 {item.label}

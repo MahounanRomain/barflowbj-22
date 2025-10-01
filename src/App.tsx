@@ -20,7 +20,6 @@ const Inventory = React.lazy(() => import("@/pages/Inventory"));
 const Staff = React.lazy(() => import("@/pages/Staff"));
 const Reports = React.lazy(() => import("@/pages/Reports"));
 const Settings = React.lazy(() => import("@/pages/Settings"));
-const IntelligentDashboard = React.lazy(() => import("@/pages/IntelligentDashboard"));
 const NotFound = React.lazy(() => import("@/pages/NotFound"));
 
 // Lazy load navigation components
@@ -121,7 +120,6 @@ function AppContent() {
                 <Route path="/inventory" element={<Inventory />} />
                 <Route path="/staff" element={<Staff />} />
                 <Route path="/reports" element={<Reports />} />
-                <Route path="/intelligent-dashboard" element={<IntelligentDashboard />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

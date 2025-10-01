@@ -21,6 +21,7 @@ import AccountingExport from "@/components/analytics/AccountingExport";
 import { PageWithSkeleton } from "@/components/PageWithSkeleton";
 import { useSkeletonLoading } from "@/hooks/useSkeletonLoading";
 import RestockDialog from "@/components/inventory/RestockDialog";
+import { RealtimeDashboard } from "@/components/dashboard/RealtimeDashboard";
 
 const Reports = () => {
   const { getSales, getInventory, getStaff } = useLocalData();
@@ -415,6 +416,7 @@ const Reports = () => {
             
             <TabsContent value="advanced" className="mt-4">
               <div className="space-y-4">
+                <RealtimeDashboard />
                 <ProfitabilityAnalysis />
                 <PeriodComparison />
                 <AccountingExport />
