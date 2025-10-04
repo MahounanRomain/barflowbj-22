@@ -19,10 +19,11 @@ export default {
 			}
 		},
 		extend: {
-			fontFamily: {
-				sans: ['Playfair Display', 'serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont'],
-				'playfair': ['Playfair Display', 'serif'],
-			},
+		fontFamily: {
+			sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+			'playfair': ['Playfair Display', 'serif'],
+			'heading': ['Playfair Display', 'serif'],
+		},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
