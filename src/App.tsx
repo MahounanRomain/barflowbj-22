@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
@@ -27,25 +26,6 @@ const DesktopNavigation = React.lazy(() => import("@/components/DesktopNavigatio
 const OfflineIndicator = React.lazy(() => import("@/components/OfflineIndicator"));
 const PWAInstallPrompt = React.lazy(() => import("@/components/PWAInstallPrompt"));
 
-// Configuration optimisée du QueryClient
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      retry: (failureCount, error) => {
-        // Retry logic plus intelligent
-        if (failureCount >= 3) return false;
-        if (error?.message?.includes('Network')) return true;
-        return failureCount < 2;
-      },
-      refetchOnWindowFocus: false, // Évite les requêtes inutiles
-      refetchOnMount: true,
-    },
-    mutations: {
-      retry: 1,
-    },
-  },
-});
 
 function AppContent() {
   const location = useLocation();
@@ -141,15 +121,13 @@ function AppContent() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-        <BrowserRouter>
-          <ErrorBoundary>
-            <AppContent />
-          </ErrorBoundary>
-        </BrowserRouter>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+      <BrowserRouter>
+        <ErrorBoundary>
+          <AppContent />
+        </ErrorBoundary>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
