@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, MouseEvent } from "react";
 import { Home, ShoppingCart, Package, Users, Settings, BarChart3 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -25,7 +25,7 @@ const GlassmorphicBottomNav = () => {
     { icon: Settings, label: "Paramètres", path: "/settings", ariaLabel: "Aller à la page des paramètres" }
   ];
 
-  const handleItemClick = (e: React.MouseEvent<HTMLAnchorElement>, index: number) => {
+  const handleItemClick = (e: MouseEvent<HTMLAnchorElement>, index: number) => {
     createRippleEffect(e);
     hapticFeedback('light');
     triggerInteraction('tap');

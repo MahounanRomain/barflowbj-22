@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
@@ -14,17 +14,17 @@ import { useDailyReset } from "@/hooks/useDailyReset";
 import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 
 // Lazy load non-critical routes for better performance
-const Sales = React.lazy(() => import("@/pages/Sales"));
-const Inventory = React.lazy(() => import("@/pages/Inventory"));
-const Staff = React.lazy(() => import("@/pages/Staff"));
-const Reports = React.lazy(() => import("@/pages/Reports"));
-const Settings = React.lazy(() => import("@/pages/Settings"));
-const NotFound = React.lazy(() => import("@/pages/NotFound"));
+const Sales = lazy(() => import("@/pages/Sales"));
+const Inventory = lazy(() => import("@/pages/Inventory"));
+const Staff = lazy(() => import("@/pages/Staff"));
+const Reports = lazy(() => import("@/pages/Reports"));
+const Settings = lazy(() => import("@/pages/Settings"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
 
 // Lazy load navigation components
-const DesktopNavigation = React.lazy(() => import("@/components/DesktopNavigation"));
-const OfflineIndicator = React.lazy(() => import("@/components/OfflineIndicator"));
-const PWAInstallPrompt = React.lazy(() => import("@/components/PWAInstallPrompt"));
+const DesktopNavigation = lazy(() => import("@/components/DesktopNavigation"));
+const OfflineIndicator = lazy(() => import("@/components/OfflineIndicator"));
+const PWAInstallPrompt = lazy(() => import("@/components/PWAInstallPrompt"));
 
 
 function AppContent() {
