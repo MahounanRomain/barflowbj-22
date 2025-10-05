@@ -1,109 +1,109 @@
-import { useState, useEffect, useMemo } from "react";
-import { Calendar, TrendingUp, Package, Users, DollarSign, BarChart3 } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Calendar, TrendingUp, BarChart3, PieChart } from "lucide-react";
 import Header from "@/components/Header";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useLocalData } from "@/hooks/useLocalData";
-import { PageWithSkeleton } from "@/components/PageWithSkeleton";
-import { useSkeletonLoading } from "@/hooks/useSkeletonLoading";
-import { DateRange, getDateRangeForPreset, filterSalesByDateRange, calculateTotals } from "@/lib/dateFilters";
-import { formatDateForStorage } from "@/lib/dateUtils";
+import { formatCurrency } from "@/lib/utils";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import DailyTransactions from "@/components/DailyTransactions";
+import { formatDateForStorage, getTodayDateString } from "@/lib/dateUtils";
+import { CashManager } from "@/components/cash/CashManager";
+import { SpendsManager } from "@/components/spends/SpendsManager";
+import AdvancedAnalytics from "@/components/analytics/AdvancedAnalytics";
 import ProfitabilityAnalysis from "@/components/analytics/ProfitabilityAnalysis";
 import PeriodComparison from "@/components/analytics/PeriodComparison";
 import AccountingExport from "@/components/analytics/AccountingExport";
-import StockPredictions from "@/components/analytics/StockPredictions";
-import { CashManager } from "@/components/cash/CashManager";
-import { SpendsManager } from "@/components/spends/SpendsManager";
-import SalesChart from "@/components/SalesChart";
+import { PageWithSkeleton } from "@/components/PageWithSkeleton";
+import { useSkeletonLoading } from "@/hooks/useSkeletonLoading";
+import RestockDialog from "@/components/inventory/RestockDialog";
 
 const Reports = () => {
   const { getSales, getInventory, getStaff } = useLocalData();
-  const [isDataLoaded, setIsDataLoaded] = useState(false);
-  const isSkeletonLoading = useSkeletonLoading(isDataLoaded);
-  
-  // État centralisé pour le filtre de dates
-  const [dateRange, setDateRange] = useState<DateRange>(() => getDateRangeForPreset('thisMonth'));
-  const [activePreset, setActivePreset] = useState('thisMonth');
-
-  // Données brutes
-  const [allSales, setAllSales] = useState<any[]>([]);
+  const [sales, setSales] = useState<any[]>([]);
   const [inventory, setInventory] = useState<any[]>([]);
   const [staff, setStaff] = useState<any[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [showDailyTransactions, setShowDailyTransactions] = useState(false);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [restockItem, setRestockItem] = useState<any>(null);
+  const [showRestockDialog, setShowRestockDialog] = useState(false);
+  const isSkeletonLoading = useSkeletonLoading(isDataLoaded);
 
   useEffect(() => {
     const loadData = () => {
-      setAllSales(getSales());
+      setSales(getSales());
       setInventory(getInventory());
       setStaff(getStaff());
       setIsDataLoaded(true);
     };
+    
     loadData();
   }, [getSales, getInventory, getStaff]);
 
-  // Filtrer les ventes selon la période sélectionnée - LOGIQUE CENTRALISÉE
-  const filteredSales = useMemo(() => {
-    return filterSalesByDateRange(allSales, dateRange);
-  }, [allSales, dateRange]);
+  // Calcul des statistiques de ventes
+  const today = getTodayDateString();
+  const thisWeekStart = new Date();
+  thisWeekStart.setDate(thisWeekStart.getDate() - 7);
+  const thisMonthStart = new Date();
+  thisMonthStart.setDate(1);
 
-  // Calculer les statistiques - UNIQUE SOURCE DE VÉRITÉ
-  const stats = useMemo(() => {
-    const totals = calculateTotals(filteredSales);
-    
-    // Articles les plus vendus
-    const itemSales: Record<string, { quantity: number; revenue: number }> = {};
-    filteredSales.forEach(sale => {
-      if (!itemSales[sale.item]) {
-        itemSales[sale.item] = { quantity: 0, revenue: 0 };
-      }
-      itemSales[sale.item].quantity += Number(sale.quantity || 0);
-      itemSales[sale.item].revenue += Number(sale.total || 0);
-    });
+  const todaySales = sales.filter(sale => sale.date === today);
+  const weekSales = sales.filter(sale => new Date(sale.date + 'T00:00:00') >= thisWeekStart);
+  const monthSales = sales.filter(sale => new Date(sale.date + 'T00:00:00') >= thisMonthStart);
 
-    const topItems = Object.entries(itemSales)
-      .map(([name, data]) => ({ name, ...data }))
-      .sort((a, b) => b.revenue - a.revenue)
-      .slice(0, 5);
+  const dailyTotal = todaySales.reduce((sum, sale) => sum + Number(sale.total || 0), 0);
+  const weeklyTotal = weekSales.reduce((sum, sale) => sum + Number(sale.total || 0), 0);
+  const monthlyTotal = monthSales.reduce((sum, sale) => sum + Number(sale.total || 0), 0);
 
-    // Tendances par catégorie
-    const categoryTrends: Record<string, number> = {};
-    filteredSales.forEach(sale => {
-      const item = inventory.find(inv => inv.name === sale.item);
-      const category = item?.category || 'Autres';
-      categoryTrends[category] = (categoryTrends[category] || 0) + Number(sale.quantity || 0);
-    });
+  // Calculer les articles les plus vendus
+  const itemSales: Record<string, { sales: number; revenue: number }> = {};
+  sales.forEach(sale => {
+    if (!itemSales[sale.item]) {
+      itemSales[sale.item] = { sales: 0, revenue: 0 };
+    }
+    itemSales[sale.item].sales += Number(sale.quantity || 0);
+    itemSales[sale.item].revenue += Number(sale.total || 0);
+  });
 
-    // Performance du personnel
-    const staffPerformance = staff
-      .filter(member => member.isActive)
-      .map(member => {
-        const memberSales = filteredSales.filter(sale => sale.sellerName === member.name);
-        const totalRevenue = memberSales.reduce((sum, sale) => sum + Number(sale.total || 0), 0);
-        return {
-          ...member,
-          totalRevenue,
-          salesCount: memberSales.length
-        };
-      })
-      .sort((a, b) => b.totalRevenue - a.totalRevenue);
+  const topItems = Object.entries(itemSales)
+    .map(([name, data]) => ({ name, ...data }))
+    .sort((a, b) => b.revenue - a.revenue)
+    .slice(0, 4);
 
+  // Analyser l'inventaire pour les alertes
+  const lowStockItems = inventory.filter(item => 
+    Number(item.quantity || 0) <= Number(item.threshold || 0) && Number(item.quantity || 0) > 0
+  );
+  const outOfStockItems = inventory.filter(item => Number(item.quantity || 0) <= 0);
+
+  // Calculer les tendances de consommation par catégorie
+  const categoryTrends: Record<string, number> = {};
+  sales.forEach(sale => {
+    const item = inventory.find(inv => inv.name === sale.item);
+    const category = item?.category || 'Autres';
+    if (!categoryTrends[category]) {
+      categoryTrends[category] = 0;
+    }
+    categoryTrends[category] += Number(sale.quantity || 0);
+  });
+
+  // Calculer les performances du personnel - corrigé
+  const staffPerformance = staff.filter(member => member.isActive).map(member => {
+    const memberSales = sales.filter(sale => sale.sellerName === member.name);
+    const totalRevenue = memberSales.reduce((sum, sale) => sum + Number(sale.total || 0), 0);
     return {
-      totals,
-      topItems,
-      categoryTrends,
-      staffPerformance
+      ...member,
+      totalRevenue,
+      salesCount: memberSales.length
     };
-  }, [filteredSales, inventory, staff]);
+  }).sort((a, b) => b.totalRevenue - a.totalRevenue);
 
-  // Alertes inventaire
-  const inventoryAlerts = useMemo(() => {
-    const lowStock = inventory.filter(item => 
-      Number(item.quantity || 0) <= Number(item.threshold || 0) && Number(item.quantity || 0) > 0
-    );
-    const outOfStock = inventory.filter(item => Number(item.quantity || 0) <= 0);
-    
-    return { lowStock, outOfStock };
-  }, [inventory]);
-
+  // Formatage en XOF
   const formatXOF = (amount: number) => {
     return new Intl.NumberFormat('fr-SN', {
       style: 'currency',
@@ -113,254 +113,324 @@ const Reports = () => {
     }).format(amount);
   };
 
-  const handlePresetChange = (preset: string) => {
-    setActivePreset(preset);
-    setDateRange(getDateRangeForPreset(preset));
+  // Obtenir les transactions pour la date sélectionnée
+  const getTransactionsForDate = (date: Date) => {
+    const dateString = formatDateForStorage(date);
+    return sales.filter(sale => sale.date === dateString);
   };
 
-  const periodButtons = [
-    { label: '7 jours', value: '7d' },
-    { label: '14 jours', value: '14d' },
-    { label: '30 jours', value: '30d' },
-    { label: 'Semaine', value: 'thisWeek' },
-    { label: 'Mois', value: 'thisMonth' },
-    { label: 'Année', value: 'thisYear' },
-    { label: 'Tout', value: 'allTime' }
-  ];
+  const handleDateSelect = (date: Date | undefined) => {
+    if (date) {
+      setSelectedDate(date);
+      setShowDailyTransactions(true);
+    }
+  };
+
+  const handleRestockClick = (item: any) => {
+    setRestockItem(item);
+    setShowRestockDialog(true);
+  };
+
+  const handleRestockClose = () => {
+    setShowRestockDialog(false);
+    setRestockItem(null);
+    // Recharger les données pour refléter les changements
+    setSales(getSales());
+    setInventory(getInventory());
+  };
 
   return (
     <PageWithSkeleton isLoading={isSkeletonLoading}>
       <div className="mobile-container">
-        <Header title="Rapports" />
+        <Header 
+          rightContent={
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <Calendar size={16} className="mr-1" />
+                  {format(selectedDate, "dd MMM yyyy", { locale: fr })}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="end">
+                <CalendarComponent
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={handleDateSelect}
+                  initialFocus
+                  className="p-3 pointer-events-auto"
+                />
+              </PopoverContent>
+            </Popover>
+          }
+        />
 
         <main className="px-4 py-4 space-y-4 pb-24">
-          {/* Filtres de période - CENTRALISÉS */}
-          <Card className="p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <Calendar className="h-4 w-4 text-primary" />
-              <h3 className="font-medium">Période d'analyse</h3>
-            </div>
-            <div className="grid grid-cols-4 gap-2">
-              {periodButtons.map(btn => (
-                <button
-                  key={btn.value}
-                  onClick={() => handlePresetChange(btn.value)}
-                  className={`px-3 py-2 text-xs rounded-lg transition-all ${
-                    activePreset === btn.value
-                      ? 'bg-primary text-primary-foreground font-medium'
-                      : 'bg-secondary hover:bg-secondary/80'
-                  }`}
-                >
-                  {btn.label}
-                </button>
-              ))}
-            </div>
-            <p className="text-xs text-muted-foreground mt-2">
-              Du {dateRange.start} au {dateRange.end}
-            </p>
-          </Card>
+          {showDailyTransactions && (
+            <DailyTransactions
+              date={selectedDate}
+              transactions={getTransactionsForDate(selectedDate)}
+              onClose={() => setShowDailyTransactions(false)}
+            />
+          )}
 
-          {/* Statistiques globales */}
-          <div className="grid grid-cols-2 gap-3">
-            <Card className="p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <DollarSign className="h-4 w-4 text-green-500" />
-                <span className="text-sm text-muted-foreground">Chiffre d'Affaires</span>
-              </div>
-              <div className="text-2xl font-bold">{formatXOF(stats.totals.revenue)}</div>
-              <p className="text-xs text-muted-foreground mt-1">{stats.totals.count} ventes</p>
-            </Card>
-
-            <Card className="p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="h-4 w-4 text-blue-500" />
-                <span className="text-sm text-muted-foreground">Articles vendus</span>
-              </div>
-              <div className="text-2xl font-bold">{stats.totals.items}</div>
-              <p className="text-xs text-muted-foreground mt-1">
-                {stats.totals.count > 0 ? (stats.totals.items / stats.totals.count).toFixed(1) : 0} / vente
-              </p>
-            </Card>
-          </div>
-
-          <Tabs defaultValue="sales" className="w-full">
-            <TabsList className="w-full grid grid-cols-6 h-auto p-1">
-              <TabsTrigger value="sales" className="text-xs px-1 py-2">
-                Ventes
+          <Tabs defaultValue="sales">
+            <TabsList className="w-full grid grid-cols-7 h-auto p-1">
+              <TabsTrigger value="sales" className="text-xs px-1 py-2 min-w-0">
+                <span className="truncate">Ventes</span>
               </TabsTrigger>
-              <TabsTrigger value="inventory" className="text-xs px-1 py-2">
-                Stock
+              <TabsTrigger value="inventory" className="text-xs px-1 py-2 min-w-0">
+                <span className="truncate">Stock</span>
               </TabsTrigger>
-              <TabsTrigger value="staff" className="text-xs px-1 py-2">
-                Staff
+              <TabsTrigger value="staff" className="text-xs px-1 py-2 min-w-0">
+                <span className="truncate">Staff</span>
               </TabsTrigger>
-              <TabsTrigger value="cash" className="text-xs px-1 py-2">
-                Caisse
+              <TabsTrigger value="cash" className="text-xs px-1 py-2 min-w-0">
+                <span className="truncate">Caisse</span>
               </TabsTrigger>
-              <TabsTrigger value="spends" className="text-xs px-1 py-2">
-                Dépenses
+              <TabsTrigger value="spends" className="text-xs px-1 py-2 min-w-0">
+                <span className="truncate">Dépenses</span>
               </TabsTrigger>
-              <TabsTrigger value="advanced" className="text-xs px-1 py-2">
-                Avancé
+              <TabsTrigger value="analytics" className="text-xs px-1 py-2 min-w-0">
+                <span className="truncate">Analytics</span>
+              </TabsTrigger>
+              <TabsTrigger value="advanced" className="text-xs px-1 py-2 min-w-0">
+                <span className="truncate">Avancé</span>
               </TabsTrigger>
             </TabsList>
-
-            {/* Ventes */}
+            
             <TabsContent value="sales" className="space-y-4 mt-4">
-              <SalesChart sales={filteredSales} />
+              <Card className="p-4">
+                <h3 className="font-medium mb-3 flex items-center">
+                  <TrendingUp size={18} className="text-bar-purple mr-2" />
+                  Aperçu des Ventes
+                </h3>
+                
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Aujourd'hui</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{formatXOF(dailyTotal)}</span>
+                      <span className="text-blue-500 text-xs flex items-center">
+                        {todaySales.length} ventes
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Cette Semaine</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{formatXOF(weeklyTotal)}</span>
+                      <span className="text-green-500 text-xs flex items-center">
+                        {weekSales.length} ventes
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Ce Mois</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{formatXOF(monthlyTotal)}</span>
+                      <span className="text-green-500 text-xs flex items-center">
+                        {monthSales.length} ventes
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </Card>
               
               <Card className="p-4">
                 <h3 className="font-medium mb-3 flex items-center">
-                  <BarChart3 size={18} className="text-primary mr-2" />
-                  Top des ventes
+                  <BarChart3 size={18} className="text-bar-purple mr-2" />
+                  Articles les Plus Vendus
                 </h3>
-                {stats.topItems.length === 0 ? (
-                  <p className="text-center py-4 text-muted-foreground text-sm">
-                    Aucune vente sur cette période
-                  </p>
+                
+                {topItems.length === 0 ? (
+                  <div className="text-center py-4 text-muted-foreground">
+                    Aucune vente enregistrée
+                  </div>
                 ) : (
                   <div className="space-y-3">
-                    {stats.topItems.map((item, index) => (
+                    {topItems.map((item, index) => (
                       <div key={index} className="flex justify-between items-center">
                         <div>
                           <span className="font-medium">{item.name}</span>
                           <div className="text-xs text-muted-foreground">
-                            {item.quantity} vendus
+                            {item.sales} vendus
                           </div>
                         </div>
-                        <span className="font-semibold">{formatXOF(item.revenue)}</span>
+                        <span className="font-medium">{formatXOF(item.revenue)}</span>
                       </div>
                     ))}
                   </div>
                 )}
               </Card>
             </TabsContent>
-
-            {/* Stock */}
+            
             <TabsContent value="inventory" className="space-y-4 mt-4">
               <Card className="p-4">
-                <h3 className="font-medium mb-3 flex items-center">
-                  <Package className="h-4 w-4 text-orange-500 mr-2" />
-                  Alertes inventaire
-                </h3>
-                {inventoryAlerts.outOfStock.length === 0 && inventoryAlerts.lowStock.length === 0 ? (
-                  <p className="text-center py-4 text-muted-foreground text-sm">
-                    Aucune alerte
-                  </p>
-                ) : (
-                  <div className="space-y-2">
-                    {inventoryAlerts.outOfStock.map((item, idx) => (
-                      <div key={idx} className="flex justify-between items-center text-sm">
-                        <span>{item.name}</span>
-                        <span className="text-red-500 font-medium">Rupture</span>
-                      </div>
-                    ))}
-                    {inventoryAlerts.lowStock.map((item, idx) => (
-                      <div key={idx} className="flex justify-between items-center text-sm">
-                        <span>{item.name}</span>
-                        <span className="text-yellow-500 font-medium">
-                          Stock faible ({item.quantity})
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </Card>
-
-              <Card className="p-4">
-                <h3 className="font-medium mb-3">Tendances par catégorie</h3>
-                {Object.keys(stats.categoryTrends).length === 0 ? (
-                  <p className="text-center py-4 text-muted-foreground text-sm">
-                    Aucune donnée
-                  </p>
-                ) : (
-                  <div className="space-y-2">
-                    {Object.entries(stats.categoryTrends).map(([category, qty], idx) => {
-                      const maxQty = Math.max(...Object.values(stats.categoryTrends));
-                      const percentage = maxQty > 0 ? (Number(qty) / maxQty) * 100 : 0;
-                      return (
-                        <div key={idx}>
-                          <div className="flex justify-between text-sm mb-1">
-                            <span>{category}</span>
-                            <span>{Number(qty)} vendus</span>
+                <h3 className="font-medium">Alertes Inventaire</h3>
+                <div className="space-y-3 mt-3">
+                  {outOfStockItems.length === 0 && lowStockItems.length === 0 ? (
+                    <div className="text-center py-4 text-muted-foreground">
+                      Aucune alerte d'inventaire
+                    </div>
+                  ) : (
+                    <>
+                      {outOfStockItems.map((item, index) => (
+                        <div key={index} className="flex justify-between items-center">
+                          <div>
+                            <span>{item.name}</span>
+                            <div className="text-xs text-red-500">Rupture de stock</div>
                           </div>
-                          <div className="w-full h-2 bg-secondary rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-primary"
-                              style={{ width: `${percentage}%` }}
-                            />
+                          <Button variant="outline" size="sm" onClick={() => handleRestockClick(item)}>Commander</Button>
+                        </div>
+                      ))}
+                      
+                      {lowStockItems.map((item, index) => (
+                        <div key={index} className="flex justify-between items-center">
+                          <div>
+                            <span>{item.name}</span>
+                            <div className="text-xs text-yellow-500">
+                              Stock faible ({item.quantity} {item.unit})
+                            </div>
+                          </div>
+                          <Button variant="outline" size="sm" onClick={() => handleRestockClick(item)}>Commander</Button>
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
+              </Card>
+              
+              <Card className="p-4">
+                <h3 className="font-medium">Tendances de Consommation</h3>
+                <div className="space-y-3 mt-3">
+                  {Object.keys(categoryTrends).length === 0 ? (
+                    <div className="text-center py-4 text-muted-foreground">
+                      Aucune donnée de consommation
+                    </div>
+                  ) : (
+                    Object.entries(categoryTrends).map(([category, quantity], index) => {
+                      const maxQuantity = Math.max(...Object.values(categoryTrends));
+                      const percentage = maxQuantity > 0 ? (Number(quantity) / maxQuantity) * 100 : 0;
+                      
+                      return (
+                        <div key={index} className="flex justify-between items-center">
+                          <span>{category}</span>
+                          <div className="flex items-center gap-2">
+                            <span>{Number(quantity)} vendus</span>
+                            <div className="w-20 h-2 bg-secondary rounded-full overflow-hidden">
+                              <div 
+                                className="h-full bg-bar-purple" 
+                                style={{ width: `${percentage}%` }}
+                              ></div>
+                            </div>
                           </div>
                         </div>
                       );
-                    })}
-                  </div>
-                )}
+                    })
+                  )}
+                </div>
               </Card>
-
-              <StockPredictions />
             </TabsContent>
-
-            {/* Personnel */}
-            <TabsContent value="staff" className="space-y-4 mt-4">
+            
+            <TabsContent value="staff" className="mt-4">
               <Card className="p-4">
-                <h3 className="font-medium mb-3 flex items-center">
-                  <Users className="h-4 w-4 text-blue-500 mr-2" />
-                  Performance du personnel
-                </h3>
-                {stats.staffPerformance.length === 0 ? (
-                  <p className="text-center py-4 text-muted-foreground text-sm">
-                    Aucun membre actif
-                  </p>
-                ) : (
-                  <div className="space-y-3">
-                    {stats.staffPerformance.map((member, idx) => {
-                      const maxRevenue = Math.max(...stats.staffPerformance.map(s => s.totalRevenue), 1);
+                <h3 className="font-medium">Performance du Personnel</h3>
+                <div className="space-y-4 mt-3">
+                  {staffPerformance.length === 0 ? (
+                    <div className="text-center py-4 text-muted-foreground">
+                      Aucun membre du personnel actif
+                    </div>
+                  ) : (
+                    staffPerformance.map((member, index) => {
+                      const maxRevenue = Math.max(...staffPerformance.map(s => s.totalRevenue), 1);
                       const percentage = (member.totalRevenue / maxRevenue) * 100;
+                      
                       return (
-                        <div key={idx}>
-                          <div className="flex justify-between mb-1 text-sm">
-                            <span className="font-medium">{member.name}</span>
-                            <span>
-                              {formatXOF(member.totalRevenue)} ({member.salesCount} ventes)
-                            </span>
+                        <div key={index}>
+                          <div className="flex justify-between mb-1">
+                            <span>{member.name}</span>
+                            <span className="text-sm">{formatXOF(member.totalRevenue)} ({member.salesCount} ventes)</span>
                           </div>
                           <div className="w-full h-2 bg-secondary rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-primary"
+                            <div 
+                              className={`h-full ${
+                                index === 0 ? 'bg-green-500' : 
+                                index === 1 ? 'bg-bar-purple' : 
+                                index === 2 ? 'bg-blue-500' : 'bg-yellow-500'
+                              }`}
                               style={{ width: `${percentage}%` }}
-                            />
+                            ></div>
                           </div>
                         </div>
                       );
-                    })}
-                  </div>
-                )}
+                    })
+                  )}
+                </div>
               </Card>
             </TabsContent>
 
-            {/* Caisse */}
             <TabsContent value="cash" className="mt-4">
-              <CashManager />
+              <div className="space-y-4">
+                <div className="bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/20 dark:to-green-950/20 p-4 rounded-xl border border-emerald-200 dark:border-emerald-800">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30">
+                      <svg className="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-emerald-800 dark:text-emerald-200">Gestion de Caisse</h3>
+                      <p className="text-sm text-emerald-600 dark:text-emerald-300">Suivez vos flux de trésorerie</p>
+                    </div>
+                  </div>
+                  <CashManager />
+                </div>
+              </div>
             </TabsContent>
-
-            {/* Dépenses */}
+            
             <TabsContent value="spends" className="mt-4">
-              <SpendsManager />
+              <div className="space-y-4">
+                <div className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-950/20 dark:to-red-950/20 p-4 rounded-xl border border-orange-200 dark:border-orange-800">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2 rounded-lg bg-orange-100 dark:bg-orange-900/30">
+                      <svg className="w-5 h-5 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7c0-2-1-3.5-3.5-3.5S10 5 10 7v2m7 0v11a1 1 0 01-1 1H8a1 1 0 01-1-1V9a1 1 0 011-1h8a1 1 0 011 1z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-orange-800 dark:text-orange-200">Gestion des Dépenses</h3>
+                      <p className="text-sm text-orange-600 dark:text-orange-300">Contrôlez vos sorties de fonds</p>
+                    </div>
+                  </div>
+                  <SpendsManager />
+                </div>
+              </div>
             </TabsContent>
 
-            {/* Avancé */}
-            <TabsContent value="advanced" className="space-y-4 mt-4">
-              <ProfitabilityAnalysis />
-              <PeriodComparison dateFilter={{
-                type: 'custom',
-                startDate: dateRange.start,
-                endDate: dateRange.end,
-                label: `Période personnalisée`
-              }} />
-              <AccountingExport />
+            <TabsContent value="analytics" className="space-y-6 mt-4">
+              <AdvancedAnalytics />
+            </TabsContent>
+            
+            <TabsContent value="advanced" className="mt-4">
+              <div className="space-y-4">
+                <ProfitabilityAnalysis />
+                <PeriodComparison />
+                <AccountingExport />
+              </div>
             </TabsContent>
           </Tabs>
         </main>
+
+        {/* Dialog de réapprovisionnement */}
+        {restockItem && (
+          <RestockDialog 
+            isOpen={showRestockDialog}
+            onClose={handleRestockClose}
+            item={restockItem}
+          />
+        )}
       </div>
     </PageWithSkeleton>
   );
