@@ -14,6 +14,7 @@ import AccountingExport from "@/components/analytics/AccountingExport";
 import StockPredictions from "@/components/analytics/StockPredictions";
 import { CashManager } from "@/components/cash/CashManager";
 import { SpendsManager } from "@/components/spends/SpendsManager";
+import SalesChart from "@/components/SalesChart";
 
 const Reports = () => {
   const { getSales, getInventory, getStaff } = useLocalData();
@@ -347,6 +348,7 @@ const Reports = () => {
 
             {/* Avancé */}
             <TabsContent value="advanced" className="space-y-4 mt-4">
+              <SalesChart sales={filteredSales} />
               <ProfitabilityAnalysis />
               <PeriodComparison dateFilter={{
                 type: 'custom',
