@@ -45,16 +45,22 @@ const Reports = () => {
     loadData();
   }, [getSales, getInventory, getStaff]);
 
-  // Calcul des statistiques de ventes
+  // Calcul des statistiques de ventes avec dates cohérentes
   const today = getTodayDateString();
+  
+  // Calculer correctement le début de la semaine (7 jours en arrière)
   const thisWeekStart = new Date();
   thisWeekStart.setDate(thisWeekStart.getDate() - 7);
+  const weekStartString = formatDateForStorage(thisWeekStart);
+  
+  // Calculer correctement le début du mois
   const thisMonthStart = new Date();
   thisMonthStart.setDate(1);
+  const monthStartString = formatDateForStorage(thisMonthStart);
 
   const todaySales = sales.filter(sale => sale.date === today);
-  const weekSales = sales.filter(sale => new Date(sale.date + 'T00:00:00') >= thisWeekStart);
-  const monthSales = sales.filter(sale => new Date(sale.date + 'T00:00:00') >= thisMonthStart);
+  const weekSales = sales.filter(sale => sale.date >= weekStartString);
+  const monthSales = sales.filter(sale => sale.date >= monthStartString);
 
   const dailyTotal = todaySales.reduce((sum, sale) => sum + Number(sale.total || 0), 0);
   const weeklyTotal = weekSales.reduce((sum, sale) => sum + Number(sale.total || 0), 0);

@@ -1,6 +1,6 @@
-
 import { useMemo } from 'react';
 import { useLocalData } from '@/hooks/useLocalData';
+import { formatDateForStorage } from '@/lib/dateUtils';
 
 interface PeriodStats {
   totalRevenue: number;
@@ -36,10 +36,13 @@ export const usePeriodComparison = (currentPeriod: { start: string; end: string 
     const previousEnd = new Date(currentStart.getTime() - 1);
     
     const calculatePeriodStats = (startDate: Date, endDate: Date): PeriodStats => {
-      const periodSales = sales.filter(sale => {
-        const saleDate = new Date(sale.date);
-        return saleDate >= startDate && saleDate <= endDate;
-      });
+      // Utiliser formatDateForStorage pour garantir la cohérence
+      const startString = formatDateForStorage(startDate);
+      const endString = formatDateForStorage(endDate);
+      
+      const periodSales = sales.filter(sale => 
+        sale.date >= startString && sale.date <= endString
+      );
       
       const totalRevenue = periodSales.reduce((sum, sale) => sum + sale.total, 0);
       const totalSales = periodSales.length;

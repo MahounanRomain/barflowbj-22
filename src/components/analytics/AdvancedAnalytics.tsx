@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -7,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import TrendIndicator from '@/components/ui/trend-indicator';
 import EnhancedDateFilter, { DateFilter } from './EnhancedDateFilter';
 import TradingChart from './TradingChart';
+import { filterSalesByDateRange } from '@/lib/dateFiltering';
 import { 
   BarChart, 
   Bar, 
@@ -70,43 +70,9 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({
   const inventory = getInventory();
   const staff = getStaff();
 
-  // Filter sales based on selected date range
+  // Utiliser la fonction centralisée de filtrage pour garantir la cohérence
   const sales = useMemo(() => {
-    if (dateFilter.type === 'custom' && dateFilter.startDate && dateFilter.endDate) {
-      return allSales.filter(sale => 
-        sale.date >= dateFilter.startDate! && sale.date <= dateFilter.endDate!
-      );
-    }
-    
-    if (dateFilter.preset === 'all') {
-      return allSales;
-    }
-    
-    // Handle monthly filter
-    if (dateFilter.preset === 'monthly' && dateFilter.month) {
-      return allSales.filter(sale => sale.date.startsWith(dateFilter.month!));
-    }
-    
-    // Handle yearly filter
-    if (dateFilter.preset === 'yearly' && dateFilter.year) {
-      return allSales.filter(sale => sale.date.startsWith(dateFilter.year!));
-    }
-    
-    // Handle day-based presets
-    let days = 30; // default
-    switch (dateFilter.preset) {
-      case '7d': days = 7; break;
-      case '14d': days = 14; break;
-      case '21d': days = 21; break;
-      case '30d': days = 30; break;
-      case '90d': days = 90; break;
-    }
-    
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - days);
-    const cutoffString = cutoffDate.toISOString().split('T')[0];
-    
-    return allSales.filter(sale => sale.date >= cutoffString);
+    return filterSalesByDateRange(allSales, dateFilter);
   }, [allSales, dateFilter]);
 
   const formatXOF = (amount: number) => {
