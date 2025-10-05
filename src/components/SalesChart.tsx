@@ -1,5 +1,4 @@
-
-import React from "react";
+import { FC } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, ReferenceLine } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, BarChart3 } from "lucide-react";
@@ -9,7 +8,7 @@ interface SalesChartProps {
   sales: any[];
 }
 
-const SalesChart: React.FC<SalesChartProps> = ({ sales }) => {
+const SalesChart: FC<SalesChartProps> = ({ sales }) => {
   // Données pour le graphique en barres (7 derniers jours)
   const last7Days = Array.from({ length: 7 }, (_, i) => {
     const date = new Date();
