@@ -90,10 +90,29 @@ const NotificationCenter = () => {
   };
 
   useEffect(() => {
+    // Générer immédiatement au montage
     generateSystemNotifications();
-    const interval = setInterval(generateSystemNotifications, 300000); // Vérifier toutes les 5 min
-    return () => clearInterval(interval);
-  }, [getInventory, getSales, getSettings]); // Add proper dependencies
+    
+    // Vérifier toutes les 5 minutes
+    const interval = setInterval(generateSystemNotifications, 300000);
+    
+    // Écouter les changements dans les données
+    const handleDataChange = () => {
+      console.log('🔔 Données changées, regénération des notifications');
+      generateSystemNotifications();
+    };
+    
+    window.addEventListener('inventoryChanged', handleDataChange);
+    window.addEventListener('salesChanged', handleDataChange);
+    window.addEventListener('settingsChanged', handleDataChange);
+    
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('inventoryChanged', handleDataChange);
+      window.removeEventListener('salesChanged', handleDataChange);
+      window.removeEventListener('settingsChanged', handleDataChange);
+    };
+  }, []); // Dépendances vides pour éviter les recréations infinies
 
   const handleRemoveNotification = (e: React.MouseEvent, notificationId: string) => {
     e.stopPropagation();

@@ -14,11 +14,13 @@ import {
   ComposedChart,
   Bar,
   Cell,
+  Area,
+  Legend,
 } from 'recharts';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Maximize2, Minimize2, Activity, CandlestickChart, LineChart as LineChartIcon, TrendingDown, TrendingUp } from 'lucide-react';
+import { Maximize2, Minimize2, Activity, CandlestickChart, LineChart as LineChartIcon, TrendingDown, TrendingUp, BarChart2, DollarSign, Target, Zap } from 'lucide-react';
 import EnhancedDateFilter, { DateFilter } from './EnhancedDateFilter';
 
 interface TradingChartProps {
@@ -35,7 +37,7 @@ interface TradingChartProps {
 const TradingChart: React.FC<TradingChartProps> = ({ data, formatXOF, currentFilter, onFilterChange }) => {
   // Chart mode & fullscreen
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [mode, setMode] = useState<'line' | 'candles'>('line');
+  const [mode, setMode] = useState<'line' | 'candles' | 'area'>('area');
   const { lockToLandscape, unlock } = useScreenOrientation();
 
   // Gérer l'orientation d'écran selon le mode plein écran
@@ -87,13 +89,27 @@ const TradingChart: React.FC<TradingChartProps> = ({ data, formatXOF, currentFil
     [data, ma7, ma21, support, resistance]
   );
 
-  // Trend detection
+  // Statistiques de performance
+  const performanceStats = useMemo(() => {
+    if (data.length === 0) return null;
+    const revenues = data.map(d => d.revenue);
+    const total = revenues.reduce((a, b) => a + b, 0);
+    const avg = total / revenues.length;
+    const max = Math.max(...revenues);
+    const min = Math.min(...revenues);
+    const volatility = ((max - min) / avg) * 100;
+    
+    return { total, avg, max, min, volatility };
+  }, [data]);
+
+  // Trend detection amélioré
   const trend: 'bullish' | 'bearish' | 'neutral' = useMemo(() => {
     if (data.length < 5) return 'neutral';
     const recent = data.slice(-5);
     const slope = (recent[4].revenue - recent[0].revenue) / 4;
-    if (slope > 0) return 'bullish';
-    if (slope < 0) return 'bearish';
+    const threshold = recent[0].revenue * 0.05; // 5% change threshold
+    if (slope > threshold) return 'bullish';
+    if (slope < -threshold) return 'bearish';
     return 'neutral';
   }, [data]);
 
@@ -127,6 +143,9 @@ const TradingChart: React.FC<TradingChartProps> = ({ data, formatXOF, currentFil
   const ChartControls = (
     <div className="flex flex-wrap items-center gap-2">
       <ToggleGroup type="single" value={mode} onValueChange={(v) => v && setMode(v as any)}>
+        <ToggleGroupItem value="area" aria-label="Aires">
+          <BarChart2 className="w-4 h-4 mr-1" /> Aires
+        </ToggleGroupItem>
         <ToggleGroupItem value="line" aria-label="Ligne">
           <LineChartIcon className="w-4 h-4 mr-1" /> Ligne
         </ToggleGroupItem>
@@ -147,11 +166,40 @@ const TradingChart: React.FC<TradingChartProps> = ({ data, formatXOF, currentFil
   );
 
   const ChartLegend = (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 text-xs">
-      <div className="flex items-center gap-2"><div className="w-3 h-0.5 bg-primary"></div><span>CA (prix)</span></div>
-      <div className="flex items-center gap-2"><div className="w-3 h-0.5 bg-purple-500"></div><span>MA7</span></div>
-      <div className="flex items-center gap-2"><div className="w-3 h-0.5 bg-amber-500"></div><span>MA21</span></div>
-      <div className="flex items-center gap-2"><div className="w-3 h-0.5 bg-green-500"></div><span>Support/Résistance</span></div>
+    <div className="space-y-3 mt-4">
+      {/* Légende des lignes */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+        <div className="flex items-center gap-2"><div className="w-3 h-0.5 bg-primary"></div><span>CA (prix)</span></div>
+        <div className="flex items-center gap-2"><div className="w-3 h-0.5 bg-purple-500"></div><span>MA7</span></div>
+        <div className="flex items-center gap-2"><div className="w-3 h-0.5 bg-amber-500"></div><span>MA21</span></div>
+        <div className="flex items-center gap-2"><div className="w-3 h-0.5 bg-green-500"></div><span>Support/Résistance</span></div>
+      </div>
+      
+      {/* Statistiques de performance */}
+      {performanceStats && (
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 p-3 bg-muted/50 rounded-lg text-xs">
+          <div className="flex flex-col">
+            <span className="text-muted-foreground flex items-center gap-1"><DollarSign className="w-3 h-3" />Total</span>
+            <span className="font-semibold text-primary">{formatXOF(performanceStats.total)}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-muted-foreground flex items-center gap-1"><Target className="w-3 h-3" />Moyenne</span>
+            <span className="font-semibold">{formatXOF(performanceStats.avg)}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-muted-foreground flex items-center gap-1"><TrendingUp className="w-3 h-3" />Max</span>
+            <span className="font-semibold text-green-600">{formatXOF(performanceStats.max)}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-muted-foreground flex items-center gap-1"><TrendingDown className="w-3 h-3" />Min</span>
+            <span className="font-semibold text-red-600">{formatXOF(performanceStats.min)}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-muted-foreground flex items-center gap-1"><Zap className="w-3 h-3" />Volatilité</span>
+            <span className="font-semibold text-orange-600">{performanceStats.volatility.toFixed(1)}%</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 
@@ -183,6 +231,38 @@ const TradingChart: React.FC<TradingChartProps> = ({ data, formatXOF, currentFil
     </ResponsiveContainer>
   );
 
+  const AreaModeChart = (
+    <ResponsiveContainer width="100%" height="100%">
+      <ComposedChart data={enrichedData} margin={{ top: 10, right: 24, left: 8, bottom: 8 }}>
+        <defs>
+          <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
+            <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+          </linearGradient>
+        </defs>
+        <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+        <XAxis dataKey="date" tick={{ fontSize: 10 }} />
+        <YAxis tick={{ fontSize: 10 }} />
+        <Tooltip content={<CustomTooltip />} />
+
+        <ReferenceArea y1={resistance * 0.96} y2={resistance * 1.04} fill="#ef4444" fillOpacity={0.08} />
+        <ReferenceArea y1={support * 0.96} y2={support * 1.04} fill="#22c55e" fillOpacity={0.08} />
+        <ReferenceLine y={resistance} stroke="#ef4444" strokeDasharray="8 4" strokeWidth={2} />
+        <ReferenceLine y={support} stroke="#22c55e" strokeDasharray="8 4" strokeWidth={2} />
+
+        <Area 
+          type="monotone" 
+          dataKey="revenue" 
+          stroke="hsl(var(--primary))" 
+          strokeWidth={3}
+          fill="url(#colorRevenue)" 
+        />
+        <Line type="monotone" dataKey="ma7" stroke="#8b5cf6" strokeWidth={2} dot={false} strokeDasharray="5 5" name="MA7" />
+        <Line type="monotone" dataKey="ma21" stroke="#f59e0b" strokeWidth={2} dot={false} strokeDasharray="3 3" name="MA21" />
+      </ComposedChart>
+    </ResponsiveContainer>
+  );
+
   const CandleModeChart = (
     <ResponsiveContainer width="100%" height="100%">
       <ComposedChart data={enrichedData} margin={{ top: 10, right: 24, left: 8, bottom: 8 }}>
@@ -197,7 +277,7 @@ const TradingChart: React.FC<TradingChartProps> = ({ data, formatXOF, currentFil
         <ReferenceLine y={support} stroke="#22c55e" strokeDasharray="8 4" strokeWidth={2} />
 
         {/* "Bougies" simplifiées via des barres colorées selon la variation */}
-        <Bar dataKey="revenue" barSize={10} radius={[2, 2, 0, 0]}>
+        <Bar dataKey="revenue" barSize={12} radius={[3, 3, 0, 0]}>
           {enrichedData.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={entry.change >= 0 ? '#16a34a' : '#ef4444'} />
           ))}
@@ -230,7 +310,7 @@ const TradingChart: React.FC<TradingChartProps> = ({ data, formatXOF, currentFil
       <Card className="p-6">
         {Header}
         <div className="h-80">
-          {mode === 'line' ? LineModeChart : CandleModeChart}
+          {mode === 'area' ? AreaModeChart : mode === 'line' ? LineModeChart : CandleModeChart}
         </div>
         {ChartLegend}
       </Card>
@@ -255,8 +335,10 @@ const TradingChart: React.FC<TradingChartProps> = ({ data, formatXOF, currentFil
             )}
 
             <div className="flex-1 min-h-0">
-              <div className="h-full rounded-lg border bg-card">
-                {mode === 'line' ? (
+              <div className="h-full rounded-lg border bg-card p-4">
+                {mode === 'area' ? (
+                  <div className="h-full">{AreaModeChart}</div>
+                ) : mode === 'line' ? (
                   <div className="h-full">{LineModeChart}</div>
                 ) : (
                   <div className="h-full">{CandleModeChart}</div>
