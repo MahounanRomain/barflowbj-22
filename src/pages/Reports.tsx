@@ -207,6 +207,8 @@ const Reports = () => {
 
             {/* Ventes */}
             <TabsContent value="sales" className="space-y-4 mt-4">
+              <SalesChart sales={filteredSales} />
+              
               <Card className="p-4">
                 <h3 className="font-medium mb-3 flex items-center">
                   <BarChart3 size={18} className="text-primary mr-2" />
@@ -348,7 +350,6 @@ const Reports = () => {
 
             {/* Avancé */}
             <TabsContent value="advanced" className="space-y-4 mt-4">
-              <SalesChart sales={filteredSales} />
               <ProfitabilityAnalysis />
               <PeriodComparison dateFilter={{
                 type: 'custom',
