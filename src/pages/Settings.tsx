@@ -5,7 +5,6 @@ import { useLocalData } from "@/hooks/useLocalData";
 import { useToast } from "@/hooks/use-toast";
 import { EstablishmentSettings } from "@/components/settings/EstablishmentSettings";
 import { AppearanceSettings } from "@/components/settings/AppearanceSettings";
-import { NotificationSettings } from "@/components/settings/NotificationSettings";
 import { DataManagement } from "@/components/settings/DataManagement";
 import { SpecificationGenerator } from "@/components/settings/SpecificationGenerator";
 import { AppVersionInfo } from "@/components/settings/AppVersionInfo";
@@ -34,11 +33,6 @@ const SettingsContent = ({ settings, onSettingsChange, handleSave, handleExport,
           />
 
           <AppearanceSettings 
-            settings={settings}
-            onSettingsChange={onSettingsChange}
-          />
-
-          <NotificationSettings 
             settings={settings}
             onSettingsChange={onSettingsChange}
           />

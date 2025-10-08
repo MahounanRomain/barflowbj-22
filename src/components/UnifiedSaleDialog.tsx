@@ -16,7 +16,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useLocalData } from "@/hooks/useLocalData";
-import { useNotifications } from '@/hooks/useNotifications';
 import { useTableBalance } from '@/hooks/useTableBalance';
 import { useToast } from "@/hooks/use-toast";
 import { getTodayDateString } from "@/lib/dateUtils";
@@ -36,7 +35,6 @@ interface SaleItem {
 
 const UnifiedSaleDialog = () => {
   const { getInventory, updateInventoryItem, addSale, getStaff, getTables } = useLocalData();
-  const { addNotification } = useNotifications();
   const { setTableStatus } = useTableBalance();
   const { toast } = useToast();
   
@@ -262,28 +260,6 @@ const UnifiedSaleDialog = () => {
     // Occuper la table
     if (table && table.status !== 'occupied') {
       setTableStatus(selectedTable, 'occupied');
-      addNotification(
-        'table_update',
-        'Table occupée',
-        `${table.name} automatiquement occupée`,
-        'low',
-        false,
-        table.id,
-        12
-      );
-    }
-
-    // Notification vente importante
-    if (saleData.total > 10000) {
-      addNotification(
-        'high_sales',
-        'Vente importante',
-        `Vente de ${formatCurrency(saleData.total)} - ${saleData.item}`,
-        'medium',
-        false,
-        undefined,
-        24
-      );
     }
   };
 

@@ -12,7 +12,6 @@ import TableSalesView from "@/components/TableSalesView";
 import EnhancedTableSalesView from "@/components/tables/EnhancedTableSalesView";
 import TableStatusManager from "@/components/tables/TableStatusManager";
 import { useLocalData } from "@/hooks/useLocalData";
-import { useNotifications } from "@/hooks/useNotifications";
 import { checkAndGenerateDailyReport } from "@/lib/dailyReports";
 import { useToast } from "@/hooks/use-toast";
 import { getTodayDateString } from "@/lib/dateUtils";
@@ -24,7 +23,6 @@ import { useRealTimeData } from "@/hooks/useRealTimeData";
 
 const Sales = () => {
   const { getSales, saveSales, updateInventoryItem, getInventory, updateTable } = useLocalData();
-  const { addNotification, removeNotificationsByEntity } = useNotifications();
   const { toast } = useToast();
   const [sales, setSales] = useState([]);
   const [inventory, setInventory] = useState([]);
@@ -158,31 +156,9 @@ const Sales = () => {
             ? { ...item, quantity: inventoryItem.quantity + saleToDelete.quantity } 
             : item
         );
-        const restoredItem = updatedInventory.find(item => item.id === inventoryItem.id);
-        if (restoredItem && restoredItem.quantity > restoredItem.threshold) {
-          // Supprimer les notifications de stock bas si le stock est maintenant suffisant
-          removeNotificationsByEntity(inventoryItem.id, 'low_stock');
-        }
       }
 
-      // 6.1. Nettoyer les notifications de table si elle est restaurée
-      if (saleToDelete.tableId) {
-        console.log('Suppression des notifications pour table:', saleToDelete.tableId);
-        removeNotificationsByEntity(saleToDelete.tableId, 'table_update');
-      }
-
-      // 7. Ajouter une notification d'annulation
-      addNotification(
-        'system',
-        'Vente annulée',
-        `Vente de ${saleToDelete.item} (x${saleToDelete.quantity}) annulée - Stock restauré`,
-        'medium',
-        false,
-        saleToDelete.id,
-        24 // Expire dans 24h
-      );
-
-      // 8. Déclencher tous les événements nécessaires
+      // 6. Déclencher tous les événements nécessaires
       window.dispatchEvent(new CustomEvent('salesChanged'));
       window.dispatchEvent(new CustomEvent('cashTransactionsChanged'));
       window.dispatchEvent(new CustomEvent('cashBalanceChanged'));

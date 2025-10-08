@@ -16,7 +16,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { useLocalData } from '@/hooks/useLocalData';
-import { useNotifications } from '@/hooks/useNotifications';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
 import { getTodayDateString } from '@/lib/dateUtils';
@@ -37,7 +36,6 @@ interface DamageReport {
 
 const DamageReportDialog = () => {
   const { getInventory, updateInventoryItem, getStaff } = useLocalData();
-  const { addNotification } = useNotifications();
   const { toast } = useToast();
 
   const [open, setOpen] = useState(false);
@@ -141,18 +139,7 @@ const DamageReportDialog = () => {
         quantity: item.quantity - quantity 
       });
 
-      // 4. Ajouter une notification
-      addNotification(
-        'damage_report',
-        'Produits endommagés déclarés',
-        `${quantity} ${item.unit} de ${item.name} - Perte: ${formatCurrency(lossValue)}`,
-        'medium',
-        true,
-        selectedItem,
-        48
-      );
-
-      // 5. Déclencher les événements
+      // 4. Déclencher les événements
       window.dispatchEvent(new CustomEvent('inventoryChanged'));
       window.dispatchEvent(new CustomEvent('damageReported', { detail: damageReport }));
 

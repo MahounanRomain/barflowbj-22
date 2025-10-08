@@ -3,7 +3,6 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import NotificationCenter from './notifications/EnhancedNotificationCenter';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface HeaderProps {
@@ -77,7 +76,6 @@ const Header: React.FC<HeaderProps> = ({ title, rightContent }) => {
       </div>
 
       <div className="flex items-center space-x-2 animate-slide-in-right">
-        {isMobile && <NotificationCenter />}
         {rightContent}
       </div>
     </header>
