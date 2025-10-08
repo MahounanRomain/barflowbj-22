@@ -116,7 +116,7 @@ const EnhancedDashboardStats = () => {
                     {stat.subtitle}
                   </span>
                 </div>
-                <p className={`font-bold text-foreground group-hover:scale-105 transition-all duration-300 ${isMobile ? 'text-lg leading-tight' : 'text-3xl'} truncate`}>
+                <p className={`font-bold text-foreground group-hover:scale-105 transition-all duration-300 ${isMobile ? 'text-base leading-tight' : 'text-2xl'} truncate`}>
                   {stat.value}
                 </p>
               </div>

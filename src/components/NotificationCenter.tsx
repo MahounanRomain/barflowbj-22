@@ -112,7 +112,7 @@ const NotificationCenter = () => {
       window.removeEventListener('salesChanged', handleDataChange);
       window.removeEventListener('settingsChanged', handleDataChange);
     };
-  }, []); // Dépendances vides pour éviter les recréations infinies
+  }, [notifications, addNotification]); // Inclure les dépendances nécessaires
 
   const handleRemoveNotification = (e: React.MouseEvent, notificationId: string) => {
     e.stopPropagation();
