@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { PerformanceOptimizer } from "@/components/PerformanceOptimizer";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { NotificationProvider } from "@/contexts/NotificationContext";
+import NotificationToast from "@/components/notifications/NotificationToast";
 import Dashboard from "@/pages/Dashboard";
 import LoadingAnimation from "@/components/LoadingAnimation";
 import AppLayout from "@/components/layout/AppLayout";
@@ -111,6 +113,7 @@ function AppContent() {
           </Suspense>
           <Toaster />
           <SonnerToaster />
+          <NotificationToast />
         </div>
       </PerformanceOptimizer>
     </ErrorBoundary>
@@ -120,11 +123,13 @@ function AppContent() {
 function App() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-      <BrowserRouter>
-        <ErrorBoundary>
-          <AppContent />
-        </ErrorBoundary>
-      </BrowserRouter>
+      <NotificationProvider>
+        <BrowserRouter>
+          <ErrorBoundary>
+            <AppContent />
+          </ErrorBoundary>
+        </BrowserRouter>
+      </NotificationProvider>
     </ThemeProvider>
   );
 }
