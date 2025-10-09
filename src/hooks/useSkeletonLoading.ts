@@ -21,14 +21,14 @@ export const useSkeletonLoading = (isDataLoaded?: boolean) => {
     previousPathnameRef.current = currentPath;
   }, [location.pathname]);
 
-  // Hide skeleton when data is loaded
+  // Hide skeleton when data is loaded with minimum display time for better UX
   useEffect(() => {
     if (isDataLoaded !== undefined) {
       if (isDataLoaded) {
-        // Small delay to avoid flash
+        // Ensure skeleton is visible for at least 600ms for better perceived performance
         const timer = setTimeout(() => {
           setIsSkeletonLoading(false);
-        }, 300);
+        }, 600);
         return () => clearTimeout(timer);
       } else {
         setIsSkeletonLoading(true);

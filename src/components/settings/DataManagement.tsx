@@ -1,11 +1,13 @@
 
-import React, { useRef } from "react";
-import { Database, Download, Upload, CheckCircle, FileText, AlertTriangle } from "lucide-react";
+import React, { useRef, useState } from "react";
+import { Database, Download, Upload, CheckCircle, FileText, AlertTriangle, Info } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useLocalData } from "@/hooks/useLocalData";
+import { exportCompleteData, importCompleteData, validateImportData } from "@/lib/comprehensiveExport";
 
 interface DataManagementProps {
   onExport: () => void;
@@ -13,8 +15,25 @@ interface DataManagementProps {
 
 export const DataManagement: React.FC<DataManagementProps> = ({ onExport }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [importInfo, setImportInfo] = useState<any>(null);
   const { toast } = useToast();
   const { importData, getSettings, getInventory, getSales, getStaff } = useLocalData();
+
+  const handleCompleteExport = () => {
+    try {
+      const result = exportCompleteData();
+      toast({
+        title: "✅ Export complet réussi",
+        description: `${result.fileName} - ${result.totalKeys} éléments exportés`,
+      });
+    } catch (error) {
+      toast({
+        title: "❌ Erreur d'export",
+        description: "Impossible d'exporter les données",
+        variant: "destructive"
+      });
+    }
+  };
 
   const handleImportClick = () => {
     fileInputRef.current?.click();
@@ -37,51 +56,64 @@ export const DataManagement: React.FC<DataManagementProps> = ({ onExport }) => {
       const text = await file.text();
       const data = JSON.parse(text);
       
-      // Validation des données importées - accepter tous types d'exports
-      if (!data.settings && !data.inventory && !data.sales && !data.staff && !data.completeLocalStorage && !data.metadata) {
+      // Validate import data
+      const validation = validateImportData(data);
+      setImportInfo(validation.info);
+
+      if (!validation.valid && validation.warnings.length > 0) {
         toast({
-          title: "❌ Données invalides",
-          description: "Le fichier ne contient pas de données BarFlowTrack valides.",
-          variant: "destructive"
+          title: "⚠️ Avertissement",
+          description: validation.warnings.join(', '),
         });
-        return;
       }
 
-      let importedCount = 0;
-
-      // Import complet depuis completeLocalStorage si disponible (export v2.2.0+)
-      if (data.completeLocalStorage) {
-        Object.keys(data.completeLocalStorage).forEach(key => {
-          try {
-            importData(key, data.completeLocalStorage[key]);
-            importedCount++;
-          } catch (error) {
-            console.warn(`Erreur lors de l'import de ${key}:`, error);
-          }
+      // Use comprehensive import if new format detected
+      if (data.exportInfo && data.completeLocalStorage) {
+        const result = importCompleteData(data);
+        
+        toast({
+          title: result.success ? "✅ Import complet réussi" : "❌ Erreur d'import",
+          description: result.message,
+          variant: result.success ? "default" : "destructive"
         });
+
+        if (result.success) {
+          setTimeout(() => window.location.reload(), 1500);
+        }
       } else {
-        // Import des données individuelles (anciens exports)
-        if (data.settings) { importData('settings', data.settings); importedCount++; }
-        if (data.inventory) { importData('inventory', data.inventory); importedCount++; }
-        if (data.sales) { importData('sales', data.sales); importedCount++; }
-        if (data.staff) { importData('staff', data.staff); importedCount++; }
-        if (data.categories) { importData('categories', data.categories); importedCount++; }
-        if (data.tables) { importData('tables', data.tables); importedCount++; }
-        if (data.notifications) { importData('notifications', data.notifications); importedCount++; }
-        if (data.cashBalance) { importData('cashBalance', data.cashBalance); importedCount++; }
-        if (data.cashTransactions) { importData('cashTransactions', data.cashTransactions); importedCount++; }
-        if (data.inventoryHistory) { importData('inventoryHistory', data.inventoryHistory); importedCount++; }
+        // Legacy import for old formats
+        let importedCount = 0;
+
+        if (data.completeLocalStorage) {
+          Object.keys(data.completeLocalStorage).forEach(key => {
+            try {
+              importData(key, data.completeLocalStorage[key]);
+              importedCount++;
+            } catch (error) {
+              console.warn(`Erreur lors de l'import de ${key}:`, error);
+            }
+          });
+        } else {
+          // Import des données individuelles (anciens exports)
+          if (data.settings) { importData('settings', data.settings); importedCount++; }
+          if (data.inventory) { importData('inventory', data.inventory); importedCount++; }
+          if (data.sales) { importData('sales', data.sales); importedCount++; }
+          if (data.staff) { importData('staff', data.staff); importedCount++; }
+          if (data.categories) { importData('categories', data.categories); importedCount++; }
+          if (data.tables) { importData('tables', data.tables); importedCount++; }
+          if (data.notifications) { importData('app_notifications', data.notifications); importedCount++; }
+          if (data.cashBalance) { importData('cashBalance', data.cashBalance); importedCount++; }
+          if (data.cashTransactions) { importData('cashTransactions', data.cashTransactions); importedCount++; }
+          if (data.inventoryHistory) { importData('inventoryHistory', data.inventoryHistory); importedCount++; }
+        }
+
+        toast({
+          title: "✅ Import réussi",
+          description: `${importedCount} éléments importés depuis ${file.name}`,
+        });
+
+        setTimeout(() => window.location.reload(), 1500);
       }
-
-      toast({
-        title: "✅ Import complet réussi",
-        description: `${importedCount} éléments importés avec succès depuis ${file.name}`,
-      });
-
-      // Recharger la page pour synchroniser toutes les données
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
 
     } catch (error) {
       console.error('Import error:', error);
@@ -140,16 +172,36 @@ export const DataManagement: React.FC<DataManagementProps> = ({ onExport }) => {
             </p>
           </div>
 
+          {/* Data summary */}
+          {importInfo && (
+            <Alert>
+              <Info className="h-4 w-4" />
+              <AlertDescription className="text-xs space-y-1">
+                <div className="font-semibold">Dernière importation détectée:</div>
+                <div className="flex gap-2 flex-wrap">
+                  {importInfo.inventoryCount && <Badge variant="secondary">{importInfo.inventoryCount} articles</Badge>}
+                  {importInfo.salesCount && <Badge variant="secondary">{importInfo.salesCount} ventes</Badge>}
+                  {importInfo.staffCount && <Badge variant="secondary">{importInfo.staffCount} employés</Badge>}
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
+
           {/* Actions */}
           <div className="space-y-2">
+            <Button onClick={handleCompleteExport} variant="default" className="w-full">
+              <Download className="w-4 h-4 mr-2" />
+              Export Complet v3.0 (Recommandé)
+            </Button>
+
             <Button onClick={onExport} variant="outline" className="w-full">
               <Download className="w-4 h-4 mr-2" />
-              Exporter toutes les données (JSON)
+              Export Standard (JSON)
             </Button>
             
             <Button onClick={handleImportClick} variant="secondary" className="w-full">
               <Upload className="w-4 h-4 mr-2" />
-              Importer des données (JSON)
+              Importer des données
             </Button>
           </div>
 

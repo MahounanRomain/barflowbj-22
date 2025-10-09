@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Home, ShoppingCart, Package, Users, Settings, BarChart3 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -35,17 +35,18 @@ const GlassmorphicBottomNav = () => {
     <nav 
       className={cn(
         "fixed bottom-safe-bottom left-[45%] transform -translate-x-1/2 z-[60] mb-4",
-        "bg-background/95 backdrop-blur-xl border border-border/30",
-        "rounded-2xl shadow-lg",
+        "bg-card/98 backdrop-blur-xl border border-primary/20",
+        "rounded-2xl shadow-2xl shadow-primary/10",
         "px-3 py-2.5 mx-4",
         "animate-slide-up transition-all duration-300",
-        "w-fit max-w-[380px]"
+        "w-fit max-w-[380px]",
+        "hover:shadow-primary/20"
       )}
       role="navigation"
       aria-label="Navigation principale"
       style={{
-        backdropFilter: "blur(16px)",
-        WebkitBackdropFilter: "blur(16px)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
       }}
     >
       <div className="flex items-center justify-center gap-1">
@@ -59,15 +60,15 @@ const GlassmorphicBottomNav = () => {
               to={item.path}
               className={cn(
                 "relative flex flex-col items-center justify-center",
-                "px-2 py-1.5 rounded-lg transition-all duration-300",
-                "min-w-0 flex-1",
+                "px-2 py-1.5 rounded-xl transition-all duration-300",
+                "min-w-0 flex-1 group",
                 isActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-gradient-to-br from-primary/20 to-primary/10 text-primary shadow-lg shadow-primary/20"
+                  : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
               )}
               style={{ 
                 animationDelay: `${index * 100}ms`,
-                transform: isActive ? 'translateY(-2px) scale(1.05)' : undefined
+                transform: isActive ? 'translateY(-2px) scale(1.05)' : isHovered ? 'translateY(-1px)' : undefined
               }}
               aria-label={item.ariaLabel}
               aria-current={isActive ? "page" : undefined}
@@ -78,21 +79,22 @@ const GlassmorphicBottomNav = () => {
               <item.icon 
                 className={cn(
                   "h-5 w-5 transition-all duration-300",
-                  isActive && "text-primary"
+                  isActive && "text-primary drop-shadow-[0_0_8px_hsl(var(--primary)/0.5)]",
+                  isHovered && !isActive && "scale-110"
                 )}
                 aria-hidden="true"
               />
               
               <span className={cn(
                 "text-[0.65rem] mt-1 font-medium transition-all duration-300 leading-tight",
-                isActive ? "text-primary font-semibold" : ""
+                isActive ? "text-primary font-semibold" : "group-hover:font-medium"
               )}>
                 {item.label}
               </span>
               
-              {/* Indicateur d'état actif */}
+              {/* Indicateur d'état actif amélioré */}
               {isActive && (
-                <div className="absolute -top-0.5 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full" />
+                <div className="absolute -top-0.5 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-primary rounded-full animate-pulse-subtle shadow-[0_0_8px_hsl(var(--primary))]" />
               )}
             </Link>
           );

@@ -47,6 +47,7 @@ html {
     --primary-foreground: 0 0% 100%;
     --primary-variant: 262 90% 65%;
     --primary-glow: 262 100% 75%;
+    --primary-soft: 262 75% 85%;
 
     --secondary: 210 40% 96%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -94,6 +95,7 @@ html {
     --primary-foreground: 0 0% 100%;
     --primary-variant: 262 90% 65%;
     --primary-glow: 262 100% 75%;
+    --primary-soft: 262 75% 25%;
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -304,9 +306,9 @@ html {
   }
 }
 
-/* Classes d'animation */
+/* Classes d'animation with improved timing */
 .animate-fade-in {
-  animation: fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .animate-fade-in-up {

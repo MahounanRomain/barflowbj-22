@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { storage } from '@/lib/storage';
 import { useToast } from '@/hooks/use-toast';
 
@@ -14,7 +14,7 @@ export const useDailyReset = () => {
   });
   const { toast } = useToast();
 
-  const resetDailyData = () => {
+  const resetDailyData = useCallback(() => {
     console.log('🔄 Réinitialisation quotidienne en cours...');
     
     setResetState(prev => ({ ...prev, isResetting: true }));
@@ -45,11 +45,7 @@ export const useDailyReset = () => {
         storage.save('dailyArchive', dailyArchive);
       }
 
-      // Réinitialiser les données quotidiennes
-      // Note: On ne supprime pas les ventes, on les conserve pour l'historique
-      // Mais on marque une nouvelle journée
-      
-      // Marquer la réinitialisation comme effectuée
+      // Reset daily counters and prepare for new day
       storage.save('lastDailyReset', today);
       
       setResetState({
@@ -59,7 +55,7 @@ export const useDailyReset = () => {
 
       // Notification de réinitialisation seulement à minuit
       const now = new Date();
-      const isNearMidnight = now.getHours() === 0 && now.getMinutes() < 5; // Dans les 5 minutes après minuit
+      const isNearMidnight = now.getHours() === 0 && now.getMinutes() < 5;
       
       if (isNearMidnight) {
         toast({
@@ -68,10 +64,12 @@ export const useDailyReset = () => {
         });
       }
 
-      // Dispatching custom event for real-time sync
-      window.dispatchEvent(new CustomEvent('dailyReset', { 
-        detail: { date: today, timestamp: new Date().toISOString() }
-      }));
+      // Dispatch events for all modules to sync
+      ['dailyReset', 'salesChanged', 'inventoryChanged', 'cashBalanceChanged'].forEach(event => {
+        window.dispatchEvent(new CustomEvent(event, { 
+          detail: { date: today, timestamp: new Date().toISOString(), type: 'daily-reset' }
+        }));
+      });
 
       console.log('✅ Réinitialisation quotidienne terminée');
       
@@ -85,21 +83,23 @@ export const useDailyReset = () => {
         variant: "destructive"
       });
     }
-  };
+  }, [toast]);
 
-  const checkForDailyReset = () => {
+  const checkForDailyReset = useCallback(() => {
     const today = new Date().toISOString().split('T')[0];
     const lastReset = storage.load('lastDailyReset') || '';
     
     if (lastReset !== today) {
       console.log(`🔍 Réinitialisation nécessaire: dernier reset ${lastReset}, aujourd'hui ${today}`);
       resetDailyData();
+      return true;
     } else {
       setResetState(prev => ({ ...prev, lastResetDate: lastReset }));
+      return false;
     }
-  };
+  }, [resetDailyData]);
 
-  const scheduleMidnightReset = () => {
+  const scheduleMidnightReset = useCallback(() => {
     const now = new Date();
     const tomorrow = new Date(now);
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -115,7 +115,7 @@ export const useDailyReset = () => {
       // Reprogrammer pour le lendemain
       scheduleMidnightReset();
     }, msUntilMidnight);
-  };
+  }, [resetDailyData]);
 
   useEffect(() => {
     // Vérifier si une réinitialisation est nécessaire au démarrage
@@ -124,14 +124,24 @@ export const useDailyReset = () => {
     // Programmer la réinitialisation à minuit
     const timeoutId = scheduleMidnightReset();
     
-    // Vérifier périodiquement (toutes les 30 minutes)
-    const intervalId = setInterval(checkForDailyReset, 30 * 60 * 1000);
+    // Vérifier périodiquement (toutes les 15 minutes pour être plus réactif)
+    const intervalId = setInterval(checkForDailyReset, 15 * 60 * 1000);
+
+    // Listen to visibility change to check when user returns
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        checkForDailyReset();
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     
     return () => {
       clearTimeout(timeoutId);
       clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, []);
+  }, [checkForDailyReset, scheduleMidnightReset]);
 
   return {
     resetState,

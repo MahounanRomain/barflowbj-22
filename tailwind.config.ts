@@ -157,18 +157,18 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'fade-in': 'fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-				'fade-in-up': 'fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
-				'slide-in-right': 'slide-in-right 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-				'slide-in-left': 'slide-in-left 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-				'scale-in': 'scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+				'fade-in': 'fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+				'fade-in-up': 'fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+				'slide-in-right': 'slide-in-right 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+				'slide-in-left': 'slide-in-left 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+				'scale-in': 'scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
 				'gentle-bounce': 'gentle-bounce 2s ease-in-out infinite',
 				'float': 'float 3s ease-in-out infinite',
-				'shimmer': 'shimmer 0.8s ease-out',
-				'gradient-shift': 'gradient-shift 3s ease infinite',
-				'pulse-subtle': 'pulse-subtle 2s ease-in-out infinite',
+				'shimmer': 'shimmer 1.2s ease-out',
+				'gradient-shift': 'gradient-shift 4s ease infinite',
+				'pulse-subtle': 'pulse-subtle 2.5s ease-in-out infinite',
 				'bounce-soft': 'bounce-soft 1s ease-in-out infinite',
-				'slide-up': 'slide-up 0.3s ease-out'
+				'slide-up': 'slide-up 0.4s ease-out'
 			},
 			spacing: {
 				'safe-bottom': 'env(safe-area-inset-bottom)',
