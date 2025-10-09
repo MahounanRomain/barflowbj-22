@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
-import { PerformanceOptimizer } from "@/components/PerformanceOptimizer";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { NotificationProvider } from "@/contexts/NotificationContext";
 import NotificationToast from "@/components/notifications/NotificationToast";
@@ -83,39 +82,42 @@ function AppContent() {
 
   return (
     <ErrorBoundary>
-      <PerformanceOptimizer>
-        <div className="min-h-screen bg-background font-sans antialiased">
-          <a 
-            href="#main-content" 
-            className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-primary text-primary-foreground px-4 py-2 rounded-md z-50"
-            aria-label="Aller au contenu principal"
-          >
-            Aller au contenu principal
-          </a>
-          
-          <AppLayout>
-            <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh]"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>}>
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/sales" element={<Sales />} />
-                <Route path="/inventory" element={<Inventory />} />
-                <Route path="/staff" element={<Staff />} />
-                <Route path="/reports" element={<Reports />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </AppLayout>
-          
-          <Suspense fallback={null}>
-            <PWAInstallPrompt />
-            <OfflineIndicator />
+      <div className="min-h-screen bg-background font-sans antialiased">
+        <a 
+          href="#main-content" 
+          className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-primary text-primary-foreground px-4 py-2 rounded-md z-50"
+          aria-label="Aller au contenu principal"
+        >
+          Aller au contenu principal
+        </a>
+        
+        <AppLayout>
+          <Suspense fallback={
+            <div className="flex items-center justify-center min-h-[50vh]" role="status" aria-live="polite" aria-busy="true">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+              <span className="sr-only">Chargement en cours...</span>
+            </div>
+          }>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/sales" element={<Sales />} />
+              <Route path="/inventory" element={<Inventory />} />
+              <Route path="/staff" element={<Staff />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
           </Suspense>
-          <Toaster />
-          <SonnerToaster />
-          <NotificationToast />
-        </div>
-      </PerformanceOptimizer>
+        </AppLayout>
+        
+        <Suspense fallback={null}>
+          <PWAInstallPrompt />
+          <OfflineIndicator />
+        </Suspense>
+        <Toaster />
+        <SonnerToaster />
+        <NotificationToast />
+      </div>
     </ErrorBoundary>
   );
 }

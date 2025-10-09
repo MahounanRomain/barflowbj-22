@@ -82,7 +82,11 @@ const AppLayout: React.FC<AppLayoutProps> = ({
       <A11yProvider>
         <div className="flex min-h-screen w-full bg-background">
           {/* Desktop Navigation Sidebar */}
-          {!isMobile && !isNotFoundPage && <EnhancedDesktopNavigation />}
+          {!isMobile && !isNotFoundPage && (
+            <nav role="navigation" aria-label="Navigation principale">
+              <EnhancedDesktopNavigation />
+            </nav>
+          )}
           
           {/* Main Content Area */}
           <div className={`flex-1 flex flex-col min-h-screen ${!isMobile && !isNotFoundPage ? 'ml-0' : 'w-full'}`}>
@@ -90,14 +94,24 @@ const AppLayout: React.FC<AppLayoutProps> = ({
             {!isMobile && !isNotFoundPage && location.pathname !== '/'}
             
             {/* Page Content */}
-            <main className={`flex-1 ${isMobile && !isNotFoundPage ? "pb-24" : ""} ${!isMobile ? 'min-h-[calc(100vh)]' : 'min-h-[calc(100vh-5rem)]'}`} id="main-content" tabIndex={-1}>
+            <main 
+              className={`flex-1 ${isMobile && !isNotFoundPage ? "pb-24" : ""} ${!isMobile ? 'min-h-[calc(100vh)]' : 'min-h-[calc(100vh-5rem)]'}`} 
+              id="main-content" 
+              tabIndex={-1}
+              role="main"
+              aria-label="Contenu principal"
+            >
               <GlobalErrorBoundary>
                 {children}
               </GlobalErrorBoundary>
             </main>
             
             {/* Mobile Bottom Navigation */}
-            {isMobile && !isNotFoundPage && <GlassmorphicBottomNav />}
+            {isMobile && !isNotFoundPage && (
+              <nav role="navigation" aria-label="Navigation mobile" className="fixed bottom-0 left-0 right-0 z-50">
+                <GlassmorphicBottomNav />
+              </nav>
+            )}
           </div>
           
           {/* Accessibility & Performance Tools */}
