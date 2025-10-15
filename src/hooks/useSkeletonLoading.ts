@@ -25,10 +25,10 @@ export const useSkeletonLoading = (isDataLoaded?: boolean) => {
   useEffect(() => {
     if (isDataLoaded !== undefined) {
       if (isDataLoaded) {
-        // Ensure skeleton is visible for at least 600ms for better perceived performance
+        // Ensure skeleton is visible for at least 1200ms for better user experience
         const timer = setTimeout(() => {
           setIsSkeletonLoading(false);
-        }, 600);
+        }, 1200);
         return () => clearTimeout(timer);
       } else {
         setIsSkeletonLoading(true);

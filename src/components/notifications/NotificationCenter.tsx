@@ -82,44 +82,44 @@ const NotificationCenter = () => {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-2xl w-[95vw] max-h-[90vh] sm:max-h-[85vh] p-0 flex flex-col">
-        <DialogHeader className="p-4 sm:p-6 pb-3 sm:pb-4 border-b shrink-0">
-          <div className="flex items-start sm:items-center justify-between gap-2">
-            <DialogTitle className="flex items-center gap-2 sm:gap-3">
-              <div className="p-1.5 sm:p-2 rounded-lg bg-primary/10 shrink-0">
-                <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+      <DialogContent className="max-w-2xl w-[95vw] max-h-[85vh] p-0 flex flex-col gap-0 rounded-2xl border-2">
+        <DialogHeader className="p-4 pb-3 border-b bg-gradient-to-br from-background via-background to-primary/5 shrink-0 rounded-t-2xl">
+          <div className="flex items-center justify-between gap-3">
+            <DialogTitle className="flex items-center gap-3 flex-1 min-w-0">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 shrink-0 shadow-sm">
+                <Bell className="w-5 h-5 text-primary" />
               </div>
-              <div>
-                <h2 className="text-base sm:text-xl font-semibold">Notifications</h2>
-                <p className="text-xs sm:text-sm text-muted-foreground font-normal">
-                  {unreadCount > 0 ? `${unreadCount} non lue${unreadCount > 1 ? 's' : ''}` : 'Tout est à jour'}
+              <div className="flex-1 min-w-0">
+                <h2 className="text-lg font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+                  Notifications
+                </h2>
+                <p className="text-xs text-muted-foreground font-medium">
+                  {unreadCount > 0 ? `${unreadCount} non lue${unreadCount > 1 ? 's' : ''}` : 'Aucune notification non lue'}
                 </p>
               </div>
             </DialogTitle>
             
             {notifications.length > 0 && (
-              <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2 shrink-0">
+              <div className="flex gap-2 shrink-0">
                 {unreadCount > 0 && (
                   <Button 
                     variant="outline" 
                     size="sm" 
                     onClick={markAllAsRead}
-                    className="gap-1.5 text-xs sm:text-sm h-8"
+                    className="gap-2 h-9 px-3 border-primary/20 hover:bg-primary/10 hover:border-primary/40"
                   >
-                    <CheckCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    <span className="hidden sm:inline">Tout marquer lu</span>
-                    <span className="sm:hidden">Marquer</span>
+                    <CheckCheck className="w-4 h-4" />
+                    <span className="hidden sm:inline font-medium">Marquer tout</span>
                   </Button>
                 )}
                 <Button 
                   variant="outline" 
                   size="sm" 
                   onClick={clearAll}
-                  className="gap-1.5 text-xs sm:text-sm h-8 text-destructive hover:text-destructive"
+                  className="gap-2 h-9 px-3 border-destructive/20 text-destructive hover:bg-destructive/10 hover:border-destructive/40 hover:text-destructive"
                 >
-                  <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  <span className="hidden sm:inline">Tout effacer</span>
-                  <span className="sm:hidden">Effacer</span>
+                  <Trash2 className="w-4 h-4" />
+                  <span className="hidden sm:inline font-medium">Effacer</span>
                 </Button>
               </div>
             )}
@@ -127,17 +127,17 @@ const NotificationCenter = () => {
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col min-h-0">
-          <TabsList className="w-full justify-start rounded-none border-b px-3 sm:px-6 shrink-0">
-            <TabsTrigger value="all" className="gap-1.5 sm:gap-2 text-xs sm:text-sm">
+          <TabsList className="w-full justify-start rounded-none border-b px-4 shrink-0 h-12 bg-muted/30">
+            <TabsTrigger value="all" className="gap-2 text-sm font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm">
               Toutes
-              <Badge variant="secondary" className="text-[10px] sm:text-xs h-4 sm:h-5 px-1.5">
+              <Badge variant="secondary" className="text-xs h-5 px-2 font-semibold">
                 {notifications.length}
               </Badge>
             </TabsTrigger>
-            <TabsTrigger value="unread" className="gap-1.5 sm:gap-2 text-xs sm:text-sm">
+            <TabsTrigger value="unread" className="gap-2 text-sm font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm">
               Non lues
               {unreadCount > 0 && (
-                <Badge variant="destructive" className="text-[10px] sm:text-xs h-4 sm:h-5 px-1.5">
+                <Badge variant="destructive" className="text-xs h-5 px-2 font-semibold">
                   {unreadCount}
                 </Badge>
               )}
@@ -145,59 +145,61 @@ const NotificationCenter = () => {
           </TabsList>
 
           <TabsContent value={activeTab} className="m-0 flex-1 min-h-0">
-            <ScrollArea className="h-full max-h-[calc(90vh-200px)] sm:max-h-[calc(85vh-180px)]">
+            <ScrollArea className="h-full max-h-[calc(85vh-180px)]">
               {filteredNotifications.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-8 sm:py-12 px-4 sm:px-6 text-center">
-                  <Bell className="w-12 h-12 sm:w-16 sm:h-16 text-muted-foreground/30 mb-3 sm:mb-4" />
-                  <h3 className="text-base sm:text-lg font-semibold text-muted-foreground mb-1 sm:mb-2">
+                <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+                  <div className="p-4 rounded-full bg-gradient-to-br from-primary/10 to-accent/10 mb-4">
+                    <Bell className="w-12 h-12 text-muted-foreground/40" />
+                  </div>
+                  <h3 className="text-lg font-bold text-foreground mb-2">
                     {activeTab === 'unread' ? 'Aucune notification non lue' : 'Aucune notification'}
                   </h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground/70">
+                  <p className="text-sm text-muted-foreground max-w-xs">
                     {activeTab === 'unread' 
-                      ? 'Vous êtes à jour !' 
-                      : 'Les notifications apparaîtront ici'}
+                      ? 'Vous êtes à jour ! Toutes vos notifications ont été lues.' 
+                      : 'Les notifications apparaîtront ici au fur et à mesure.'}
                   </p>
                 </div>
               ) : (
-                <div className="p-3 sm:p-4 space-y-2 sm:space-y-3">
+                <div className="p-4 space-y-3">
                   {filteredNotifications.map((notification) => (
                     <Card
                       key={notification.id}
                       className={cn(
-                        "p-3 sm:p-4 border-l-4 transition-all duration-200 hover:shadow-md cursor-pointer touch-feedback",
+                        "p-4 border-l-4 transition-all duration-300 hover:shadow-lg cursor-pointer group",
                         getPriorityColor(notification.priority),
-                        !notification.read && "bg-accent/50"
+                        !notification.read && "bg-gradient-to-r from-accent/30 via-accent/20 to-transparent border-primary/50"
                       )}
                       onClick={() => !notification.read && markAsRead(notification.id)}
                     >
-                      <div className="flex items-start gap-2 sm:gap-3">
-                        <div className="mt-0.5 shrink-0">
+                      <div className="flex items-start gap-3">
+                        <div className="mt-1 shrink-0 p-2 rounded-lg bg-background/80 shadow-sm">
                           {getIcon(notification.type)}
                         </div>
                         
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between gap-2 mb-1">
-                            <h4 className="font-semibold text-xs sm:text-sm leading-tight">
+                          <div className="flex items-start justify-between gap-2 mb-1.5">
+                            <h4 className="font-bold text-sm leading-tight text-foreground group-hover:text-primary transition-colors">
                               {notification.title}
                             </h4>
                             {notification.priority === 'high' && (
-                              <Badge variant="destructive" className="text-[10px] sm:text-xs shrink-0 h-4 sm:h-5">
+                              <Badge variant="destructive" className="text-xs shrink-0 h-5 font-bold animate-pulse">
                                 Urgent
                               </Badge>
                             )}
                           </div>
                           
-                          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-1.5 sm:mb-2">
+                          <p className="text-sm text-muted-foreground leading-relaxed mb-2">
                             {notification.message}
                           </p>
                           
                           <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-muted-foreground/70 flex-wrap">
-                              <span className="whitespace-nowrap">{formatTimestamp(notification.timestamp)}</span>
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground/80 font-medium">
+                              <span>{formatTimestamp(notification.timestamp)}</span>
                               {notification.source && (
                                 <>
-                                  <span className="hidden sm:inline">•</span>
-                                  <span className="capitalize whitespace-nowrap hidden sm:inline">{notification.source}</span>
+                                  <span>•</span>
+                                  <span className="capitalize">{notification.source}</span>
                                 </>
                               )}
                             </div>
@@ -205,13 +207,13 @@ const NotificationCenter = () => {
                             <Button
                               variant="ghost"
                               size="sm"
-                              className="h-6 w-6 sm:h-7 sm:w-7 p-0 hover:bg-destructive/10 hover:text-destructive shrink-0"
+                              className="h-8 w-8 p-0 hover:bg-destructive/20 hover:text-destructive shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 removeNotification(notification.id);
                               }}
                             >
-                              <X className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                              <X className="w-4 h-4" />
                             </Button>
                           </div>
                         </div>

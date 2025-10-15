@@ -26,6 +26,7 @@ export const NotificationContext = createContext<NotificationContextType | undef
 
 const STORAGE_KEY = 'app_notifications';
 const MAX_NOTIFICATIONS = 100;
+const NOTIFICATION_CACHE_TIME = 5000; // 5 seconds to prevent duplicate notifications
 
 export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [notifications, setNotifications] = useState<Notification[]>(() => {
@@ -36,6 +37,8 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       return [];
     }
   });
+  
+  const recentNotificationsRef = React.useRef<Map<string, number>>(new Map());
 
   // Sauvegarder dans localStorage
   useEffect(() => {
@@ -126,6 +129,26 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   }, []);
 
   const addNotification = useCallback((notification: Omit<Notification, 'id' | 'timestamp' | 'read'>) => {
+    // Create a unique key for deduplication
+    const notificationKey = `${notification.type}_${notification.title}_${notification.source || ''}`;
+    const now = Date.now();
+    const lastTimestamp = recentNotificationsRef.current.get(notificationKey);
+    
+    // Prevent duplicate notifications within cache time
+    if (lastTimestamp && (now - lastTimestamp) < NOTIFICATION_CACHE_TIME) {
+      return;
+    }
+    
+    // Update cache
+    recentNotificationsRef.current.set(notificationKey, now);
+    
+    // Clean old cache entries
+    recentNotificationsRef.current.forEach((timestamp, key) => {
+      if (now - timestamp > NOTIFICATION_CACHE_TIME) {
+        recentNotificationsRef.current.delete(key);
+      }
+    });
+
     const newNotification: Notification = {
       ...notification,
       id: `notif_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,

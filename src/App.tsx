@@ -12,6 +12,7 @@ import AppLayout from "@/components/layout/AppLayout";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useDailyReset } from "@/hooks/useDailyReset";
 import { useRealtimeSync } from "@/hooks/useRealtimeSync";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 // Lazy load non-critical routes for better performance
 const Sales = React.lazy(() => import("@/pages/Sales"));
@@ -20,6 +21,8 @@ const Staff = React.lazy(() => import("@/pages/Staff"));
 const Reports = React.lazy(() => import("@/pages/Reports"));
 const Settings = React.lazy(() => import("@/pages/Settings"));
 const NotFound = React.lazy(() => import("@/pages/NotFound"));
+const Welcome = React.lazy(() => import("@/pages/Welcome"));
+const Auth = React.lazy(() => import("@/pages/Auth"));
 
 // Lazy load navigation components
 const DesktopNavigation = React.lazy(() => import("@/components/DesktopNavigation"));
@@ -41,12 +44,12 @@ function AppContent() {
 
   // Handle initial loading animation and route preloading
   useEffect(() => {
-    // Optimize initial load for better LCP
+    // Slower initial load for better UX
     if (isInitialLoad) {
       const timer = setTimeout(() => {
         setShowLoadingAnimation(false);
         setIsInitialLoad(false);
-      }, 300); // Further reduced to 300ms for better Speed Index
+      }, 800); // Increased to 800ms for better user experience
 
       return () => clearTimeout(timer);
     }
@@ -99,12 +102,15 @@ function AppContent() {
             </div>
           }>
             <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/sales" element={<Sales />} />
-              <Route path="/inventory" element={<Inventory />} />
-              <Route path="/staff" element={<Staff />} />
-              <Route path="/reports" element={<Reports />} />
-              <Route path="/settings" element={<Settings />} />
+              <Route path="/welcome" element={<Welcome />} />
+              <Route path="/auth/login" element={<Auth />} />
+              <Route path="/auth/signup" element={<Auth />} />
+              <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/sales" element={<ProtectedRoute><Sales /></ProtectedRoute>} />
+              <Route path="/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
+              <Route path="/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
+              <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+              <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
