@@ -308,37 +308,37 @@ html {
 
 /* Classes d'animation with improved timing */
 .animate-fade-in {
-  animation: fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fade-in 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .animate-fade-in-up {
-  animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fade-in-up 1.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .animate-slide-in-right {
-  animation: slide-in-right 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slide-in-right 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .animate-slide-in-left {
-  animation: slide-in-left 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slide-in-left 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .animate-scale-in {
-  animation: scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: scale-in 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .animate-gentle-bounce {
-  animation: gentle-bounce 2s ease-in-out infinite;
+  animation: gentle-bounce 4s ease-in-out infinite;
 }
 
 .animate-float {
-  animation: float 3s ease-in-out infinite;
+  animation: float 6s ease-in-out infinite;
 }
 
 .animate-shimmer {
   background: linear-gradient(90deg, transparent, hsl(var(--muted) / 0.8), transparent);
   background-size: 200px 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer 3s infinite;
 }
 
 .animate-text-shimmer {
@@ -380,25 +380,25 @@ html {
 }
 
 .animate-slide-up {
-  animation: slide-up 0.3s ease-out;
+  animation: slide-up 0.6s ease-out;
 }
 
 /* Transitions universelles */
 .transition-smooth {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .transition-fast {
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .transition-slow {
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Effets de survol */
 .hover-lift {
-  transition: transform 0.2s ease-out;
+  transition: transform 0.4s ease-out;
 }
 
 .hover-lift:hover {
@@ -406,7 +406,7 @@ html {
 }
 
 .hover-glow {
-  transition: box-shadow 0.2s ease-out;
+  transition: box-shadow 0.4s ease-out;
 }
 
 .hover-glow:hover {

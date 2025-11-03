@@ -27,6 +27,7 @@ const Auth = React.lazy(() => import("@/pages/Auth"));
 // Lazy load navigation components
 const DesktopNavigation = React.lazy(() => import("@/components/DesktopNavigation"));
 const OfflineIndicator = React.lazy(() => import("@/components/OfflineIndicator"));
+const OfflineSyncIndicator = React.lazy(() => import("@/components/OfflineSyncIndicator"));
 const PWAInstallPrompt = React.lazy(() => import("@/components/PWAInstallPrompt"));
 
 
@@ -49,7 +50,7 @@ function AppContent() {
       const timer = setTimeout(() => {
         setShowLoadingAnimation(false);
         setIsInitialLoad(false);
-      }, 800); // Increased to 800ms for better user experience
+      }, 1600); // Increased to 1600ms for slower animations (0.5 speed scale)
 
       return () => clearTimeout(timer);
     }
@@ -119,6 +120,7 @@ function AppContent() {
         <Suspense fallback={null}>
           <PWAInstallPrompt />
           <OfflineIndicator />
+          <OfflineSyncIndicator />
         </Suspense>
         <Toaster />
         <SonnerToaster />

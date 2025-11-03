@@ -84,11 +84,10 @@ const Auth = () => {
         if (error) throw error;
 
         toast({
-          title: 'Compte créé',
-          description: 'Vous pouvez maintenant vous connecter.',
+          title: 'Compte créé avec succès',
+          description: 'Veuillez vérifier votre boîte mail pour confirmer votre adresse email.',
+          duration: 7000
         });
-        
-        setIsLogin(true);
       }
     } catch (error: any) {
       console.error('Auth error:', error);

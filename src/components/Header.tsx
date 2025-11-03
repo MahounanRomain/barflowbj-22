@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, LogOut } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import NotificationCenter from '@/components/notifications/NotificationCenter';
+import { UserAccountDialog } from '@/components/auth/UserAccountDialog';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
 
 interface HeaderProps {
   title?: string;
@@ -19,7 +19,6 @@ const Header: React.FC<HeaderProps> = ({ title, rightContent }) => {
   const isMobile = useIsMobile();
   const isOnDashboard = location.pathname === '/';
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const { toast } = useToast();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -34,23 +33,6 @@ const Header: React.FC<HeaderProps> = ({ title, rightContent }) => {
 
     return () => subscription.unsubscribe();
   }, []);
-
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Erreur',
-        description: 'Impossible de se déconnecter',
-      });
-    } else {
-      toast({
-        title: 'Déconnexion réussie',
-        description: 'À bientôt !',
-      });
-      navigate('/welcome');
-    }
-  };
 
   // Toujours afficher le header s'il y a du contenu à droite (boutons d'action)
   const shouldShowHeader = isMobile || rightContent;
@@ -114,17 +96,7 @@ const Header: React.FC<HeaderProps> = ({ title, rightContent }) => {
       <div className="flex items-center space-x-2 animate-slide-in-right">
         {isAuthenticated && <NotificationCenter />}
         {rightContent}
-        {isAuthenticated && (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleLogout}
-            className="rounded-full hover:bg-destructive/10 hover:text-destructive transition-all duration-300"
-            title="Déconnexion"
-          >
-            <LogOut className="w-5 h-5" />
-          </Button>
-        )}
+        {isAuthenticated && isOnDashboard && <UserAccountDialog />}
       </div>
     </header>
   );
