@@ -36,33 +36,66 @@ export const UserAccountDialog = () => {
 
   const fetchProfile = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      
+      if (userError) {
+        console.error('Error getting user:', userError);
+        toast({
+          title: "Erreur d'authentification",
+          description: "Impossible de récupérer l'utilisateur actuel.",
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      if (!user) {
+        console.error('No user found');
+        return;
+      }
 
-      const { data: profileData } = await supabase
+      // Fetch profile data
+      const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
-      const { data: roleData } = await supabase
+      if (profileError) {
+        console.error('Error fetching profile:', profileError);
+        toast({
+          title: "Erreur",
+          description: "Impossible de charger le profil.",
+          variant: "destructive"
+        });
+      }
+
+      // Fetch role data
+      const { data: roleData, error: roleError } = await supabase
         .from('user_roles')
         .select('role')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
-      if (profileData) {
-        setProfile({
-          email: profileData.email || user.email || '',
-          first_name: profileData.first_name || '',
-          last_name: profileData.last_name || '',
-          phone: profileData.phone || '',
-          avatar_url: profileData.avatar_url || '',
-          role: roleData?.role || 'user'
-        });
+      if (roleError) {
+        console.error('Error fetching role:', roleError);
       }
+
+      // Set profile with user data as fallback
+      setProfile({
+        email: profileData?.email || user.email || '',
+        first_name: profileData?.first_name || '',
+        last_name: profileData?.last_name || '',
+        phone: profileData?.phone || '',
+        avatar_url: profileData?.avatar_url || '',
+        role: roleData?.role || 'user'
+      });
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      console.error('Error in fetchProfile:', error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur inattendue s'est produite.",
+        variant: "destructive"
+      });
     } finally {
       setLoading(false);
     }

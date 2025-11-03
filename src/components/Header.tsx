@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import NotificationCenter from '@/components/notifications/NotificationCenter';
+import { NotificationCenter } from '@/components/notifications/NotificationCenter';
 import { UserAccountDialog } from '@/components/auth/UserAccountDialog';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { supabase } from '@/integrations/supabase/client';
