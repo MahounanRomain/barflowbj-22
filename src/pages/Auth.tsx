@@ -25,26 +25,35 @@ const Auth = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check if user is already authenticated
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        navigate('/');
-      }
-      setCheckingAuth(false);
-    };
-    checkAuth();
-  }, [navigate]);
+    let mounted = true;
 
-  useEffect(() => {
-    // Listen to auth state changes
+    const checkAuth = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session && mounted) {
+          navigate('/', { replace: true });
+        }
+      } catch (error) {
+        console.error('Auth check error:', error);
+      } finally {
+        if (mounted) {
+          setCheckingAuth(false);
+        }
+      }
+    };
+    
+    checkAuth();
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN' && session) {
-        navigate('/');
+      if (mounted && event === 'SIGNED_IN' && session) {
+        navigate('/', { replace: true });
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {

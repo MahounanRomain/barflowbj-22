@@ -204,7 +204,7 @@ html {
   }
 }
 
-/* Initial load animation */
+/* Animation initiale pour le chargement global - Identique sur tous les appareils */
 @keyframes initialFadeIn {
   from {
     opacity: 0;
@@ -319,39 +319,39 @@ html {
   }
 }
 
-/* Classes d'animation with improved timing */
+/* Classes d'animation with improved timing - Identiques mobile et desktop */
 .animate-fade-in {
-  animation: fade-in 2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fade-in 2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .animate-fade-in-up {
-  animation: fade-in-up 3.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fade-in-up 3.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .animate-slide-in-right {
-  animation: slide-in-right 2.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slide-in-right 2.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .animate-slide-in-left {
-  animation: slide-in-left 2.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slide-in-left 2.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .animate-scale-in {
-  animation: scale-in 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: scale-in 1.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .animate-gentle-bounce {
-  animation: gentle-bounce 8s ease-in-out infinite;
+  animation: gentle-bounce 8s ease-in-out infinite !important;
 }
 
 .animate-float {
-  animation: float 12s ease-in-out infinite;
+  animation: float 12s ease-in-out infinite !important;
 }
 
 .animate-shimmer {
   background: linear-gradient(90deg, transparent, hsl(var(--muted) / 0.8), transparent);
   background-size: 200px 100%;
-  animation: shimmer 6s infinite;
+  animation: shimmer 6s infinite !important;
 }
 
 .animate-text-shimmer {
@@ -364,7 +364,26 @@ html {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: text-shimmer 4s ease-in-out infinite;
+  animation: text-shimmer 4s ease-in-out infinite !important;
+}
+
+/* Force la même durée d'animation sur mobile et desktop */
+@media screen and (max-width: 768px) {
+  .animate-fade-in {
+    animation: fade-in 2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+  .animate-fade-in-up {
+    animation: fade-in-up 3.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+  .animate-slide-in-right {
+    animation: slide-in-right 2.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+  .animate-slide-in-left {
+    animation: slide-in-left 2.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+  .animate-scale-in {
+    animation: scale-in 1.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
 }
 
 /* Barre de progression réelle */
