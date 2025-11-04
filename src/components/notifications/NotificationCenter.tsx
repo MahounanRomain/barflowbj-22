@@ -44,7 +44,7 @@ const getPriorityStyles = (priority: string) => {
   }
 };
 
-export const NotificationCenter = () => {
+const NotificationCenter = () => {
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
   const { notifications, unreadCount, markAsRead, markAllAsRead, removeNotification, clearAll } = useNotifications();
@@ -292,3 +292,6 @@ export const NotificationCenter = () => {
     </Sheet>
   );
 };
+
+export { NotificationCenter };
+export default NotificationCenter;
