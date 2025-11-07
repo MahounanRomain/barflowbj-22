@@ -8,9 +8,7 @@ const Welcome = () => {
         {/* Logo & Title */}
         <div className="text-center space-y-4">
           <div className="flex justify-center mb-6">
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 shadow-xl">
-              
-            </div>
+            
           </div>
           <h1 className="text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-gradient-shift bg-[length:200%_auto]">BarFlow</h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
