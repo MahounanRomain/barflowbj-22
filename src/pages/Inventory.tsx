@@ -44,22 +44,18 @@ const InventoryContent = () => {
   const [viewMode, setViewMode] = useState("list");
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(() => {
     try {
       const inventoryData = getInventory();
       const categoriesData = getCategories();
       setInventory(inventoryData);
       setCategories(categoriesData);
-      if (!isDataLoaded) {
-        setIsDataLoaded(true);
-      }
+      setIsDataLoaded(true);
     } catch (error) {
       console.error("Error loading inventory data:", error);
-      if (!isDataLoaded) {
-        setIsDataLoaded(true);
-      }
+      setIsDataLoaded(true);
     }
-  }, [getInventory, getCategories, isDataLoaded]);
+  }, [getInventory, getCategories]);
 
   // Listen for real-time data changes
   useRealTimeData({
@@ -416,28 +412,8 @@ const InventoryContent = () => {
 };
 
 const Inventory = () => {
-  const { getInventory, getCategories } = useLocalData();
-  const [isDataLoaded, setIsDataLoaded] = useState(false);
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        getInventory();
-        getCategories();
-        setIsDataLoaded(true);
-      } catch (error) {
-        console.error("Error loading inventory data:", error);
-        setIsDataLoaded(true);
-      }
-    };
-    
-    loadData();
-  }, [getInventory, getCategories]);
-
-  const isSkeletonLoading = useSkeletonLoading(isDataLoaded);
-
   return (
-    <PageWithSkeleton isLoading={isSkeletonLoading}>
+    <PageWithSkeleton>
       <InventoryContent />
     </PageWithSkeleton>
   );
