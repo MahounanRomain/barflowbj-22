@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import Header from "@/components/Header";
 import { Input } from "@/components/ui/input";
@@ -15,38 +15,41 @@ const StaffContent = () => {
   const [staff, setStaff] = useState<StaffMemberProps[]>([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
-  const loadStaff = useCallback(() => {
+  const loadStaff = () => {
     try {
       const data = getStaff();
       setStaff(data);
       setIsDataLoaded(true);
+      console.log('📡 Staff data reloaded:', data);
     } catch (error) {
       console.error("Error loading staff:", error);
       setIsDataLoaded(true);
     }
-  }, [getStaff]);
+  };
 
   useEffect(() => {
     loadStaff();
-  }, [loadStaff]);
+  }, [getStaff]);
 
+  // Listen for staff changes
   useEffect(() => {
     const handleStaffChange = () => {
+      console.log('🔄 Staff changed event received, reloading data...');
       loadStaff();
     };
 
     window.addEventListener('staffChanged', handleStaffChange);
-    return () => window.removeEventListener('staffChanged', handleStaffChange);
-  }, [loadStaff]);
+    
+    return () => {
+      window.removeEventListener('staffChanged', handleStaffChange);
+    };
+  }, [getStaff]);
 
   const isSkeletonLoading = useSkeletonLoading(isDataLoaded);
 
-  const filteredStaff = useMemo(() => 
-    staff.filter(member => 
-      member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.role.toLowerCase().includes(searchTerm.toLowerCase())
-    ),
-    [staff, searchTerm]
+  const filteredStaff = staff.filter(member => 
+    member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    member.role.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (isSkeletonLoading) {
@@ -90,8 +93,27 @@ const StaffContent = () => {
 };
 
 const Staff = () => {
+  const { getStaff } = useLocalData();
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        getStaff();
+        setIsDataLoaded(true);
+      } catch (error) {
+        console.error("Error loading staff data:", error);
+        setIsDataLoaded(true);
+      }
+    };
+    
+    loadData();
+  }, [getStaff]);
+
+  const isSkeletonLoading = useSkeletonLoading(isDataLoaded);
+
   return (
-    <PageWithSkeleton>
+    <PageWithSkeleton isLoading={isSkeletonLoading}>
       <StaffContent />
     </PageWithSkeleton>
   );
