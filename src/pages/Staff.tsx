@@ -15,26 +15,22 @@ const StaffContent = () => {
   const [staff, setStaff] = useState<StaffMemberProps[]>([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
-  const loadStaff = () => {
-    try {
-      const data = getStaff();
-      setStaff(data);
-      setIsDataLoaded(true);
-      console.log('📡 Staff data reloaded:', data);
-    } catch (error) {
-      console.error("Error loading staff:", error);
-      setIsDataLoaded(true);
-    }
-  };
-
   useEffect(() => {
+    const loadStaff = () => {
+      try {
+        const data = getStaff();
+        setStaff(data);
+        setIsDataLoaded(true);
+      } catch (error) {
+        console.error("Error loading staff:", error);
+        setIsDataLoaded(true);
+      }
+    };
+
     loadStaff();
-  }, [getStaff]);
 
-  // Listen for staff changes
-  useEffect(() => {
+    // Listen for staff changes
     const handleStaffChange = () => {
-      console.log('🔄 Staff changed event received, reloading data...');
       loadStaff();
     };
 

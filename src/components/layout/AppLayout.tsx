@@ -89,7 +89,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
           )}
           
           {/* Main Content Area */}
-          <div className={`flex-1 flex flex-col min-h-screen ${!isMobile && !isNotFoundPage ? 'ml-0' : 'w-full'}`}>
+          <div className={`flex-1 flex flex-col min-h-screen ${!isMobile && !isNotFoundPage ? 'ml-64' : 'w-full'}`}>
             {/* Desktop Header - Only for non-dashboard pages */}
             {!isMobile && !isNotFoundPage && location.pathname !== '/'}
             

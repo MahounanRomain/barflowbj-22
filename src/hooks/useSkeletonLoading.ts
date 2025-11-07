@@ -1,40 +1,52 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+
+// Track visited pages across the app session
+const visitedPages = new Set<string>();
 
 export const useSkeletonLoading = (isDataLoaded?: boolean) => {
   const [isSkeletonLoading, setIsSkeletonLoading] = useState(true);
   const location = useLocation();
   const previousPathnameRef = useRef<string>('');
-  const initialLoadRef = useRef<boolean>(true);
 
   useEffect(() => {
     const currentPath = location.pathname;
     const previousPath = previousPathnameRef.current;
 
-    // Show skeleton when navigating to a different page or on initial load
-    if (currentPath !== previousPath || initialLoadRef.current) {
-      setIsSkeletonLoading(true);
-      initialLoadRef.current = false;
+    // Only show skeleton if this page hasn't been visited yet
+    if (currentPath !== previousPath) {
+      if (!visitedPages.has(currentPath)) {
+        setIsSkeletonLoading(true);
+      } else {
+        setIsSkeletonLoading(false);
+      }
     }
 
     previousPathnameRef.current = currentPath;
   }, [location.pathname]);
 
-  // Hide skeleton when data is loaded with minimum display time for better UX
+  // Hide skeleton when data is loaded
   useEffect(() => {
     if (isDataLoaded !== undefined) {
       if (isDataLoaded) {
-        // Ensure skeleton is visible for at least 4800ms for ultra smooth user experience (0.25 speed scale)
-        const timer = setTimeout(() => {
+        // Mark page as visited
+        visitedPages.add(location.pathname);
+        
+        // Show skeleton for minimum time on first visit
+        if (!visitedPages.has(location.pathname)) {
+          const timer = setTimeout(() => {
+            setIsSkeletonLoading(false);
+          }, 1200);
+          return () => clearTimeout(timer);
+        } else {
           setIsSkeletonLoading(false);
-        }, 4800);
-        return () => clearTimeout(timer);
+        }
       } else {
         setIsSkeletonLoading(true);
       }
     }
-  }, [isDataLoaded]);
+  }, [isDataLoaded, location.pathname]);
 
   return isSkeletonLoading;
 };
