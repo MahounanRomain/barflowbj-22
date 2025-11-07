@@ -89,6 +89,14 @@ export default {
 				'2xl': 'calc(var(--radius) + 8px)'
 			},
 			keyframes: {
+				'skeleton-pulse': {
+					'0%, 100%': {
+						opacity: '1'
+					},
+					'50%': {
+						opacity: '0.4'
+					}
+				},
 				'accordion-down': {
 					from: {
 						height: '0'
@@ -155,6 +163,7 @@ export default {
 				}
 			},
       animation: {
+        'skeleton-pulse': 'skeleton-pulse 3.2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'accordion-down': 'accordion-down 2s ease-out',
         'accordion-up': 'accordion-up 2s ease-out',
         'fade-in': 'fade-in 3.2s cubic-bezier(0.16, 1, 0.3, 1)',
