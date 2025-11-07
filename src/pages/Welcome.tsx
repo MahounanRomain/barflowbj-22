@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { BarChart3, TrendingUp, Package, Users } from 'lucide-react';
+import { TrendingUp, Package, Users } from 'lucide-react';
 const Welcome = () => {
   return <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4">
       <div className="w-full max-w-4xl space-y-8 animate-fade-in">
@@ -9,7 +9,7 @@ const Welcome = () => {
         <div className="text-center space-y-4">
           <div className="flex justify-center mb-6">
             <div className="p-4 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 shadow-xl">
-              <BarChart3 className="w-16 h-16 text-primary" />
+              
             </div>
           </div>
           <h1 className="text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-gradient-shift bg-[length:200%_auto]">BarFlow</h1>
