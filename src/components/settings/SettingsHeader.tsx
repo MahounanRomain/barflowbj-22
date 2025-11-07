@@ -22,9 +22,7 @@ export const SettingsHeader: React.FC<SettingsHeaderProps> = ({
           <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Paramètres
           </h1>
-          <p className="text-muted-foreground">
-            Configurez votre application BarFlowTrack
-            {hasUnsavedChanges && <span className="ml-2 text-orange-600 font-medium">• Modifications non sauvegardées</span>}
+          <p className="text-muted-foreground">Configurez votre application BarFlow{hasUnsavedChanges && <span className="ml-2 text-orange-600 font-medium">• Modifications non sauvegardées</span>}
           </p>
         </div>
       </div>
