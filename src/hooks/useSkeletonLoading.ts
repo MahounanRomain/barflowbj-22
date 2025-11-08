@@ -30,11 +30,13 @@ export const useSkeletonLoading = (isDataLoaded?: boolean) => {
   useEffect(() => {
     if (isDataLoaded !== undefined) {
       if (isDataLoaded) {
+        const isFirstVisit = !visitedPages.has(location.pathname);
+        
         // Mark page as visited
         visitedPages.add(location.pathname);
         
         // Show skeleton for minimum time on first visit
-        if (!visitedPages.has(location.pathname)) {
+        if (isFirstVisit) {
           const timer = setTimeout(() => {
             setIsSkeletonLoading(false);
           }, 1200);
