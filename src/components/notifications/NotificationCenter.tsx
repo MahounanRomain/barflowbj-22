@@ -1,10 +1,13 @@
-import { useState, useMemo } from 'react';
-import { Bell, Check, X, AlertCircle, Info, AlertTriangle, CheckCircle, Trash2 } from 'lucide-react';
+import { useState, useMemo, useCallback } from 'react';
+import { Bell, Check, X, AlertCircle, Info, AlertTriangle, CheckCircle, Trash2, Search, Filter, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Sheet,
   SheetContent,
@@ -47,22 +50,102 @@ const getPriorityStyles = (priority: string) => {
 const NotificationCenter = () => {
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
-  const { notifications, unreadCount, markAsRead, markAllAsRead, removeNotification, clearAll } = useNotifications();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterType, setFilterType] = useState<string>('all');
+  const [filterPriority, setFilterPriority] = useState<string>('all');
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [selectionMode, setSelectionMode] = useState(false);
+  
+  const { 
+    notifications, 
+    unreadCount, 
+    markAsRead, 
+    markAllAsRead, 
+    removeNotification, 
+    clearAll,
+    markMultipleAsRead,
+    removeMultiple,
+    isLoading 
+  } = useNotifications();
 
   const filteredNotifications = useMemo(() => {
+    let filtered = notifications;
+    
+    // Filter by tab
     if (activeTab === 'unread') {
-      return notifications.filter(n => !n.read);
+      filtered = filtered.filter(n => !n.read);
     }
-    return notifications;
-  }, [notifications, activeTab]);
+    
+    // Filter by search
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(n => 
+        n.title.toLowerCase().includes(query) ||
+        n.message.toLowerCase().includes(query) ||
+        n.source?.toLowerCase().includes(query)
+      );
+    }
+    
+    // Filter by type
+    if (filterType !== 'all') {
+      filtered = filtered.filter(n => n.type === filterType);
+    }
+    
+    // Filter by priority
+    if (filterPriority !== 'all') {
+      filtered = filtered.filter(n => n.priority === filterPriority);
+    }
+    
+    return filtered;
+  }, [notifications, activeTab, searchQuery, filterType, filterPriority]);
 
-  const handleMarkAsRead = (id: string) => {
+  const handleMarkAsRead = useCallback((id: string) => {
     markAsRead(id);
-  };
+    setSelectedIds(prev => prev.filter(selectedId => selectedId !== id));
+  }, [markAsRead]);
 
-  const handleRemove = (id: string) => {
+  const handleRemove = useCallback((id: string) => {
     removeNotification(id);
-  };
+    setSelectedIds(prev => prev.filter(selectedId => selectedId !== id));
+  }, [removeNotification]);
+
+  const handleToggleSelection = useCallback((id: string) => {
+    setSelectedIds(prev => 
+      prev.includes(id) ? prev.filter(selectedId => selectedId !== id) : [...prev, id]
+    );
+  }, []);
+
+  const handleSelectAll = useCallback(() => {
+    setSelectedIds(filteredNotifications.map(n => n.id));
+  }, [filteredNotifications]);
+
+  const handleDeselectAll = useCallback(() => {
+    setSelectedIds([]);
+  }, []);
+
+  const handleMarkSelectedAsRead = useCallback(() => {
+    if (selectedIds.length > 0) {
+      markMultipleAsRead(selectedIds);
+      setSelectedIds([]);
+      setSelectionMode(false);
+    }
+  }, [selectedIds, markMultipleAsRead]);
+
+  const handleRemoveSelected = useCallback(() => {
+    if (selectedIds.length > 0) {
+      removeMultiple(selectedIds);
+      setSelectedIds([]);
+      setSelectionMode(false);
+    }
+  }, [selectedIds, removeMultiple]);
+
+  const hasActiveFilters = searchQuery.trim() !== '' || filterType !== 'all' || filterPriority !== 'all';
+
+  const clearFilters = useCallback(() => {
+    setSearchQuery('');
+    setFilterType('all');
+    setFilterPriority('all');
+  }, []);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -88,7 +171,7 @@ const NotificationCenter = () => {
         side="right" 
         className="w-full sm:w-[440px] p-0 flex flex-col"
       >
-        <SheetHeader className="px-6 py-4 border-b">
+        <SheetHeader className="px-6 py-4 border-b space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <SheetTitle>Notifications</SheetTitle>
@@ -98,29 +181,164 @@ const NotificationCenter = () => {
             </div>
             {notifications.length > 0 && (
               <div className="flex gap-2">
-                {unreadCount > 0 && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={markAllAsRead}
-                    className="text-xs"
-                  >
-                    <Check className="h-3 w-3 mr-1" />
-                    Tout marquer
-                  </Button>
+                {!selectionMode ? (
+                  <>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setSelectionMode(true)}
+                      className="text-xs"
+                    >
+                      <Check className="h-3 w-3 mr-1" />
+                      Sélection
+                    </Button>
+                    {unreadCount > 0 && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={markAllAsRead}
+                        disabled={isLoading}
+                        className="text-xs"
+                      >
+                        <Check className="h-3 w-3 mr-1" />
+                        Tout marquer
+                      </Button>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={clearAll}
+                      disabled={isLoading}
+                      className="text-xs text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="h-3 w-3 mr-1" />
+                      Effacer
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setSelectionMode(false);
+                        setSelectedIds([]);
+                      }}
+                      className="text-xs"
+                    >
+                      Annuler
+                    </Button>
+                    {selectedIds.length > 0 && (
+                      <>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleMarkSelectedAsRead}
+                          disabled={isLoading}
+                          className="text-xs"
+                        >
+                          <Check className="h-3 w-3 mr-1" />
+                          Marquer ({selectedIds.length})
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleRemoveSelected}
+                          disabled={isLoading}
+                          className="text-xs text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="h-3 w-3 mr-1" />
+                          Supprimer ({selectedIds.length})
+                        </Button>
+                      </>
+                    )}
+                  </>
                 )}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearAll}
-                  className="text-xs text-destructive hover:text-destructive"
-                >
-                  <Trash2 className="h-3 w-3 mr-1" />
-                  Effacer
-                </Button>
               </div>
             )}
           </div>
+          
+          {/* Search and Filters */}
+          <div className="space-y-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Rechercher..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 h-9"
+              />
+            </div>
+            
+            <div className="flex gap-2">
+              <Select value={filterType} onValueChange={setFilterType}>
+                <SelectTrigger className="h-8 text-xs flex-1">
+                  <SelectValue placeholder="Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tous les types</SelectItem>
+                  <SelectItem value="error">Erreurs</SelectItem>
+                  <SelectItem value="warning">Avertissements</SelectItem>
+                  <SelectItem value="success">Succès</SelectItem>
+                  <SelectItem value="info">Info</SelectItem>
+                  <SelectItem value="inventory">Inventaire</SelectItem>
+                  <SelectItem value="sales">Ventes</SelectItem>
+                  <SelectItem value="system">Système</SelectItem>
+                </SelectContent>
+              </Select>
+              
+              <Select value={filterPriority} onValueChange={setFilterPriority}>
+                <SelectTrigger className="h-8 text-xs flex-1">
+                  <SelectValue placeholder="Priorité" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toutes priorités</SelectItem>
+                  <SelectItem value="high">Haute</SelectItem>
+                  <SelectItem value="medium">Moyenne</SelectItem>
+                  <SelectItem value="low">Basse</SelectItem>
+                </SelectContent>
+              </Select>
+              
+              {hasActiveFilters && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearFilters}
+                  className="h-8 px-2"
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              )}
+            </div>
+          </div>
+          
+          {selectionMode && filteredNotifications.length > 0 && (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Button
+                variant="link"
+                size="sm"
+                onClick={handleSelectAll}
+                className="h-auto p-0 text-xs"
+              >
+                Tout sélectionner
+              </Button>
+              {selectedIds.length > 0 && (
+                <>
+                  <span>•</span>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    onClick={handleDeselectAll}
+                    className="h-auto p-0 text-xs"
+                  >
+                    Tout désélectionner
+                  </Button>
+                  <span>•</span>
+                  <span>{selectedIds.length} sélectionnée{selectedIds.length > 1 ? 's' : ''}</span>
+                </>
+              )}
+            </div>
+          )}
         </SheetHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
@@ -152,10 +370,21 @@ const NotificationCenter = () => {
                       className={cn(
                         'p-4 transition-all hover:shadow-md',
                         getPriorityStyles(notification.priority),
-                        !notification.read && 'bg-accent/30'
+                        !notification.read && 'bg-accent/30',
+                        selectionMode && 'cursor-pointer',
+                        selectedIds.includes(notification.id) && 'ring-2 ring-primary'
                       )}
+                      onClick={() => selectionMode && handleToggleSelection(notification.id)}
                     >
                       <div className="flex gap-3">
+                        {selectionMode && (
+                          <div className="flex-shrink-0 mt-0.5">
+                            <Checkbox
+                              checked={selectedIds.includes(notification.id)}
+                              onCheckedChange={() => handleToggleSelection(notification.id)}
+                            />
+                          </div>
+                        )}
                         <div className="flex-shrink-0 mt-0.5">
                           {getIcon(notification.type)}
                         </div>
@@ -164,28 +393,36 @@ const NotificationCenter = () => {
                             <h4 className="text-sm font-semibold leading-tight">
                               {notification.title}
                             </h4>
-                            <div className="flex gap-1 flex-shrink-0">
-                              {!notification.read && (
+                            {!selectionMode && (
+                              <div className="flex gap-1 flex-shrink-0">
+                                {!notification.read && (
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-6 w-6"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleMarkAsRead(notification.id);
+                                    }}
+                                    aria-label="Marquer comme lu"
+                                  >
+                                    <Check className="h-3 w-3" />
+                                  </Button>
+                                )}
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  className="h-6 w-6"
-                                  onClick={() => handleMarkAsRead(notification.id)}
-                                  aria-label="Marquer comme lu"
+                                  className="h-6 w-6 text-destructive hover:text-destructive"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRemove(notification.id);
+                                  }}
+                                  aria-label="Supprimer"
                                 >
-                                  <Check className="h-3 w-3" />
+                                  <X className="h-3 w-3" />
                                 </Button>
-                              )}
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6 text-destructive hover:text-destructive"
-                                onClick={() => handleRemove(notification.id)}
-                                aria-label="Supprimer"
-                              >
-                                <X className="h-3 w-3" />
-                              </Button>
-                            </div>
+                              </div>
+                            )}
                           </div>
                           <p className="text-xs text-muted-foreground leading-relaxed">
                             {notification.message}
@@ -230,10 +467,21 @@ const NotificationCenter = () => {
                       className={cn(
                         'p-4 transition-all hover:shadow-md',
                         getPriorityStyles(notification.priority),
-                        'bg-accent/30'
+                        'bg-accent/30',
+                        selectionMode && 'cursor-pointer',
+                        selectedIds.includes(notification.id) && 'ring-2 ring-primary'
                       )}
+                      onClick={() => selectionMode && handleToggleSelection(notification.id)}
                     >
                       <div className="flex gap-3">
+                        {selectionMode && (
+                          <div className="flex-shrink-0 mt-0.5">
+                            <Checkbox
+                              checked={selectedIds.includes(notification.id)}
+                              onCheckedChange={() => handleToggleSelection(notification.id)}
+                            />
+                          </div>
+                        )}
                         <div className="flex-shrink-0 mt-0.5">
                           {getIcon(notification.type)}
                         </div>
@@ -242,26 +490,34 @@ const NotificationCenter = () => {
                             <h4 className="text-sm font-semibold leading-tight">
                               {notification.title}
                             </h4>
-                            <div className="flex gap-1 flex-shrink-0">
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6"
-                                onClick={() => handleMarkAsRead(notification.id)}
-                                aria-label="Marquer comme lu"
-                              >
-                                <Check className="h-3 w-3" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6 text-destructive hover:text-destructive"
-                                onClick={() => handleRemove(notification.id)}
-                                aria-label="Supprimer"
-                              >
-                                <X className="h-3 w-3" />
-                              </Button>
-                            </div>
+                            {!selectionMode && (
+                              <div className="flex gap-1 flex-shrink-0">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-6 w-6"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleMarkAsRead(notification.id);
+                                  }}
+                                  aria-label="Marquer comme lu"
+                                >
+                                  <Check className="h-3 w-3" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-6 w-6 text-destructive hover:text-destructive"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRemove(notification.id);
+                                  }}
+                                  aria-label="Supprimer"
+                                >
+                                  <X className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            )}
                           </div>
                           <p className="text-xs text-muted-foreground leading-relaxed">
                             {notification.message}
