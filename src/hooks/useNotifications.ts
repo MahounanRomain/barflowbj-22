@@ -13,7 +13,7 @@ export const useNotifications = () => {
 
 // Helper function pour envoyer des messages système personnalisés
 export const sendSystemMessage = (
-  type: 'success' | 'error' | 'warning' | 'info',
+  type: 'success' | 'error' | 'warning' | 'info' | 'inventory' | 'sales' | 'system',
   title: string,
   message: string,
   priority: 'high' | 'medium' | 'low' = 'medium'

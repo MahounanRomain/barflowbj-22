@@ -1,6 +1,6 @@
-
-import { useMemo } from 'react';
+import { useMemo, useEffect, useRef } from 'react';
 import { useLocalData } from '@/hooks/useLocalData';
+import { sendSystemMessage } from '@/hooks/useNotifications';
 
 interface StockPrediction {
   itemId: string;
@@ -22,6 +22,7 @@ interface StockPrediction {
 
 export const useStockPredictions = () => {
   const { getSales, getInventory } = useLocalData();
+  const notifiedPredictionsRef = useRef<Set<string>>(new Set());
   
   const predictions = useMemo((): StockPrediction[] => {
     const sales = getSales();
@@ -138,6 +139,40 @@ export const useStockPredictions = () => {
       return a.predictedDaysRemaining - b.predictedDaysRemaining;
     });
   }, [getSales, getInventory]);
+  
+  // Envoyer des notifications pour les prédictions à haut risque
+  useEffect(() => {
+    predictions.forEach(prediction => {
+      const notifKey = `${prediction.itemId}_${prediction.riskLevel}`;
+      
+      if (prediction.riskLevel === 'high' && !notifiedPredictionsRef.current.has(notifKey)) {
+        notifiedPredictionsRef.current.add(notifKey);
+        
+        sendSystemMessage(
+          'warning',
+          'Alerte stock critique',
+          `${prediction.itemName}: Stock critique - ${prediction.predictedDaysRemaining} jour(s) restant(s). Réapprovisionner ${prediction.suggestedRestockQuantity} unités.`,
+          'high'
+        );
+      } else if (prediction.riskLevel === 'medium' && !notifiedPredictionsRef.current.has(notifKey)) {
+        notifiedPredictionsRef.current.add(notifKey);
+        
+        sendSystemMessage(
+          'info',
+          'Prévision de stock',
+          `${prediction.itemName}: Stock faible prévu dans ${prediction.predictedDaysRemaining} jours. Quantité suggérée: ${prediction.suggestedRestockQuantity} unités.`,
+          'medium'
+        );
+      }
+      
+      // Nettoyer les anciennes notifications si le niveau de risque a changé
+      if (prediction.riskLevel === 'low') {
+        ['high', 'medium'].forEach(level => {
+          notifiedPredictionsRef.current.delete(`${prediction.itemId}_${level}`);
+        });
+      }
+    });
+  }, [predictions]);
   
   return { predictions };
 };

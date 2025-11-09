@@ -18,6 +18,7 @@ import {
 import { useLocalData } from "@/hooks/useLocalData";
 import { useTableBalance } from '@/hooks/useTableBalance';
 import { useToast } from "@/hooks/use-toast";
+import { sendSystemMessage } from '@/hooks/useNotifications';
 import { getTodayDateString } from "@/lib/dateUtils";
 import { formatCurrency } from "@/lib/utils";
 import { CommonItemSelector } from "./sale/CommonItemSelector";
@@ -195,6 +196,14 @@ const UnifiedSaleDialog = () => {
       description: `${quantity} ${item.unit} de ${item.name} vendu(s)`,
     });
 
+    // Envoyer notification
+    sendSystemMessage(
+      'sales',
+      'Vente enregistrée',
+      `${quantity} ${item.unit} de ${item.name} vendu(s) pour ${formatCurrency(quantity * item.salePrice)} par ${staffMember?.name || 'Inconnu'}`,
+      'low'
+    );
+
     resetForm();
     setOpen(false);
   };
@@ -247,10 +256,20 @@ const UnifiedSaleDialog = () => {
       setTableStatus(selectedTable, 'occupied');
     }
 
+    const totalAmount = getTotalAmount();
+    
     toast({
       title: "✨ Ventes enregistrées",
-      description: `${saleItems.length} vente(s) pour un total de ${formatCurrency(getTotalAmount())}`,
+      description: `${saleItems.length} vente(s) pour un total de ${formatCurrency(totalAmount)}`,
     });
+
+    // Envoyer notification
+    sendSystemMessage(
+      'sales',
+      'Ventes multiples enregistrées',
+      `${saleItems.length} article(s) vendus pour ${formatCurrency(totalAmount)} par ${staffMember?.name || 'Inconnu'}`,
+      'low'
+    );
 
     resetForm();
     setOpen(false);

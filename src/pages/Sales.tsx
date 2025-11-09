@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UnifiedSaleDialog from "@/components/UnifiedSaleDialog";
 import SalesChart from "@/components/SalesChart";
 import TableManager from "@/components/TableManager";
+import { sendSystemMessage } from '@/hooks/useNotifications';
 import TableSalesView from "@/components/TableSalesView";
 import EnhancedTableSalesView from "@/components/tables/EnhancedTableSalesView";
 import TableStatusManager from "@/components/tables/TableStatusManager";
@@ -132,6 +133,14 @@ const Sales = () => {
       // 3. Supprimer la vente
       const updatedSales = sales.filter(sale => sale.id !== saleId);
       saveSales(updatedSales);
+
+      // Envoyer notification
+      sendSystemMessage(
+        'warning',
+        'Vente annulée',
+        `Vente de ${saleToDelete.item} (${saleToDelete.quantity} unité(s)) annulée - Stock restauré`,
+        'medium'
+      );
 
       // 4. Supprimer la transaction de trésorerie associée
       const { storage } = await import('@/lib/storage');

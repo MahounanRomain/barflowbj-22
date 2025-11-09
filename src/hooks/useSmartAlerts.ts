@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocalData } from '@/hooks/useLocalData';
+import { sendSystemMessage } from '@/hooks/useNotifications';
 
 export interface SmartAlert {
   id: string;
@@ -17,6 +18,7 @@ export interface SmartAlert {
 export const useSmartAlerts = () => {
   const [alerts, setAlerts] = useState<SmartAlert[]>([]);
   const { getSales, getInventory, getStaff } = useLocalData();
+  const notifiedAlertsRef = useRef<Set<string>>(new Set());
 
   const generateAlerts = () => {
     const sales = getSales();
@@ -102,9 +104,32 @@ export const useSmartAlerts = () => {
     setAlerts((prev) =>
       draftAlerts.map((a) => {
         const existing = prev.find((p) => p.id === a.id);
+        
+        // Envoyer notification seulement pour les nouvelles alertes critiques ou warnings
+        if (!existing && !notifiedAlertsRef.current.has(a.id)) {
+          notifiedAlertsRef.current.add(a.id);
+          
+          if (a.severity === 'critical' || a.severity === 'warning') {
+            sendSystemMessage(
+              a.severity === 'critical' ? 'error' : 'warning',
+              a.title,
+              a.description,
+              a.severity === 'critical' ? 'high' : 'medium'
+            );
+          }
+        }
+        
         return { ...a, timestamp: existing?.timestamp || a.timestamp };
       })
     );
+    
+    // Nettoyer les alertes notifiées qui n'existent plus
+    const currentAlertIds = new Set(draftAlerts.map(a => a.id));
+    notifiedAlertsRef.current.forEach(id => {
+      if (!currentAlertIds.has(id)) {
+        notifiedAlertsRef.current.delete(id);
+      }
+    });
   };
 
   useEffect(() => {

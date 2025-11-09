@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { SimpleNumericInput } from '@/components/ui/simple-numeric-input';
 import { useLocalData } from '@/hooks/useLocalData';
 import { useToast } from '@/components/ui/use-toast';
+import { sendSystemMessage } from '@/hooks/useNotifications';
 import { Plus } from 'lucide-react';
 
 interface RestockDialogProps {
@@ -72,6 +73,14 @@ const RestockDialog: React.FC<RestockDialogProps> = ({
         title: "✅ Stock réapprovisionné",
         description: `${restockQuantity} ${item.unit} ajouté(s) au stock de ${item.name}`,
       });
+
+      // Envoyer notification
+      sendSystemMessage(
+        'inventory',
+        'Réapprovisionnement effectué',
+        `${restockQuantity} ${item.unit} de ${item.name} ajouté(s) au stock (Nouveau total: ${newQuantity})`,
+        'medium'
+      );
 
       // Reset form
       setQuantity('');
