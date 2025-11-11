@@ -19,6 +19,10 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react/jsx-runtime'],
+    exclude: [],
+  },
   build: {
     rollupOptions: {
       output: {
