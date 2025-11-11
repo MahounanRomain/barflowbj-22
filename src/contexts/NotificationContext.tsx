@@ -87,48 +87,8 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     safeSetStorage(STORAGE_KEY, notifications);
   }, [notifications]);
 
-  // Event listeners pour capturer toutes les modifications
+  // Event listeners pour les notifications importantes uniquement
   useEffect(() => {
-    const handleInventoryChange = () => {
-      addNotification({
-        type: 'inventory',
-        title: 'Inventaire mis à jour',
-        message: 'Les données d\'inventaire ont été modifiées',
-        priority: 'low',
-        source: 'inventory'
-      });
-    };
-
-    const handleSalesChange = () => {
-      addNotification({
-        type: 'sales',
-        title: 'Vente enregistrée',
-        message: 'Une nouvelle vente a été ajoutée',
-        priority: 'low',
-        source: 'sales'
-      });
-    };
-
-    const handleCashChange = () => {
-      addNotification({
-        type: 'info',
-        title: 'Caisse mise à jour',
-        message: 'Le solde de caisse a été modifié',
-        priority: 'low',
-        source: 'cash'
-      });
-    };
-
-    const handleTableChange = () => {
-      addNotification({
-        type: 'info',
-        title: 'Tables mises à jour',
-        message: 'L\'état des tables a changé',
-        priority: 'low',
-        source: 'tables'
-      });
-    };
-
     const handleError = (event: ErrorEvent) => {
       addNotification({
         type: 'error',
@@ -150,21 +110,11 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       });
     };
 
-    // Enregistrer tous les event listeners
-    window.addEventListener('inventoryChanged', handleInventoryChange);
-    window.addEventListener('salesChanged', handleSalesChange);
-    window.addEventListener('cashTransactionsChanged', handleCashChange);
-    window.addEventListener('cashBalanceChanged', handleCashChange);
-    window.addEventListener('tablesChanged', handleTableChange);
+    // Enregistrer seulement les event listeners pour erreurs et messages système
     window.addEventListener('error', handleError);
     window.addEventListener('systemMessage', handleSystemMessage as EventListener);
 
     return () => {
-      window.removeEventListener('inventoryChanged', handleInventoryChange);
-      window.removeEventListener('salesChanged', handleSalesChange);
-      window.removeEventListener('cashTransactionsChanged', handleCashChange);
-      window.removeEventListener('cashBalanceChanged', handleCashChange);
-      window.removeEventListener('tablesChanged', handleTableChange);
       window.removeEventListener('error', handleError);
       window.removeEventListener('systemMessage', handleSystemMessage as EventListener);
     };
