@@ -35,10 +35,10 @@ const LoadingAnimation = () => {
             <div className="text-3xl animate-gentle-bounce">🍸</div>
           </div>
         </div>
-        {/* Texte BarFlowTrack avec animation */}
+        {/* Texte BarFlow avec animation */}
         <div className="text-center animate-fade-in-up">
           <h1 className="text-5xl font-bold text-shimmer mb-3">
-            BarFlowTrack
+            BarFlow
           </h1>
           <div className="flex space-x-1 justify-center">
             {['C', 'h', 'a', 'r', 'g', 'e', 'm', 'e', 'n', 't', '.', '.', '.'].map((letter, index) => (

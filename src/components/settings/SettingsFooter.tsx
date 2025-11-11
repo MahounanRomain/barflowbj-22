@@ -17,7 +17,7 @@ export const SettingsFooter: React.FC<SettingsFooterProps> = ({
       <div className="mt-8 p-6 bg-gradient-to-r from-primary/5 to-accent/5 rounded-xl border shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="font-semibold text-lg">BarFlowTrack</h3>
+            <h3 className="font-semibold text-lg">BarFlow</h3>
             <p className="text-sm text-muted-foreground">Gestion intelligente de bar</p>
           </div>
           <Badge variant="secondary" className="bg-primary/10 text-primary">

@@ -11,7 +11,7 @@ export const SpecificationGenerator: React.FC = () => {
   const generateSpecification = () => {
     const specification = {
       project: {
-        name: "BarFlowTrack",
+        name: "BarFlow",
         version: "2.2.0",
         description: "Application de gestion intelligente de bar",
         author: "Romain Sergio BOGNISSOU",
@@ -20,7 +20,7 @@ export const SpecificationGenerator: React.FC = () => {
       },
       overview: {
         title: "Vue d'ensemble",
-        description: "BarFlowTrack est une application web progressive conçue pour la gestion complète d'un établissement de bar. Elle offre une interface moderne et intuitive pour gérer l'inventaire, les ventes, le personnel et générer des rapports détaillés.",
+        description: "BarFlow est une application web progressive conçue pour la gestion complète d'un établissement de bar. Elle offre une interface moderne et intuitive pour gérer l'inventaire, les ventes, le personnel et générer des rapports détaillés.",
         objectives: [
           "Simplifier la gestion quotidienne d'un bar",
           "Optimiser le suivi des stocks et des ventes",
@@ -476,7 +476,7 @@ ${specification.futureEnhancements.suggestions.map(suggestion => `- ${suggestion
 
 ---
 
-*Document généré automatiquement par BarFlowTrack v${specification.project.version}*
+*Document généré automatiquement par BarFlow v${specification.project.version}*
 *© 2024 ${specification.project.author}*
 `;
 
@@ -484,7 +484,7 @@ ${specification.futureEnhancements.suggestions.map(suggestion => `- ${suggestion
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `BarFlowTrack-Cahier-des-Charges-${new Date().toISOString().split('T')[0]}.md`;
+    link.download = `BarFlow-Cahier-des-Charges-${new Date().toISOString().split('T')[0]}.md`;
     link.click();
     URL.revokeObjectURL(url);
 

@@ -303,7 +303,7 @@ const Settings = () => {
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `barflowtrack-export-${new Date().toISOString().split('T')[0]}.json`;
+    link.download = `barflow-export-${new Date().toISOString().split('T')[0]}.json`;
     link.click();
     URL.revokeObjectURL(url);
     

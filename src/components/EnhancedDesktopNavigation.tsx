@@ -101,7 +101,7 @@ const EnhancedDesktopNavigation = () => {
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg hover-glow transition-smooth animate-gentle-bounce flex-shrink-0">
                   <img 
                     src={barflowtrackLogo} 
-                    alt="BarFlowTrack Logo" 
+                    alt="BarFlow Logo" 
                     className="w-12 h-12 object-contain"
                   />
                 </div>
@@ -110,7 +110,7 @@ const EnhancedDesktopNavigation = () => {
                   shouldShowExpanded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
                 )}>
                   <h1 className="text-lg font-bold text-foreground bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-                    BarFlowTrack
+                    BarFlow
                   </h1>
                   <p className="text-xs text-muted-foreground font-medium">by Romain Sergio</p>
                 </div>
@@ -122,13 +122,13 @@ const EnhancedDesktopNavigation = () => {
                     <div className="w-14 h-14 rounded-xl flex items-center justify-center shadow-lg hover-glow transition-smooth animate-gentle-bounce mx-auto">
                       <img 
                         src={barflowtrackLogo} 
-                        alt="BarFlowTrack Logo" 
+                        alt="BarFlow Logo" 
                         className="w-12 h-12 object-contain"
                       />
                     </div>
                   </TooltipTrigger>
                   <TooltipContent side="right">
-                    <p>BarFlowTrack</p>
+                    <p>BarFlow</p>
                   </TooltipContent>
                 </Tooltip>
               )}

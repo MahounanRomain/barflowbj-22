@@ -41,7 +41,7 @@ const PWAInstallPrompt = () => {
     };
 
   const handleAppInstalled = () => {
-    console.log('BarFlowTrack PWA was successfully installed!');
+    console.log('BarFlow PWA was successfully installed!');
     setIsInstalled(true);
     setShowPrompt(false);
     setDeferredPrompt(null);
@@ -95,7 +95,7 @@ const PWAInstallPrompt = () => {
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
           <Download className="w-5 h-5 text-primary" />
-          <h3 className="font-semibold text-sm">Installer BarFlowTrack</h3>
+          <h3 className="font-semibold text-sm">Installer BarFlow</h3>
         </div>
         <Button
           variant="ghost"
@@ -109,7 +109,7 @@ const PWAInstallPrompt = () => {
       </div>
       
       <p className="text-sm text-muted-foreground mb-4">
-        Installez BarFlowTrack sur votre appareil pour un accès rapide et une utilisation hors-ligne.
+        Installez BarFlow sur votre appareil pour un accès rapide et une utilisation hors-ligne.
       </p>
       
       <div className="flex gap-2">

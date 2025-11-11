@@ -66,7 +66,7 @@ export const exportCompleteData = () => {
       timestamp,
       dateStr,
       timeStr,
-      appName: 'BarFlowTrack',
+      appName: 'BarFlow',
       dataKeys: Object.keys(completeData),
       totalKeys: Object.keys(completeData).length,
       exportType: 'complete'
@@ -88,7 +88,7 @@ export const exportCompleteData = () => {
   const dataBlob = new Blob([dataStr], { type: 'application/json' });
   const url = URL.createObjectURL(dataBlob);
   
-  const fileName = `BarFlowTrack_Complete_Export_${dateStr}_${timeStr}.json`;
+  const fileName = `BarFlow_Complete_Export_${dateStr}_${timeStr}.json`;
   
   const link = document.createElement('a');
   link.href = url;
@@ -135,8 +135,8 @@ export const importCompleteData = (data: any): {
 
     const { version, appName } = data.exportInfo;
     
-    // Version compatibility check
-    if (!version || !appName || appName !== 'BarFlowTrack') {
+    // Version compatibility check - accept both BarFlow and BarFlowTrack for backward compatibility
+    if (!version || !appName || (appName !== 'BarFlow' && appName !== 'BarFlowTrack')) {
       result.details.errors.push('Format non reconnu ou version incompatible');
     }
 

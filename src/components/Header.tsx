@@ -60,7 +60,7 @@ const Header: React.FC<HeaderProps> = ({
       case '/settings':
         return 'Réglages';
       default:
-        return 'BarFlowTrack';
+        return 'BarFlow';
     }
   };
   return <header className={`bg-background/95 backdrop-blur-lg border-b border-border/60 px-4 py-3 flex items-center justify-between sticky top-0 z-40 glass-effect animate-slide-up shadow-lg ${!isMobile ? 'border-l-4 border-l-primary' : ''}`}>
