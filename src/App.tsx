@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { NotificationProvider } from "@/contexts/NotificationContext";
@@ -20,6 +19,7 @@ const Inventory = React.lazy(() => import("@/pages/Inventory"));
 const Staff = React.lazy(() => import("@/pages/Staff"));
 const Reports = React.lazy(() => import("@/pages/Reports"));
 const Settings = React.lazy(() => import("@/pages/Settings"));
+const Analytics = React.lazy(() => import("@/pages/Analytics"));
 const NotFound = React.lazy(() => import("@/pages/NotFound"));
 const Welcome = React.lazy(() => import("@/pages/Welcome"));
 const Auth = React.lazy(() => import("@/pages/Auth"));
@@ -34,23 +34,21 @@ const PWAInstallPrompt = React.lazy(() => import("@/components/PWAInstallPrompt"
 function AppContent() {
   const location = useLocation();
   const isMobile = useIsMobile();
-  const isNotFoundPage = location.pathname === '*' || !['/', '/sales', '/inventory', '/staff', '/reports', '/settings'].includes(location.pathname);
+  const isNotFoundPage = !['/', '/sales', '/inventory', '/staff', '/reports', '/settings', '/analytics', '/welcome', '/auth/login', '/auth/signup'].includes(location.pathname);
   const [showLoadingAnimation, setShowLoadingAnimation] = useState(true);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // Initialize daily reset and real-time sync
-  // Temporarily commenting out hooks to debug
-  // const { resetState } = useDailyReset();
-  // const { syncState } = useRealtimeSync();
+  useDailyReset();
+  useRealtimeSync();
 
   // Handle initial loading animation and route preloading
   useEffect(() => {
-    // Slower initial load for better UX
     if (isInitialLoad) {
       const timer = setTimeout(() => {
         setShowLoadingAnimation(false);
         setIsInitialLoad(false);
-      }, 1600); // Increased to 1600ms for slower animations (0.5 speed scale)
+      }, 600);
 
       return () => clearTimeout(timer);
     }
@@ -112,6 +110,7 @@ function AppContent() {
               <Route path="/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
               <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+              <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
@@ -122,7 +121,6 @@ function AppContent() {
           <OfflineIndicator />
           <OfflineSyncIndicator />
         </Suspense>
-        <Toaster />
         <SonnerToaster />
         <NotificationToast />
       </div>

@@ -130,9 +130,8 @@ const Sales = () => {
         updateTable(saleToDelete.tableId, { status: 'available' });
       }
 
-      // 3. Supprimer la vente
-      const updatedSales = sales.filter(sale => sale.id !== saleId);
-      saveSales(updatedSales);
+      // 3. Supprimer la vente - reload from server
+      saveSales();
 
       // Envoyer notification
       sendSystemMessage(
