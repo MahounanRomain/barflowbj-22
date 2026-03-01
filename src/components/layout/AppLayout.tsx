@@ -21,7 +21,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
 }) => {
   const location = useLocation();
   const isMobile = useIsMobile();
-  const isNotFoundPage = !['/', '/sales', '/inventory', '/staff', '/reports', '/settings'].includes(location.pathname);
+  const isNotFoundPage = !['/', '/sales', '/inventory', '/staff', '/reports', '/settings', '/analytics'].includes(location.pathname);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   // Global search shortcut

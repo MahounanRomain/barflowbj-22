@@ -1,75 +1,36 @@
 
 import { useState, useEffect } from 'react';
-import { storage, BarSettings, Table } from '@/lib/storage';
-import { generateRandomId } from '@/lib/utils';
+import { supabase } from '@/integrations/supabase/client';
 
 export const useLocalDataCore = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const initData = async () => {
+    const checkAuth = async () => {
       try {
-        if (!storage.exists('app_initialized')) {
-          console.log('Premier lancement - initialisation des données par défaut');
-          
-          const defaultSettings: BarSettings = {
-            barName: '',
-            address: '',
-            phone: '',
-            email: 'romainmahougnon@gmail.com',
-            darkMode: true,
-            notifications: true,
-            lowStockAlerts: true
-          };
-
-          const defaultTables: Table[] = [
-            { id: '1', name: 'Table 1', capacity: 4, status: 'available', isActive: true, createdAt: new Date().toISOString() },
-            { id: '2', name: 'Table 2', capacity: 4, status: 'available', isActive: true, createdAt: new Date().toISOString() },
-            { id: '3', name: 'Table 3', capacity: 6, status: 'available', isActive: true, createdAt: new Date().toISOString() },
-            { id: '4', name: 'Table 4', capacity: 2, status: 'available', isActive: true, createdAt: new Date().toISOString() },
-            { id: '5', name: 'Table 5', capacity: 8, status: 'available', isActive: true, createdAt: new Date().toISOString() }
-          ];
-          
-          storage.save('settings', defaultSettings);
-          storage.save('inventory', []);
-          storage.save('staff', []);
-          storage.save('sales', []);
-          storage.save('categories', []);
-          storage.save('inventoryHistory', []);
-          storage.save('tables', defaultTables);
-          storage.save('cashBalance', null);
-          storage.save('cashTransactions', []);
-          storage.save('app_initialized', true);
-        } else {
-          // Vérifier les données essentielles
-          const existingTables = storage.load<Table[]>('tables');
-          if (!existingTables || existingTables.length === 0) {
-            const defaultTables: Table[] = [
-              { id: '1', name: 'Table 1', capacity: 4, status: 'available', isActive: true, createdAt: new Date().toISOString() },
-              { id: '2', name: 'Table 2', capacity: 4, status: 'available', isActive: true, createdAt: new Date().toISOString() },
-              { id: '3', name: 'Table 3', capacity: 6, status: 'available', isActive: true, createdAt: new Date().toISOString() },
-              { id: '4', name: 'Table 4', capacity: 2, status: 'available', isActive: true, createdAt: new Date().toISOString() },
-              { id: '5', name: 'Table 5', capacity: 8, status: 'available', isActive: true, createdAt: new Date().toISOString() }
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          // Check if user has default tables, create if not
+          const { data: tables } = await supabase.from('tables').select('id').eq('user_id', user.id).limit(1);
+          if (!tables || tables.length === 0) {
+            const defaultTables = [
+              { user_id: user.id, name: 'Table 1', capacity: 4, status: 'available', is_active: true },
+              { user_id: user.id, name: 'Table 2', capacity: 4, status: 'available', is_active: true },
+              { user_id: user.id, name: 'Table 3', capacity: 6, status: 'available', is_active: true },
+              { user_id: user.id, name: 'Table 4', capacity: 2, status: 'available', is_active: true },
+              { user_id: user.id, name: 'Table 5', capacity: 8, status: 'available', is_active: true },
             ];
-            storage.save('tables', defaultTables);
+            await supabase.from('tables').insert(defaultTables);
           }
-
-          // S'assurer que les autres données nécessaires existent
-          ['categories', 'inventory', 'staff', 'sales', 'inventoryHistory', 'cashBalance', 'cashTransactions'].forEach(key => {
-            if (!storage.exists(key)) {
-              storage.save(key, key === 'cashBalance' ? null : []);
-            }
-          });
         }
-        
-        setIsLoading(false);
       } catch (error) {
-        console.error('Erreur lors de l\'initialisation:', error);
+        console.error('Error initializing data:', error);
+      } finally {
         setIsLoading(false);
       }
     };
 
-    initData();
+    checkAuth();
   }, []);
 
   return { isLoading };

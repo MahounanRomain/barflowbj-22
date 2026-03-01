@@ -34,7 +34,7 @@ const GlassmorphicBottomNav = () => {
   return (
     <nav 
       className={cn(
-        "fixed bottom-safe-bottom left-[45%] transform -translate-x-1/2 z-[60] mb-4",
+        "fixed bottom-0 left-1/2 transform -translate-x-1/2 z-[60] mb-4",
         "bg-card/98 backdrop-blur-xl border border-primary/20",
         "rounded-2xl shadow-2xl shadow-primary/10",
         "px-3 py-2.5 mx-4",

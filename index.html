@@ -4,9 +4,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BarFlow - Gestion de Bar Moderne</title>
-    <meta name="description" content="Application de gestion de bar moderne avec fonctionnalités hors-ligne">
-    <meta name="author" content="BarFlow Team" />
+    <title>BarFlow — Gestion de bar intelligente</title>
+    <meta name="description" content="Gérez votre bar en toute simplicité : inventaire, ventes, personnel et analyses en temps réel. Disponible hors-ligne.">
+    <meta name="author" content="BarFlow" />
+    <link rel="canonical" href="https://barflowbj-22.lovable.app/" />
 
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#9333ea" />
@@ -17,7 +18,7 @@
     <meta name="application-name" content="BarFlow" />
 
     <!-- Icons -->
-    <link rel="icon" type="image/x-icon" href="https://storage.googleapis.com/gpt-engineer-file-uploads/wq9UEuZ6NVPUFw2MqkDkFG1LDkg2/uploads/1758548975166-BarFowTrack_logo.png">
+    <link rel="icon" type="image/png" href="/icon-192.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
     <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
@@ -26,33 +27,44 @@
     <link rel="manifest" href="/manifest.json" />
 
     <!-- Open Graph -->
-    
-    
+    <meta property="og:title" content="BarFlow — Gestion de bar intelligente" />
+    <meta property="og:description" content="Gérez votre bar en toute simplicité : inventaire, ventes, personnel et analyses en temps réel." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/Thb7mZXdaPVEAZXnmSTJqQ1XxT02/social-images/social-1758114479597-Capture d’écran_16-9-2025_132648_barflowbj.netlify.app.jpeg">
+    <meta property="og:url" content="https://barflowbj-22.lovable.app/" />
+    <meta property="og:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/Thb7mZXdaPVEAZXnmSTJqQ1XxT02/social-images/social-1758114479597-Capture d'écran_16-9-2025_132648_barflowbj.netlify.app.jpeg" />
+    <meta property="og:locale" content="fr_FR" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/Thb7mZXdaPVEAZXnmSTJqQ1XxT02/social-images/social-1758114479597-Capture d’écran_16-9-2025_132648_barflowbj.netlify.app.jpeg">
+    <meta name="twitter:title" content="BarFlow — Gestion de bar intelligente" />
+    <meta name="twitter:description" content="Gérez votre bar en toute simplicité : inventaire, ventes, personnel et analyses en temps réel." />
+    <meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/Thb7mZXdaPVEAZXnmSTJqQ1XxT02/social-images/social-1758114479597-Capture d'écran_16-9-2025_132648_barflowbj.netlify.app.jpeg" />
 
-    <!-- Preconnect for performance - establish early connections -->
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "BarFlow",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "Application de gestion de bar : inventaire, ventes, personnel et analyses en temps réel.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "XOF" }
+    }
+    </script>
+
+    <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     
-    <!-- Critical resource preloading for faster LCP -->
-    <link rel="preload" href="/src/main.tsx" as="script" />
-    <link rel="preload" href="/src/App.tsx" as="script" />
-    
     <!-- Optimized non-blocking font loading -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"></noscript>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"></noscript>
     
-    <!-- Critical CSS inline for immediate rendering -->
+    <!-- Critical CSS inline -->
     <style>
-      /* Critical font fallback and base styles */
       :root {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
         line-height: 1.5;
         font-weight: 400;
         color-scheme: light dark;
@@ -76,7 +88,6 @@
         }
       }
       
-      /* Optimized loading state for better Speed Index */
       #root:empty::before {
         content: '';
         position: fixed;
@@ -96,17 +107,12 @@
         100% { transform: rotate(360deg); }
       }
       
-      /* Prevent layout shift */
       #root {
         min-height: 100vh;
         display: block;
       }
     </style>
-    <meta property="og:title" content="BarFlow - Gestion de Bar Moderne">
-  <meta name="twitter:title" content="BarFlow - Gestion de Bar Moderne">
-  <meta property="og:description" content="Application de gestion de bar moderne avec fonctionnalités hors-ligne">
-  <meta name="twitter:description" content="Application de gestion de bar moderne avec fonctionnalités hors-ligne">
-</head>
+  </head>
 
   <body>
     <div id="root"></div>
@@ -119,14 +125,12 @@
             .then((registration) => {
               console.log('SW registered: ', registration);
               
-              // Check for updates
               registration.addEventListener('updatefound', () => {
                 const newWorker = registration.installing;
                 if (newWorker) {
                   newWorker.addEventListener('statechange', () => {
                     if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                      // Show update available notification
-                      if (confirm('Une nouvelle version de l\'application est disponible. Voulez-vous la recharger?')) {
+                      if (confirm('Une nouvelle version de BarFlow est disponible. Recharger ?')) {
                         window.location.reload();
                       }
                     }
@@ -140,12 +144,10 @@
         });
       }
       
-      // Enhanced PWA installation support
       let deferredPrompt;
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        // Show install button or prompt
         window.dispatchEvent(new CustomEvent('pwaInstallAvailable', { detail: deferredPrompt }));
       });
     </script>

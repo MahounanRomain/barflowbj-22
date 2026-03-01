@@ -29,7 +29,7 @@ interface Table {
 }
 
 const TableManager = () => {
-  const { getTables, saveTables } = useLocalData();
+  const { getTables, addTable, updateTable, deleteTable } = useLocalData();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [editingTable, setEditingTable] = useState<Table | null>(null);
@@ -60,24 +60,19 @@ const TableManager = () => {
       createdAt: editingTable?.createdAt || new Date().toISOString()
     };
 
-    let updatedTables;
     if (editingTable) {
-      updatedTables = tables.map(table => 
-        table.id === editingTable.id ? tableData : table
-      );
+      updateTable(editingTable.id, { name: tableData.name, capacity: tableData.capacity });
       toast({
         title: "Table modifiée",
         description: `Table ${tableData.name} mise à jour avec succès`
       });
     } else {
-      updatedTables = [...tables, tableData];
+      addTable({ name: tableData.name, capacity: tableData.capacity, status: 'available', isActive: true });
       toast({
         title: "Table créée",
         description: `Table ${tableData.name} créée avec succès`
       });
     }
-
-    saveTables(updatedTables);
     
     setFormData({ name: '', capacity: 4 });
     setEditingTable(null);
@@ -94,8 +89,7 @@ const TableManager = () => {
   };
 
   const handleDelete = (tableId: string) => {
-    const updatedTables = tables.filter(table => table.id !== tableId);
-    saveTables(updatedTables);
+    deleteTable(tableId);
     
     toast({
       title: "Table supprimée",

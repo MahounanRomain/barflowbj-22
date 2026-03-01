@@ -13,13 +13,11 @@ import AccountingExport from "@/components/analytics/AccountingExport";
 import { PageWithSkeleton } from "@/components/PageWithSkeleton";
 import { useSkeletonLoading } from "@/hooks/useSkeletonLoading";
 import { DateFilter } from "@/components/analytics/EnhancedDateFilter";
-import ScreenOrientationDemo from "@/components/ScreenOrientationDemo";
 
 const Analytics = () => {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const isSkeletonLoading = useSkeletonLoading(isDataLoaded);
   
-  // Gestion des filtres de date pour synchroniser avec TradingChart
   const [currentFilter, setCurrentFilter] = useState<DateFilter>({
     type: 'preset',
     preset: '30d',
@@ -31,29 +29,28 @@ const Analytics = () => {
   };
 
   useEffect(() => {
-    // Simulate data loading
     setTimeout(() => {
       setIsDataLoaded(true);
-    }, 500);
+    }, 300);
   }, []);
 
   return (
     <PageWithSkeleton isLoading={isSkeletonLoading}>
       <div className="mobile-container bg-gradient-to-br from-background via-background to-accent/5">
         <Header 
-          title="Analytics Avancées"
+          title="Analyses avancées"
           rightContent={<DarkModeToggle />}
         />
 
         <ScrollArea className="flex-1 h-[calc(100vh-140px)]">
           <main className="px-4 py-6 space-y-6">
             <Tabs defaultValue="dashboard" className="w-full">
-              <TabsList className="w-full grid grid-cols-7 h-auto p-1">
+              <TabsList className="w-full grid grid-cols-6 h-auto p-1">
                 <TabsTrigger value="dashboard" className="text-xs px-1 py-2 min-w-0">
-                  <span className="truncate">Dashboard</span>
+                  <span className="truncate">Tableau de bord</span>
                 </TabsTrigger>
                 <TabsTrigger value="predictions" className="text-xs px-1 py-2 min-w-0">
-                  <span className="truncate">Prédictions</span>
+                  <span className="truncate">Prévisions</span>
                 </TabsTrigger>
                 <TabsTrigger value="profitability" className="text-xs px-1 py-2 min-w-0">
                   <span className="truncate">Rentabilité</span>
@@ -66,9 +63,6 @@ const Analytics = () => {
                 </TabsTrigger>
                 <TabsTrigger value="export" className="text-xs px-1 py-2 min-w-0">
                   <span className="truncate">Export</span>
-                </TabsTrigger>
-                <TabsTrigger value="demo" className="text-xs px-1 py-2 min-w-0">
-                  <span className="truncate">Demo</span>
                 </TabsTrigger>
               </TabsList>
               
@@ -98,13 +92,8 @@ const Analytics = () => {
               <TabsContent value="export" className="mt-6">
                 <AccountingExport />
               </TabsContent>
-
-              <TabsContent value="demo" className="mt-6">
-                <ScreenOrientationDemo />
-              </TabsContent>
             </Tabs>
 
-            {/* Espace pour la navigation */}
             <div className="h-8"></div>
           </main>
         </ScrollArea>
