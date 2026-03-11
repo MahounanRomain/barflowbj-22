@@ -54,8 +54,8 @@ const AddStaffDialog = () => {
       setOpen(false);
     } catch (error) {
       toast({
-        title: "Erreur",
-        description: "Une erreur s'est produite lors de l'ajout",
+        title: "Ajout impossible",
+        description: "Une erreur est survenue. Réessayez.",
         variant: "destructive"
       });
     }
