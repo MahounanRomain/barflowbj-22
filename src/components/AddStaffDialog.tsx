@@ -130,7 +130,7 @@ const AddStaffDialog = () => {
           </div>
           
           <Button type="submit" className="w-full">
-            Ajouter au personnel
+            Ajouter à l'équipe
           </Button>
         </form>
       </DialogContent>

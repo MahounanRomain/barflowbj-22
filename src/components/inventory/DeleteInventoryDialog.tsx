@@ -61,9 +61,9 @@ const DeleteInventoryDialog: React.FC<DeleteInventoryDialogProps> = ({
     <AlertDialog open={isOpen} onOpenChange={onClose}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Supprimer l'article</AlertDialogTitle>
+          <AlertDialogTitle>Retirer cet article ?</AlertDialogTitle>
           <AlertDialogDescription>
-            Êtes-vous sûr de vouloir supprimer <strong>{itemName}</strong> de l'inventaire ? 
+            <strong>{itemName}</strong> sera définitivement supprimé de votre inventaire.
             Cette action est irréversible.
           </AlertDialogDescription>
         </AlertDialogHeader>

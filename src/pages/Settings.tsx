@@ -318,8 +318,8 @@ const Settings = () => {
   const handleClearAllData = () => {
     clearAllData();
     toast({
-      title: "🗑️ Données supprimées",
-      description: "Toutes les données ont été supprimées définitivement.",
+      title: "Données supprimées",
+      description: "Toutes les données ont été effacées. L'application a été réinitialisée.",
       variant: "destructive"
     });
     navigate("/");
