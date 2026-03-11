@@ -122,8 +122,8 @@ const Settings = () => {
           updateSettings(settings);
           setHasUnsavedChanges(false);
           toast({
-            title: "✅ Sauvegarde automatique",
-            description: "Vos paramètres ont été sauvegardés automatiquement.",
+            title: "Sauvegarde automatique",
+            description: "Vos paramètres ont été enregistrés.",
           });
         } catch (error) {
           toast({
