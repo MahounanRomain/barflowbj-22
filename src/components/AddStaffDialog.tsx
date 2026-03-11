@@ -29,8 +29,8 @@ const AddStaffDialog = () => {
     
     if (!formData.name || !formData.role) {
       toast({
-        title: "Erreur",
-        description: "Veuillez remplir le nom et le poste",
+        title: "Champs requis manquants",
+        description: "Le nom et le poste sont obligatoires.",
         variant: "destructive"
       });
       return;
