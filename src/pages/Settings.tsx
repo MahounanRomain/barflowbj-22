@@ -127,8 +127,8 @@ const Settings = () => {
           });
         } catch (error) {
           toast({
-            title: "❌ Erreur de sauvegarde",
-            description: "Impossible de sauvegarder les paramètres automatiquement.",
+            title: "Sauvegarde impossible",
+            description: "Vérifiez votre connexion et réessayez.",
             variant: "destructive"
           });
         } finally {
