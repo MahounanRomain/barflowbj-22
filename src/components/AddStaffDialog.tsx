@@ -39,8 +39,8 @@ const AddStaffDialog = () => {
     try {
       addStaffMember(formData);
       toast({
-        title: "Employé ajouté",
-        description: `${formData.name} a été ajouté au personnel`
+        title: "Membre ajouté",
+        description: `${formData.name} fait désormais partie de l'équipe.`
       });
       
       // Reset form
