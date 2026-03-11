@@ -87,7 +87,7 @@ const QuickSalesAnalytics = () => {
     <Card className="p-4 bg-gradient-to-r from-card to-primary/5 border shadow-lg">
       <h3 className="font-semibold mb-4 flex items-center gap-2">
         <BarChart3 className="w-5 h-5 text-blue-500" />
-        Analytics rapides
+        Indicateurs clés
       </h3>
       
       <div className="space-y-3">

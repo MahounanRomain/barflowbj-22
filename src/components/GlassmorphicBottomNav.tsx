@@ -17,12 +17,12 @@ const GlassmorphicBottomNav = () => {
   }
 
   const navItems = [
-    { icon: Home, label: "Accueil", path: "/", ariaLabel: "Aller à la page d'accueil" },
-    { icon: ShoppingCart, label: "Ventes", path: "/sales", ariaLabel: "Aller à la page des ventes" },
-    { icon: Package, label: "Stock", path: "/inventory", ariaLabel: "Aller à la page de gestion du stock" },
-    { icon: Users, label: "Personnel", path: "/staff", ariaLabel: "Aller à la page de gestion du personnel" },
-    { icon: BarChart3, label: "Rapports", path: "/reports", ariaLabel: "Aller à la page des rapports" },
-    { icon: Settings, label: "Paramètres", path: "/settings", ariaLabel: "Aller à la page des paramètres" }
+    { icon: Home, label: "Accueil", path: "/", ariaLabel: "Tableau de bord" },
+    { icon: ShoppingCart, label: "Ventes", path: "/sales", ariaLabel: "Point de vente" },
+    { icon: Package, label: "Stock", path: "/inventory", ariaLabel: "Gestion de l'inventaire" },
+    { icon: Users, label: "Équipe", path: "/staff", ariaLabel: "Gestion de l'équipe" },
+    { icon: BarChart3, label: "Rapports", path: "/reports", ariaLabel: "Rapports et analyses" },
+    { icon: Settings, label: "Réglages", path: "/settings", ariaLabel: "Paramètres de l'application" }
   ];
 
   const handleItemClick = (e: React.MouseEvent<HTMLAnchorElement>, index: number) => {

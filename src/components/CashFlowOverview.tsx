@@ -53,7 +53,7 @@ const CashFlowOverview = () => {
         <div className="space-y-2 text-center">
           <div className="flex items-center justify-center gap-2">
             <TrendingDown className="w-4 h-4 text-red-500" />
-            <span className="text-sm text-muted-foreground">Sorties</span>
+            <span className="text-sm text-muted-foreground">Décaissements</span>
           </div>
           <p className="text-lg font-bold text-red-600">
             {formatXOF(todayExpenses)}

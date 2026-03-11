@@ -79,7 +79,7 @@ const SmartSuggestions = () => {
     <Card className="p-4 bg-gradient-to-r from-card to-accent/5 border shadow-lg">
       <h3 className="font-semibold mb-4 flex items-center gap-2">
         <Lightbulb className="w-5 h-5 text-amber-500" />
-        Suggestions intelligentes
+        Recommandations
       </h3>
       
       <div className="space-y-3">
