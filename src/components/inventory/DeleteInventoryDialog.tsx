@@ -40,8 +40,8 @@ const DeleteInventoryDialog: React.FC<DeleteInventoryDialogProps> = ({
     try {
       deleteInventoryItem(itemId);
       toast({
-        title: "🗑️ Article supprimé",
-        description: `${itemName} a été supprimé de l'inventaire.`,
+        title: "Article supprimé",
+        description: `${itemName} a été retiré de l'inventaire.`,
         variant: "destructive"
       });
       onClose();
