@@ -22,8 +22,8 @@ const SmartSuggestions = () => {
       icon: AlertTriangle,
       color: 'text-red-500',
       bgColor: 'bg-red-50 dark:bg-red-950/20',
-      title: 'Réapprovisionnement urgent',
-      description: `${lowStockItems.length} articles en rupture de stock`,
+      title: 'Réapprovisionner maintenant',
+      description: `${lowStockItems.length} article${lowStockItems.length > 1 ? 's' : ''} en stock critique — commandez rapidement.`,
       priority: 'high'
     });
   }
