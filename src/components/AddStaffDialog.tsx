@@ -66,7 +66,7 @@ const AddStaffDialog = () => {
       <DialogTrigger asChild>
         <Button size="sm">
           <PlusCircle size={16} className="mr-1" />
-          Ajouter Employé
+          Ajouter un membre
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-sm">
