@@ -142,7 +142,7 @@ const UnifiedSaleDialog = () => {
     e.preventDefault();
     
     if (cartItems.length === 0) {
-      toast({ title: "Panier vide", description: "Ajoutez au moins un article", variant: "destructive" });
+      toast({ title: "Panier vide", description: "Sélectionnez au moins un article avant de valider.", variant: "destructive" });
       return;
     }
 
