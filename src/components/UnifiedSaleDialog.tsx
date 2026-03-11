@@ -181,8 +181,8 @@ const UnifiedSaleDialog = () => {
     const totalAmount = getCartTotal();
     
     toast({
-      title: "✅ Vente enregistrée",
-      description: `${cartItems.length} article(s) — ${formatCurrency(totalAmount)}`,
+      title: "Vente confirmée",
+      description: `${cartItems.length} article${cartItems.length > 1 ? 's' : ''} pour ${formatCurrency(totalAmount)}`,
     });
 
     sendSystemMessage(
