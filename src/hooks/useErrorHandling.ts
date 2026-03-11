@@ -37,8 +37,8 @@ export const useErrorHandler = () => {
     });
 
     toast({
-      title: "Erreur de validation",
-      description: "Veuillez vérifier les champs du formulaire.",
+      title: "Formulaire incomplet",
+      description: "Certains champs sont incorrects ou manquants. Vérifiez et réessayez.",
       variant: "destructive",
     });
   }, []);
