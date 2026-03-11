@@ -107,8 +107,8 @@ const Sales = () => {
     const saleToDelete = sales.find(sale => sale.id === saleId);
     if (!saleToDelete) {
       toast({
-        title: "Erreur",
-        description: "Vente introuvable",
+        title: "Vente introuvable",
+        description: "Cette vente n'existe plus ou a déjà été supprimée.",
         variant: "destructive"
       });
       return;
