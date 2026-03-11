@@ -85,19 +85,19 @@ const Sales = () => {
       const fileName = checkAndGenerateDailyReport();
       if (fileName) {
         toast({
-          title: "Rapport généré",
-          description: `Rapport quotidien sauvegardé: ${fileName}`
+          title: "Rapport prêt",
+          description: `Le rapport du jour a été généré : ${fileName}`
         });
       } else {
         toast({
-          title: "Information",
-          description: "Un rapport a déjà été généré aujourd'hui"
+          title: "Déjà généré",
+          description: "Le rapport quotidien a déjà été créé aujourd'hui."
         });
       }
     } catch (error) {
       toast({
-        title: "Erreur",
-        description: "Erreur lors de la génération du rapport",
+        title: "Échec de la génération",
+        description: "Impossible de créer le rapport. Réessayez.",
         variant: "destructive"
       });
     }
@@ -107,8 +107,8 @@ const Sales = () => {
     const saleToDelete = sales.find(sale => sale.id === saleId);
     if (!saleToDelete) {
       toast({
-        title: "Erreur",
-        description: "Vente introuvable",
+        title: "Vente introuvable",
+        description: "Cette vente n'existe plus ou a déjà été supprimée.",
         variant: "destructive"
       });
       return;
@@ -174,14 +174,14 @@ const Sales = () => {
       window.dispatchEvent(new CustomEvent('tablesChanged'));
 
       toast({
-        title: "✅ Vente annulée",
-        description: `La vente de ${saleToDelete.item} a été annulée. Stock et table restaurés.`
+        title: "Vente annulée",
+        description: `${saleToDelete.item} — stock et table restaurés avec succès.`
       });
     } catch (error) {
       console.error('Erreur lors de la suppression:', error);
       toast({
-        title: "❌ Erreur",
-        description: "Impossible de supprimer la vente",
+        title: "Suppression impossible",
+        description: "Une erreur est survenue. Réessayez.",
         variant: "destructive"
       });
     }
@@ -237,7 +237,7 @@ const Sales = () => {
 
               {/* Actions rapides */}
               <Card className="p-4">
-                <h3 className="font-medium mb-3">Actions rapides</h3>
+                <h3 className="font-medium mb-3">Actions</h3>
                 <div className="space-y-2">
                   <Button 
                     variant="outline" 

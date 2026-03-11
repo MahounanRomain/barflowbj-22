@@ -1,6 +1,5 @@
-
 import React, { useRef, useState } from "react";
-import { Database, Download, Upload, CheckCircle, FileText, AlertTriangle, Info } from "lucide-react";
+import { Database, Download, Upload, CheckCircle, AlertTriangle, Info } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -23,13 +22,13 @@ export const DataManagement: React.FC<DataManagementProps> = ({ onExport }) => {
     try {
       const result = exportCompleteData();
       toast({
-        title: "✅ Export complet réussi",
-        description: `${result.fileName} - ${result.totalKeys} éléments exportés`,
+        title: "Export terminé",
+        description: `Fichier ${result.fileName} généré — ${result.totalKeys} éléments sauvegardés.`,
       });
     } catch (error) {
       toast({
-        title: "❌ Erreur d'export",
-        description: "Impossible d'exporter les données",
+        title: "Échec de l'export",
+        description: "Impossible de générer le fichier. Réessayez.",
         variant: "destructive"
       });
     }
@@ -45,8 +44,8 @@ export const DataManagement: React.FC<DataManagementProps> = ({ onExport }) => {
 
     if (file.type !== "application/json" && !file.name.endsWith('.json')) {
       toast({
-        title: "❌ Format incorrect",
-        description: "Veuillez sélectionner un fichier JSON valide.",
+        title: "Format non pris en charge",
+        description: "Sélectionnez un fichier au format JSON.",
         variant: "destructive"
       });
       return;
@@ -56,34 +55,28 @@ export const DataManagement: React.FC<DataManagementProps> = ({ onExport }) => {
       const text = await file.text();
       const data = JSON.parse(text);
       
-      // Validate import data
       const validation = validateImportData(data);
       setImportInfo(validation.info);
 
       if (!validation.valid && validation.warnings.length > 0) {
         toast({
-          title: "⚠️ Avertissement",
+          title: "Attention",
           description: validation.warnings.join(', '),
         });
       }
 
-      // Use comprehensive import if new format detected
       if (data.exportInfo && data.completeLocalStorage) {
         const result = importCompleteData(data);
-        
         toast({
-          title: result.success ? "✅ Import complet réussi" : "❌ Erreur d'import",
+          title: result.success ? "Import réussi" : "Échec de l'import",
           description: result.message,
           variant: result.success ? "default" : "destructive"
         });
-
         if (result.success) {
           setTimeout(() => window.location.reload(), 1500);
         }
       } else {
-        // Legacy import for old formats
         let importedCount = 0;
-
         if (data.completeLocalStorage) {
           Object.keys(data.completeLocalStorage).forEach(key => {
             try {
@@ -94,7 +87,6 @@ export const DataManagement: React.FC<DataManagementProps> = ({ onExport }) => {
             }
           });
         } else {
-          // Import des données individuelles (anciens exports)
           if (data.settings) { importData('settings', data.settings); importedCount++; }
           if (data.inventory) { importData('inventory', data.inventory); importedCount++; }
           if (data.sales) { importData('sales', data.sales); importedCount++; }
@@ -108,42 +100,24 @@ export const DataManagement: React.FC<DataManagementProps> = ({ onExport }) => {
         }
 
         toast({
-          title: "✅ Import réussi",
-          description: `${importedCount} éléments importés depuis ${file.name}`,
+          title: "Données importées",
+          description: `${importedCount} élément${importedCount > 1 ? 's' : ''} restauré${importedCount > 1 ? 's' : ''} depuis ${file.name}.`,
         });
-
         setTimeout(() => window.location.reload(), 1500);
       }
-
     } catch (error) {
       console.error('Import error:', error);
       toast({
-        title: "❌ Erreur d'import",
-        description: "Impossible de lire le fichier. Vérifiez qu'il s'agit d'un fichier JSON valide.",
+        title: "Fichier illisible",
+        description: "Le fichier sélectionné est invalide ou corrompu. Vérifiez qu'il s'agit d'un export BarFlow.",
         variant: "destructive"
       });
     }
 
-    // Reset input
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
-
-  const getDataSummary = () => {
-    const inventory = getInventory();
-    const sales = getSales();
-    const staff = getStaff();
-    
-    return {
-      inventory: inventory.length,
-      sales: sales.length,
-      staff: staff.length,
-      totalValue: sales.reduce((sum, sale) => sum + sale.total, 0)
-    };
-  };
-
-  const summary = getDataSummary();
 
   return (
     <Card className="group hover:shadow-md transition-all duration-200 border-l-4 border-l-primary/20 hover:border-l-primary/50">
@@ -153,31 +127,30 @@ export const DataManagement: React.FC<DataManagementProps> = ({ onExport }) => {
             <Database className="w-5 h-5" />
           </div>
           <div>
-            <CardTitle className="text-lg">Gestion des données</CardTitle>
-            <CardDescription className="text-sm">Export et import de vos données</CardDescription>
+            <CardTitle className="text-lg">Sauvegarde et restauration</CardTitle>
+            <CardDescription className="text-sm">Exportez ou importez l'intégralité de vos données</CardDescription>
           </div>
         </div>
       </CardHeader>
       <CardContent className="pt-0">
         <div className="space-y-4">
-
           {/* Status */}
-          <div className="p-4 bg-success/10 rounded-lg border border-success/20">
-            <div className="flex items-center gap-2 mb-2">
-              <CheckCircle className="w-4 h-4 text-success" />
-              <span className="text-sm font-medium text-success">Données stockées localement</span>
+          <div className="p-4 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+            <div className="flex items-center gap-2 mb-1">
+              <CheckCircle className="w-4 h-4 text-green-600" />
+              <span className="text-sm font-medium text-green-700 dark:text-green-300">Données synchronisées</span>
             </div>
-            <p className="text-xs text-success/80">
-              Vos données sont sécurisées dans votre navigateur
+            <p className="text-xs text-green-600 dark:text-green-400">
+              Vos données sont sauvegardées dans le cloud et accessibles sur tous vos appareils.
             </p>
           </div>
 
-          {/* Data summary */}
+          {/* Import info */}
           {importInfo && (
             <Alert>
               <Info className="h-4 w-4" />
               <AlertDescription className="text-xs space-y-1">
-                <div className="font-semibold">Dernière importation détectée:</div>
+                <div className="font-semibold">Dernière importation :</div>
                 <div className="flex gap-2 flex-wrap">
                   {importInfo.inventoryCount && <Badge variant="secondary">{importInfo.inventoryCount} articles</Badge>}
                   {importInfo.salesCount && <Badge variant="secondary">{importInfo.salesCount} ventes</Badge>}
@@ -191,30 +164,28 @@ export const DataManagement: React.FC<DataManagementProps> = ({ onExport }) => {
           <div className="space-y-2">
             <Button onClick={handleCompleteExport} variant="default" className="w-full">
               <Download className="w-4 h-4 mr-2" />
-              Export Complet v3.0 (Recommandé)
+              Exporter toutes les données
             </Button>
 
             <Button onClick={onExport} variant="outline" className="w-full">
               <Download className="w-4 h-4 mr-2" />
-              Export Standard (JSON)
+              Export standard (JSON)
             </Button>
-            
+
             <Button onClick={handleImportClick} variant="secondary" className="w-full">
               <Upload className="w-4 h-4 mr-2" />
-              Importer des données
+              Restaurer depuis un fichier
             </Button>
           </div>
 
-          {/* Avertissement import */}
+          {/* Warning */}
           <Alert>
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription className="text-xs">
-              <strong>Import :</strong> Les données importées remplaceront les données actuelles. 
-              Exportez d'abord vos données actuelles par sécurité.
+              L'import remplacera vos données actuelles. Pensez à exporter une sauvegarde avant de restaurer un fichier.
             </AlertDescription>
           </Alert>
 
-          {/* Input file caché */}
           <input
             ref={fileInputRef}
             type="file"

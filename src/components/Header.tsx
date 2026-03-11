@@ -48,17 +48,19 @@ const Header: React.FC<HeaderProps> = ({
     if (title) return title;
     switch (location.pathname) {
       case '/':
-        return 'Accueil';
+        return 'Tableau de bord';
       case '/inventory':
-        return 'Stock';
+        return 'Inventaire';
       case '/sales':
-        return 'Ventes';
+        return 'Point de vente';
       case '/staff':
-        return 'Personnel';
+        return 'Équipe';
       case '/reports':
         return 'Rapports';
+      case '/analytics':
+        return 'Analyses';
       case '/settings':
-        return 'Réglages';
+        return 'Paramètres';
       default:
         return 'BarFlow';
     }

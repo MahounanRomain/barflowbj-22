@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,40 +34,42 @@ export const DangerZone: React.FC<DangerZoneProps> = ({
           <div className="p-2 rounded-full bg-red-100 dark:bg-red-900/50">
             <Trash2 className="w-5 h-5" />
           </div>
-          Zone dangereuse
+          Zone critique
         </CardTitle>
         <CardDescription>
-          Actions irréversibles - procédez avec prudence
+          Ces actions sont définitives et ne peuvent pas être annulées.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button 
-              variant="destructive" 
+            <Button
+              variant="destructive"
               className="w-full hover:shadow-lg transition-all duration-200"
             >
               <Trash2 className="w-4 h-4 mr-2" />
-              Supprimer toutes les données
+              Réinitialiser toutes les données
             </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>⚠️ Supprimer toutes les données ?</AlertDialogTitle>
+              <AlertDialogTitle>Confirmer la réinitialisation complète</AlertDialogTitle>
               <AlertDialogDescription className="space-y-2">
-                <p>Cette action supprimera définitivement :</p>
+                <p>Vous êtes sur le point de supprimer définitivement :</p>
                 <ul className="list-disc list-inside text-sm space-y-1">
-                  <li>Tous les articles d'inventaire ({inventoryCount} articles)</li>
-                  <li>Tous les enregistrements de ventes ({salesCount} ventes)</li>
-                  <li>Tous les membres du personnel ({staffCount} membres)</li>
-                  <li>Tous vos paramètres personnalisés</li>
+                  <li>{inventoryCount} article{inventoryCount > 1 ? 's' : ''} d'inventaire</li>
+                  <li>{salesCount} enregistrement{salesCount > 1 ? 's' : ''} de vente</li>
+                  <li>{staffCount} membre{staffCount > 1 ? 's' : ''} du personnel</li>
+                  <li>L'ensemble de vos paramètres</li>
                 </ul>
-                <p className="font-semibold text-red-600">Cette action est irréversible !</p>
+                <p className="font-semibold text-red-600 mt-3">
+                  Exportez vos données avant de continuer. Cette action est irréversible.
+                </p>
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Annuler</AlertDialogCancel>
-              <AlertDialogAction 
+              <AlertDialogAction
                 onClick={onClearAllData}
                 className="bg-red-600 hover:bg-red-700"
               >

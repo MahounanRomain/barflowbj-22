@@ -40,16 +40,16 @@ const DeleteInventoryDialog: React.FC<DeleteInventoryDialogProps> = ({
     try {
       deleteInventoryItem(itemId);
       toast({
-        title: "🗑️ Article supprimé",
-        description: `${itemName} a été supprimé de l'inventaire.`,
+        title: "Article supprimé",
+        description: `${itemName} a été retiré de l'inventaire.`,
         variant: "destructive"
       });
       onClose();
       onSuccess?.();
     } catch (error) {
       toast({
-        title: "❌ Erreur",
-        description: "Une erreur s'est produite lors de la suppression.",
+        title: "Suppression impossible",
+        description: "Une erreur est survenue. Réessayez.",
         variant: "destructive"
       });
     } finally {
@@ -61,9 +61,9 @@ const DeleteInventoryDialog: React.FC<DeleteInventoryDialogProps> = ({
     <AlertDialog open={isOpen} onOpenChange={onClose}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Supprimer l'article</AlertDialogTitle>
+          <AlertDialogTitle>Retirer cet article ?</AlertDialogTitle>
           <AlertDialogDescription>
-            Êtes-vous sûr de vouloir supprimer <strong>{itemName}</strong> de l'inventaire ? 
+            <strong>{itemName}</strong> sera définitivement supprimé de votre inventaire.
             Cette action est irréversible.
           </AlertDialogDescription>
         </AlertDialogHeader>

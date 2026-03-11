@@ -28,10 +28,9 @@ const EnhancedDashboardStats = () => {
     hapticFeedback('light');
     triggerInteraction('card-click');
     
-    // Toast de navigation pour un meilleur feedback
     enhancedToast.success({
-      title: `Navigation vers ${cardName}`,
-      duration: 1000
+      title: `Ouverture de ${cardName}`,
+      duration: 800
     });
     
     setTimeout(() => navigate(path), 100);

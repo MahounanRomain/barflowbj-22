@@ -41,7 +41,7 @@ const RecentActivity = () => {
     <Card className="p-6 bg-gradient-to-br from-card to-primary/5 border shadow-lg">
       <h3 className="font-semibold mb-4 flex items-center gap-2">
         <BarChart3 className="w-5 h-5 text-primary" />
-        Activité récente
+        Aperçu en direct
       </h3>
       
       <div className="space-y-4">

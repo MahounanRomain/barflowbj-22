@@ -29,8 +29,8 @@ const AddStaffDialog = () => {
     
     if (!formData.name || !formData.role) {
       toast({
-        title: "Erreur",
-        description: "Veuillez remplir le nom et le poste",
+        title: "Champs requis manquants",
+        description: "Le nom et le poste sont obligatoires.",
         variant: "destructive"
       });
       return;
@@ -39,8 +39,8 @@ const AddStaffDialog = () => {
     try {
       addStaffMember(formData);
       toast({
-        title: "Employé ajouté",
-        description: `${formData.name} a été ajouté au personnel`
+        title: "Membre ajouté",
+        description: `${formData.name} fait désormais partie de l'équipe.`
       });
       
       // Reset form
@@ -54,8 +54,8 @@ const AddStaffDialog = () => {
       setOpen(false);
     } catch (error) {
       toast({
-        title: "Erreur",
-        description: "Une erreur s'est produite lors de l'ajout",
+        title: "Ajout impossible",
+        description: "Une erreur est survenue. Réessayez.",
         variant: "destructive"
       });
     }
@@ -66,12 +66,12 @@ const AddStaffDialog = () => {
       <DialogTrigger asChild>
         <Button size="sm">
           <PlusCircle size={16} className="mr-1" />
-          Ajouter Employé
+          Ajouter un membre
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle>Ajouter un Employé</DialogTitle>
+          <DialogTitle>Nouveau membre d'équipe</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -130,7 +130,7 @@ const AddStaffDialog = () => {
           </div>
           
           <Button type="submit" className="w-full">
-            Ajouter au personnel
+            Ajouter à l'équipe
           </Button>
         </form>
       </DialogContent>

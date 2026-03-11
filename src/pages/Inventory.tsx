@@ -171,7 +171,7 @@ const InventoryContent = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold tracking-tight">Inventaire</h1>
-              <p className="text-muted-foreground">Gérez votre stock et suivez vos produits</p>
+              <p className="text-muted-foreground">Vue complète de vos produits et niveaux de stock</p>
             </div>
             <ToggleGroup 
               type="single" 

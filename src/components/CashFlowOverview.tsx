@@ -36,14 +36,14 @@ const CashFlowOverview = () => {
     <Card className="p-4 bg-gradient-to-r from-card to-accent/5 border shadow-lg">
       <h3 className="font-semibold mb-4 flex items-center gap-2">
         <DollarSign className="w-5 h-5 text-green-500" />
-        Trésorerie aujourd'hui
+        Flux de trésorerie
       </h3>
       
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2 text-center">
           <div className="flex items-center justify-center gap-2">
             <TrendingUp className="w-4 h-4 text-green-500" />
-            <span className="text-sm text-muted-foreground">Entrées</span>
+            <span className="text-sm text-muted-foreground">Encaissements</span>
           </div>
           <p className="text-lg font-bold text-green-600">
             {formatXOF(todayIncome)}
@@ -53,7 +53,7 @@ const CashFlowOverview = () => {
         <div className="space-y-2 text-center">
           <div className="flex items-center justify-center gap-2">
             <TrendingDown className="w-4 h-4 text-red-500" />
-            <span className="text-sm text-muted-foreground">Sorties</span>
+            <span className="text-sm text-muted-foreground">Décaissements</span>
           </div>
           <p className="text-lg font-bold text-red-600">
             {formatXOF(todayExpenses)}

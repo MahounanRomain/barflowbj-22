@@ -91,7 +91,7 @@ const UnifiedSaleDialog = () => {
     if (totalQty > inventoryItem.quantity) {
       toast({
         title: "Stock insuffisant",
-        description: `Quantité demandée (${totalQty}) dépasse le stock (${inventoryItem.quantity})`,
+        description: `Il reste ${inventoryItem.quantity} unité${inventoryItem.quantity > 1 ? 's' : ''} en stock (${totalQty} demandée${totalQty > 1 ? 's' : ''}).`,
         variant: "destructive",
       });
       return;
@@ -142,12 +142,12 @@ const UnifiedSaleDialog = () => {
     e.preventDefault();
     
     if (cartItems.length === 0) {
-      toast({ title: "Panier vide", description: "Ajoutez au moins un article", variant: "destructive" });
+      toast({ title: "Panier vide", description: "Sélectionnez au moins un article avant de valider.", variant: "destructive" });
       return;
     }
 
     if (!selectedStaff) {
-      toast({ title: "Vendeur requis", description: "Sélectionnez un vendeur", variant: "destructive" });
+      toast({ title: "Vendeur manquant", description: "Indiquez qui réalise cette vente.", variant: "destructive" });
       return;
     }
 
@@ -181,8 +181,8 @@ const UnifiedSaleDialog = () => {
     const totalAmount = getCartTotal();
     
     toast({
-      title: "✅ Vente enregistrée",
-      description: `${cartItems.length} article(s) — ${formatCurrency(totalAmount)}`,
+      title: "Vente confirmée",
+      description: `${cartItems.length} article${cartItems.length > 1 ? 's' : ''} pour ${formatCurrency(totalAmount)}`,
     });
 
     sendSystemMessage(

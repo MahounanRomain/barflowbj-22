@@ -22,8 +22,8 @@ const SmartSuggestions = () => {
       icon: AlertTriangle,
       color: 'text-red-500',
       bgColor: 'bg-red-50 dark:bg-red-950/20',
-      title: 'Réapprovisionnement urgent',
-      description: `${lowStockItems.length} articles en rupture de stock`,
+      title: 'Réapprovisionner maintenant',
+      description: `${lowStockItems.length} article${lowStockItems.length > 1 ? 's' : ''} en stock critique — commandez rapidement.`,
       priority: 'high'
     });
   }
@@ -43,8 +43,8 @@ const SmartSuggestions = () => {
         icon: TrendingUp,
         color: 'text-green-500',
         bgColor: 'bg-green-50 dark:bg-green-950/20',
-        title: 'Produit vedette',
-        description: `${mostSold[0]} se vend bien aujourd'hui`,
+        title: 'Article star du jour',
+        description: `${mostSold[0]} est le plus demandé aujourd'hui.`,
         priority: 'medium'
       });
     }
@@ -57,8 +57,8 @@ const SmartSuggestions = () => {
       icon: Package,
       color: 'text-blue-500',
       bgColor: 'bg-blue-50 dark:bg-blue-950/20',
-      title: 'Optimisation stock',
-      description: `${overstockedItems.length} articles en surstock`,
+      title: 'Stock excédentaire détecté',
+      description: `${overstockedItems.length} article${overstockedItems.length > 1 ? 's' : ''} en surstock — pensez à ajuster vos commandes.`,
       priority: 'low'
     });
   }
@@ -69,8 +69,8 @@ const SmartSuggestions = () => {
       icon: Lightbulb,
       color: 'text-amber-500',
       bgColor: 'bg-amber-50 dark:bg-amber-950/20',
-      title: 'Astuce du jour',
-      description: 'Ajoutez des ventes pour obtenir des suggestions personnalisées',
+      title: 'Commencez à vendre',
+      description: 'Enregistrez vos premières ventes pour recevoir des recommandations personnalisées.',
       priority: 'medium'
     });
   }
@@ -79,7 +79,7 @@ const SmartSuggestions = () => {
     <Card className="p-4 bg-gradient-to-r from-card to-accent/5 border shadow-lg">
       <h3 className="font-semibold mb-4 flex items-center gap-2">
         <Lightbulb className="w-5 h-5 text-amber-500" />
-        Suggestions intelligentes
+        Recommandations
       </h3>
       
       <div className="space-y-3">

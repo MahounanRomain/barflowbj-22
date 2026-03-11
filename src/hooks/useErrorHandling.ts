@@ -11,8 +11,8 @@ export const useErrorHandler = () => {
     }, error);
 
     toast({
-      title: "Une erreur s'est produite",
-      description: "Veuillez réessayer ou rafraîchir la page.",
+      title: "Quelque chose s'est mal passé",
+      description: "Réessayez ou actualisez la page. Si le problème persiste, contactez le support.",
       variant: "destructive",
     });
   }, []);
@@ -37,8 +37,8 @@ export const useErrorHandler = () => {
     });
 
     toast({
-      title: "Erreur de validation",
-      description: "Veuillez vérifier les champs du formulaire.",
+      title: "Formulaire incomplet",
+      description: "Certains champs sont incorrects ou manquants. Vérifiez et réessayez.",
       variant: "destructive",
     });
   }, []);
@@ -106,8 +106,8 @@ export const useErrorRecovery = () => {
         maxRetries,
       });
       toast({
-        title: "Erreur persistante",
-        description: "L'opération a échoué plusieurs fois. Veuillez rafraîchir la page.",
+        title: "Opération impossible",
+        description: "Plusieurs tentatives ont échoué. Actualisez la page et réessayez.",
         variant: "destructive",
       });
       return;

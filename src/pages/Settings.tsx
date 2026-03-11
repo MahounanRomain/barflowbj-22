@@ -122,13 +122,13 @@ const Settings = () => {
           updateSettings(settings);
           setHasUnsavedChanges(false);
           toast({
-            title: "✅ Sauvegarde automatique",
-            description: "Vos paramètres ont été sauvegardés automatiquement.",
+            title: "Sauvegarde automatique",
+            description: "Vos paramètres ont été enregistrés.",
           });
         } catch (error) {
           toast({
-            title: "❌ Erreur de sauvegarde",
-            description: "Impossible de sauvegarder les paramètres automatiquement.",
+            title: "Sauvegarde impossible",
+            description: "Vérifiez votre connexion et réessayez.",
             variant: "destructive"
           });
         } finally {
@@ -146,13 +146,13 @@ const Settings = () => {
       updateSettings(settings);
       setHasUnsavedChanges(false);
       toast({
-        title: "✅ Paramètres sauvegardés",
-        description: "Vos préférences ont été mises à jour avec succès.",
+        title: "Paramètres enregistrés",
+        description: "Vos préférences sont à jour.",
       });
     } catch (error) {
       toast({
-        title: "❌ Erreur de sauvegarde",
-        description: "Impossible de sauvegarder les paramètres.",
+        title: "Sauvegarde impossible",
+        description: "Une erreur est survenue. Réessayez.",
         variant: "destructive"
       });
     } finally {
@@ -308,8 +308,8 @@ const Settings = () => {
     URL.revokeObjectURL(url);
     
     toast({
-      title: "📦 Export complet terminé",
-      description: `Sauvegarde complète avec ${Object.keys(allLocalStorageData).length} éléments exportés.`,
+      title: "Export terminé",
+      description: `Sauvegarde complète générée — ${Object.keys(allLocalStorageData).length} éléments exportés.`,
     });
     
     return dataToExport;
@@ -318,8 +318,8 @@ const Settings = () => {
   const handleClearAllData = () => {
     clearAllData();
     toast({
-      title: "🗑️ Données supprimées",
-      description: "Toutes les données ont été supprimées définitivement.",
+      title: "Données supprimées",
+      description: "Toutes les données ont été effacées. L'application a été réinitialisée.",
       variant: "destructive"
     });
     navigate("/");
