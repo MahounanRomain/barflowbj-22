@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Building2 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,10 +24,10 @@ export const EstablishmentSettings: React.FC<EstablishmentSettingsProps> = ({
             </div>
             <div>
               <CardTitle className="text-lg flex items-center gap-2">
-                Établissement
+                Mon établissement
                 <Badge variant="secondary" className="text-xs">Pro</Badge>
               </CardTitle>
-              <CardDescription className="text-sm">Informations sur votre bar</CardDescription>
+              <CardDescription className="text-sm">Coordonnées et identité de votre bar</CardDescription>
             </div>
           </div>
         </div>
@@ -37,33 +36,30 @@ export const EstablishmentSettings: React.FC<EstablishmentSettingsProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label className="text-sm font-medium">Nom de l'établissement</Label>
-            <PlaceholderInput 
-              value={settings.barName} 
+            <PlaceholderInput
+              value={settings.barName}
               onValueChange={(value) => onSettingsChange({ barName: value })}
-              placeholder="Entrez le nom de votre établissement"
+              placeholder="Ex : Le Comptoir"
               className="focus:ring-2 focus:ring-primary/20"
             />
           </div>
           <div className="space-y-2">
             <Label className="text-sm font-medium">Téléphone</Label>
-            <PlaceholderInput 
-              value={settings.phone} 
+            <PlaceholderInput
+              value={settings.phone}
               onValueChange={(value) => onSettingsChange({ phone: value })}
-              placeholder="Entrez le numéro de téléphone"
+              placeholder="Ex : +229 97 00 00 00"
               className="focus:ring-2 focus:ring-primary/20"
             />
           </div>
           <div className="space-y-2 md:col-span-2">
             <Label className="text-sm font-medium">Adresse</Label>
-            <textarea 
-              value={settings.address || ''} 
+            <textarea
+              value={settings.address || ''}
               onChange={(e) => onSettingsChange({ address: e.target.value })}
-              placeholder="Entrez l'adresse de votre établissement"
+              placeholder="Adresse complète de votre établissement"
               className="flex min-h-[2.5rem] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden focus:ring-2 focus:ring-primary/20"
-              style={{
-                height: 'auto',
-                minHeight: '2.5rem'
-              }}
+              style={{ height: 'auto', minHeight: '2.5rem' }}
               onInput={(e) => {
                 const target = e.target as HTMLTextAreaElement;
                 target.style.height = 'auto';
