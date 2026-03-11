@@ -29,7 +29,7 @@ export const SalesStats: React.FC<SalesStatsProps> = ({
       <Card className="p-4">
         <div className="flex items-center gap-2 mb-2">
           <TrendingUp size={16} className="text-blue-500" />
-          <span className="text-sm text-muted-foreground">Articles vendus</span>
+          <span className="text-sm text-muted-foreground">Unités vendues</span>
         </div>
         <span className="text-lg font-bold">{totalItemsToday}</span>
       </Card>
