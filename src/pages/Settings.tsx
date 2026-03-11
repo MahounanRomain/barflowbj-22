@@ -308,8 +308,8 @@ const Settings = () => {
     URL.revokeObjectURL(url);
     
     toast({
-      title: "📦 Export complet terminé",
-      description: `Sauvegarde complète avec ${Object.keys(allLocalStorageData).length} éléments exportés.`,
+      title: "Export terminé",
+      description: `Sauvegarde complète générée — ${Object.keys(allLocalStorageData).length} éléments exportés.`,
     });
     
     return dataToExport;
