@@ -147,7 +147,7 @@ const UnifiedSaleDialog = () => {
     }
 
     if (!selectedStaff) {
-      toast({ title: "Vendeur requis", description: "Sélectionnez un vendeur", variant: "destructive" });
+      toast({ title: "Vendeur manquant", description: "Indiquez qui réalise cette vente.", variant: "destructive" });
       return;
     }
 
