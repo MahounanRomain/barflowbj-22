@@ -69,8 +69,8 @@ const SmartSuggestions = () => {
       icon: Lightbulb,
       color: 'text-amber-500',
       bgColor: 'bg-amber-50 dark:bg-amber-950/20',
-      title: 'Astuce du jour',
-      description: 'Ajoutez des ventes pour obtenir des suggestions personnalisées',
+      title: 'Commencez à vendre',
+      description: 'Enregistrez vos premières ventes pour recevoir des recommandations personnalisées.',
       priority: 'medium'
     });
   }
