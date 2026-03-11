@@ -174,8 +174,8 @@ const Sales = () => {
       window.dispatchEvent(new CustomEvent('tablesChanged'));
 
       toast({
-        title: "✅ Vente annulée",
-        description: `La vente de ${saleToDelete.item} a été annulée. Stock et table restaurés.`
+        title: "Vente annulée",
+        description: `${saleToDelete.item} — stock et table restaurés avec succès.`
       });
     } catch (error) {
       console.error('Erreur lors de la suppression:', error);
