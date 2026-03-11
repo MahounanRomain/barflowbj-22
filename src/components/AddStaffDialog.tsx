@@ -71,7 +71,7 @@ const AddStaffDialog = () => {
       </DialogTrigger>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle>Ajouter un Employé</DialogTitle>
+          <DialogTitle>Nouveau membre d'équipe</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
