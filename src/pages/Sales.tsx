@@ -180,8 +180,8 @@ const Sales = () => {
     } catch (error) {
       console.error('Erreur lors de la suppression:', error);
       toast({
-        title: "❌ Erreur",
-        description: "Impossible de supprimer la vente",
+        title: "Suppression impossible",
+        description: "Une erreur est survenue. Réessayez.",
         variant: "destructive"
       });
     }
