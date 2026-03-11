@@ -58,9 +58,9 @@ export const RecentSales: React.FC<RecentSalesProps> = ({
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Supprimer cette vente ?</AlertDialogTitle>
+                        <AlertDialogTitle>Annuler cette vente ?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Cette action supprimera définitivement la vente de {sale.item} et restaurera le stock correspondant.
+                          La vente de {sale.item} sera supprimée et le stock sera automatiquement restauré. Cette action est irréversible.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>

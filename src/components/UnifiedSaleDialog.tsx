@@ -91,7 +91,7 @@ const UnifiedSaleDialog = () => {
     if (totalQty > inventoryItem.quantity) {
       toast({
         title: "Stock insuffisant",
-        description: `Quantité demandée (${totalQty}) dépasse le stock (${inventoryItem.quantity})`,
+        description: `Il reste ${inventoryItem.quantity} unité${inventoryItem.quantity > 1 ? 's' : ''} en stock (${totalQty} demandée${totalQty > 1 ? 's' : ''}).`,
         variant: "destructive",
       });
       return;

@@ -37,7 +37,7 @@ export const SalesStats: React.FC<SalesStatsProps> = ({
       <Card className="p-4">
         <div className="flex items-center gap-2 mb-2">
           <PiggyBank size={16} className="text-orange-500" />
-          <span className="text-sm text-muted-foreground">Bénéfices</span>
+          <span className="text-sm text-muted-foreground">Marge brute</span>
         </div>
         <span className="text-lg font-bold text-green-600">{formatFCFA(totalProfits)}</span>
       </Card>

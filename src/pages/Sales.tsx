@@ -237,7 +237,7 @@ const Sales = () => {
 
               {/* Actions rapides */}
               <Card className="p-4">
-                <h3 className="font-medium mb-3">Actions rapides</h3>
+                <h3 className="font-medium mb-3">Actions</h3>
                 <div className="space-y-2">
                   <Button 
                     variant="outline" 

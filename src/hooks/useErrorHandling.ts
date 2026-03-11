@@ -106,8 +106,8 @@ export const useErrorRecovery = () => {
         maxRetries,
       });
       toast({
-        title: "Erreur persistante",
-        description: "L'opération a échoué plusieurs fois. Veuillez rafraîchir la page.",
+        title: "Opération impossible",
+        description: "Plusieurs tentatives ont échoué. Actualisez la page et réessayez.",
         variant: "destructive",
       });
       return;
