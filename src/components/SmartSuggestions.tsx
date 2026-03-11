@@ -43,8 +43,8 @@ const SmartSuggestions = () => {
         icon: TrendingUp,
         color: 'text-green-500',
         bgColor: 'bg-green-50 dark:bg-green-950/20',
-        title: 'Produit vedette',
-        description: `${mostSold[0]} se vend bien aujourd'hui`,
+        title: 'Article star du jour',
+        description: `${mostSold[0]} est le plus demandé aujourd'hui.`,
         priority: 'medium'
       });
     }
