@@ -29,11 +29,11 @@ export const RecentSales: React.FC<RecentSalesProps> = ({
 }) => {
   return (
     <Card className="p-4">
-      <h3 className="font-medium mb-3">Ventes récentes</h3>
+      <h3 className="font-medium mb-3">Historique des ventes</h3>
       
       {sales.length === 0 ? (
         <div className="text-center py-8 text-muted-foreground">
-          Aucune vente enregistrée. Commencez par enregistrer votre première vente !
+          Aucune vente pour le moment. Utilisez le bouton « Nouvelle vente » pour démarrer.
         </div>
       ) : (
         <div className="space-y-3 max-h-96 overflow-y-auto">
