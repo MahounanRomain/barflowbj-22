@@ -85,19 +85,19 @@ const Sales = () => {
       const fileName = checkAndGenerateDailyReport();
       if (fileName) {
         toast({
-          title: "Rapport généré",
-          description: `Rapport quotidien sauvegardé: ${fileName}`
+          title: "Rapport prêt",
+          description: `Le rapport du jour a été généré : ${fileName}`
         });
       } else {
         toast({
-          title: "Information",
-          description: "Un rapport a déjà été généré aujourd'hui"
+          title: "Déjà généré",
+          description: "Le rapport quotidien a déjà été créé aujourd'hui."
         });
       }
     } catch (error) {
       toast({
-        title: "Erreur",
-        description: "Erreur lors de la génération du rapport",
+        title: "Échec de la génération",
+        description: "Impossible de créer le rapport. Réessayez.",
         variant: "destructive"
       });
     }
