@@ -146,8 +146,8 @@ const Settings = () => {
       updateSettings(settings);
       setHasUnsavedChanges(false);
       toast({
-        title: "✅ Paramètres sauvegardés",
-        description: "Vos préférences ont été mises à jour avec succès.",
+        title: "Paramètres enregistrés",
+        description: "Vos préférences sont à jour.",
       });
     } catch (error) {
       toast({
