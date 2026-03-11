@@ -36,7 +36,7 @@ const CashFlowOverview = () => {
     <Card className="p-4 bg-gradient-to-r from-card to-accent/5 border shadow-lg">
       <h3 className="font-semibold mb-4 flex items-center gap-2">
         <DollarSign className="w-5 h-5 text-green-500" />
-        Trésorerie aujourd'hui
+        Flux de trésorerie
       </h3>
       
       <div className="grid grid-cols-2 gap-4">
