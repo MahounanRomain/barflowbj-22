@@ -151,8 +151,8 @@ const Settings = () => {
       });
     } catch (error) {
       toast({
-        title: "❌ Erreur de sauvegarde",
-        description: "Impossible de sauvegarder les paramètres.",
+        title: "Sauvegarde impossible",
+        description: "Une erreur est survenue. Réessayez.",
         variant: "destructive"
       });
     } finally {
