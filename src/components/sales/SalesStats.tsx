@@ -21,7 +21,7 @@ export const SalesStats: React.FC<SalesStatsProps> = ({
       <Card className="p-4">
         <div className="flex items-center gap-2 mb-2">
           <div className="w-2 h-2 rounded-full bg-green-500"></div>
-          <span className="text-sm text-muted-foreground">CA Aujourd'hui</span>
+          <span className="text-sm text-muted-foreground">Recettes du jour</span>
         </div>
         <span className="text-lg font-bold">{formatFCFA(totalToday)}</span>
       </Card>
