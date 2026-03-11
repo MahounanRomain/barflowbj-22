@@ -57,8 +57,8 @@ const SmartSuggestions = () => {
       icon: Package,
       color: 'text-blue-500',
       bgColor: 'bg-blue-50 dark:bg-blue-950/20',
-      title: 'Optimisation stock',
-      description: `${overstockedItems.length} articles en surstock`,
+      title: 'Stock excédentaire détecté',
+      description: `${overstockedItems.length} article${overstockedItems.length > 1 ? 's' : ''} en surstock — pensez à ajuster vos commandes.`,
       priority: 'low'
     });
   }
