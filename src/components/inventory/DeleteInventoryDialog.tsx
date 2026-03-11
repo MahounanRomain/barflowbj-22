@@ -48,8 +48,8 @@ const DeleteInventoryDialog: React.FC<DeleteInventoryDialogProps> = ({
       onSuccess?.();
     } catch (error) {
       toast({
-        title: "❌ Erreur",
-        description: "Une erreur s'est produite lors de la suppression.",
+        title: "Suppression impossible",
+        description: "Une erreur est survenue. Réessayez.",
         variant: "destructive"
       });
     } finally {
