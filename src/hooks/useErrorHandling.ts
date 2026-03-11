@@ -11,8 +11,8 @@ export const useErrorHandler = () => {
     }, error);
 
     toast({
-      title: "Une erreur s'est produite",
-      description: "Veuillez réessayer ou rafraîchir la page.",
+      title: "Quelque chose s'est mal passé",
+      description: "Réessayez ou actualisez la page. Si le problème persiste, contactez le support.",
       variant: "destructive",
     });
   }, []);
